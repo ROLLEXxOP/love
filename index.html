@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<!-- 
+  LOVE WELLNESS - Live Chat Website
+  This website detects visitor's location and shows profiles in local language
+  Features: IP-based location detection, multi-language support, instant profile loading
+-->
+<html lang="en">
+<head>
+  <!-- Basic HTML Meta Tags -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LOVE WELLNESS - Live Chat with Expert</title>
+  
+  <!-- CSS STYLES - All styling for the website -->
+  <style>
+    /* ============================================
+       GLOBAL STYLES - Reset and base styles
+       ============================================ */
+    /* Reset all margins and paddings, use border-box for easier sizing */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    
+    /* Prevent horizontal scrolling on mobile */
+    html,body{width:100%;overflow-x:hidden;}
+    
+    /* Main body styling - light gray background, full height */
+    body{font-family:Arial;background:#f8fafc;color:#1e293b;min-height:100vh;}
+    
+    /* ============================================
+       NAVIGATION BAR - Top sticky navigation
+       ============================================ */
+    /* Navigation bar - blue background, sticky at top, scrollable on mobile */
+    .nav{background:#1e40af;padding:12px 8px;text-align:center;position:sticky;top:0;z-index:100;overflow-x:auto;}
+    
+    /* Navigation links - white text, inline display */
+    .nav a{color:white;margin:0 8px;text-decoration:none;font-weight:600;display:inline-block;padding:6px 10px;white-space:nowrap;font-size:14px;}
+    
+    /* Active and hover state for nav links - lighter blue background */
+    .nav a:hover,.nav a.active{background:#3b82f6;border-radius:6px;}
+    
+    /* ============================================
+       HEADER SECTION - Page title and location
+       ============================================ */
+    /* Header container - white background, centered text */
+    .header{padding:20px 15px;text-align:center;background:#fff;border-bottom:1px solid #eee;}
+    
+    /* Main heading - LOVE in pink, WELLNESS in blue */
+    .header h1{font-size:24px;}
+    .brand-love{color:#ec4899;font-weight:700;}
+    .brand-wellness{color:#1e40af;font-weight:700;}
+    
+    /* Subtitle text - smaller font, spacing */
+    .header p{font-size:14px;margin-top:8px;}
+    
+    /* ============================================
+       PROFILE SECTION - Main content area
+       ============================================ */
+    /* Live chat section - white background, centered content, minimum height */
+    .live{padding:20px 15px;background:#fff;display:flex;justify-content:center;min-height:400px;flex-wrap:wrap;gap:20px;align-items:flex-start;}
+    
+    /* Profile container - full width, block display, minimum height */
+    #profile{width:100%;display:block;min-height:400px;flex:1;min-width:300px;}
+    
+    /* Vertical banner container - for side-by-side layout with profile */
+    .vertical-banner-container{display:flex;justify-content:center;align-items:flex-start;padding:10px;min-width:160px;}
+    
+    /* Profile card - white card with shadow, rounded corners, centered */
+    .card{
+      width:100%;max-width:450px;background:#fff;padding:25px;border-radius:20px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);text-align:center;position:relative;
+      margin:0 auto;display:block;
+    }
+    
+    /* Profile avatar image - circular, pink border, centered - larger for bigger card */
+    .avatar{
+      width:130px;height:130px;border-radius:50%;border:5px solid #f472b6;
+      object-fit:cover;object-position:center top;margin:0 auto 18px;display:block;
+    }
+    
+    /* Online status badge - green badge in top-right corner of card */
+    .online-badge{
+      position:absolute;top:15px;right:15px;background:#10b981;color:white;
+      padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;
+    }
+    
+    /* Name display - large, bold, word-wrap for long names - enhanced visibility */
+    .name{font-size:26px;font-weight:700;margin:12px 0 8px;word-wrap:break-word;color:#1e293b;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+    
+    /* Location text - larger, darker, more visible */
+    .location{font-size:18px;color:#334155;font-weight:600;margin-bottom:15px;text-shadow:0 1px 1px rgba(0,0,0,0.05);}
+    
+    /* ============================================
+       CLICKBAIT PROFILE ELEMENTS - Engagement boosters
+       ============================================ */
+    /* Activity stats - shows fake user count for social proof */
+    .activity-stats{
+      background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
+      padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;
+      text-align:center;margin:10px 0 15px;box-shadow:0 2px 8px rgba(251,191,36,0.3);
+      animation:pulse 2s ease-in-out infinite;
+    }
+    
+    /* Online badge inline - centered badge where rating was */
+    .online-badge-inline{
+      background:#10b981;color:white;padding:6px 14px;
+      border-radius:20px;font-size:13px;font-weight:bold;
+      text-align:center;margin:8px auto 8px;display:block;width:fit-content;
+    }
+    
+    /* Pulse animation for activity stats */
+    @keyframes pulse{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.02);}
+    }
+    
+    /* ============================================
+       BUTTONS - Action buttons with timers
+       ============================================ */
+    /* Base button style - full width, rounded, smooth transitions - slightly smaller */
+    .btn{
+      padding:11px;width:100%;margin:6px 0;border:none;border-radius:12px;
+      color:white;font-weight:600;cursor:pointer;position:relative;font-size:14px;
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+      transition:background 0.3s ease;
+    }
+    
+    /* Disabled button state - gray background, not clickable, reduced opacity */
+    .btn:disabled{
+      background:#9ca3af !important;cursor:not-allowed;opacity:0.7;
+    }
+    
+    /* Button color variants - pink for video, blue for chat, red for find */
+    .video{background:#ec4899;}.chat{background:#3b82f6;}.find{background:#ef4444;}
+    
+    /* Timer text inside button - positioned on right side, vertically centered */
+    .timer{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:bold;}
+    
+    /* ============================================
+       ADVERTISEMENT SECTION
+       ============================================ */
+    /* Ad placeholder - dashed border, gray background, centered */
+    /* Desktop: Optimized for 300x250 banner ads (Medium Rectangle) */
+    /* Mobile: Optimized for 320x50 banner ads (Mobile Banner) - see @media query */
+    .ad{
+      width:100%;max-width:300px;height:250px;margin:20px auto;background:#e2e8f0;
+      border:2px dashed #94a3b8;border-radius:12px;display:flex;align-items:center;
+      justify-content:center;color:#64748b;font-size:14px;padding:15px;
+    }
+    
+    /* ============================================
+       SEXUAL HEALTH BLOG TOPICS SECTION
+       ============================================ */
+    /* Blog topics container - white card with shadow */
+    .blog-topics{
+      max-width:380px;margin:20px auto;padding:20px;background:#fff;
+      border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Blog topics heading */
+    .blog-topics h3{
+      color:#1e40af;margin-bottom:15px;font-size:18px;text-align:center;
+    }
+    
+    /* Blog topics list container */
+    .blog-topics-list{
+      display:block;width:100%;
+    }
+    
+    /* Individual blog topic item container */
+    .blog-topic-item{
+      margin-bottom:12px;
+    }
+    
+    /* Individual blog topic link - now with title and description */
+    .blog-topic-link{
+      display:block;padding:15px;background:#fff;border-left:4px solid #ec4899;
+      border-radius:8px;text-decoration:none;color:#1e293b;
+      transition:all 0.2s ease;box-shadow:0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    /* Topic title (strong tag) */
+    .blog-topic-link strong{
+      display:block;color:#1e40af;font-size:15px;margin-bottom:8px;font-weight:600;
+    }
+    
+    /* Topic description (p tag) */
+    .blog-topic-link p{
+      color:#64748b;font-size:13px;line-height:1.6;margin:0;
+    }
+    
+    /* Blog topic link hover effect */
+    .blog-topic-link:hover{
+      background:#f8fafc;transform:translateX(5px);box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    }
+    
+    .blog-topic-link:hover strong{
+      color:#ec4899;
+    }
+    
+    /* ============================================
+       PAGE SYSTEM - Multi-page navigation
+       ============================================ */
+    /* Hidden page - default state, all pages hidden */
+    .page{display:none;padding:20px 15px;min-height:calc(100vh - 200px);}
+    
+    /* Active page - only one page visible at a time */
+    .page.active{display:block;}
+    
+    /* ============================================
+       BLOG POSTS - Study tips section
+       ============================================ */
+    /* Blog post card - light background, blue left border */
+    .post{margin-bottom:25px;padding:18px;background:#f8fafc;border-left:4px solid #1e40af;border-radius:8px;}
+    
+    /* Post title - dark text, larger font */
+    .post h3{font-size:18px;color:#1e293b;margin-bottom:8px;}
+    
+    /* Post content - gray text, readable line height */
+    .post p{font-size:14px;color:#475569;line-height:1.6;}
+    
+    /* ============================================
+       CLICKBAIT BLOG STYLES - Engaging elements
+       ============================================ */
+    /* Clickbait post - enhanced styling with hover effects */
+    .clickbait-post{position:relative;transition:all 0.3s ease;cursor:pointer;}
+    .clickbait-post:hover{transform:translateX(5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);background:#fff;}
+    
+    /* Trending badge - eye-catching labels */
+    .trending-badge{
+      display:inline-block;background:linear-gradient(135deg,#ec4899,#f472b6);
+      color:white;padding:4px 12px;border-radius:20px;font-size:11px;
+      font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;
+    }
+    
+    /* Clickbait headlines - larger, more engaging */
+    .clickbait-post h3{font-size:20px;color:#1e293b;margin-bottom:12px;line-height:1.4;font-weight:700;}
+    .clickbait-post:hover h3{color:#ec4899;}
+    
+    /* Preview text - creates curiosity */
+    .clickbait-post p{font-size:15px;color:#64748b;margin-bottom:15px;line-height:1.6;font-style:italic;}
+    
+    /* Read More button - call to action */
+    .read-more-btn{
+      background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;
+      border:none;padding:10px 20px;border-radius:8px;font-size:14px;
+      font-weight:600;cursor:pointer;transition:all 0.3s ease;
+      display:inline-block;margin-top:5px;
+    }
+    .read-more-btn:hover{
+      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+      transform:translateX(5px);box-shadow:0 4px 12px rgba(59,130,246,0.4);
+    }
+    .read-more-btn:active{transform:scale(0.98);}
+    
+    /* ============================================
+       FOOTER - Copyright section
+       ============================================ */
+    /* Footer - dark background, light text, centered */
+    .footer{padding:25px 15px;background:#1e293b;color:#e2e8f0;text-align:center;font-size:13px;}
+    
+    /* ============================================
+       LOCAL LANGUAGE TEXT - Special styling
+       ============================================ */
+    /* Local language text - bold, red color for emphasis */
+    .local{font-weight:700;color:#dc2626;}
+    
+    /* ============================================
+       CONTACT FORM - Contact page styling
+       ============================================ */
+    /* Contact page heading - blue, centered */
+    #contact h2{text-align:center;color:#1e40af;margin-bottom:20px;font-size:22px;}
+    
+    /* Contact form container - full width, centered */
+    #contact form{max-width:100%;margin:0 auto;padding:0 10px;}
+    
+    /* Form inputs and textarea - full width, rounded, proper spacing */
+    #contact input,#contact textarea{
+      width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;
+      font-size:16px;font-family:Arial;box-sizing:border-box;
+    }
+    
+    /* Textarea - minimum height, vertical resize only */
+    #contact textarea{min-height:120px;resize:vertical;}
+    
+    /* Submit button - blue background, full width, touch-friendly */
+    #contact button[type="submit"]{
+      width:100%;padding:14px;background:#3b82f6;color:white;border:none;
+      border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;
+      touch-action:manipulation;margin-top:10px;
+    }
+    
+    /* Submit button hover state - darker blue */
+    #contact button[type="submit"]:hover{background:#2563eb;}
+    
+    /* Submit button active state - even darker blue */
+    #contact button[type="submit"]:active{background:#1d4ed8;}
+    
+    /* ============================================
+       MOBILE RESPONSIVE - Styles for small screens
+       ============================================ */
+    @media (max-width:480px){
+      /* Mobile navigation - smaller margins and font */
+      .nav a{margin:0 5px;font-size:13px;padding:6px 8px;}
+      
+      /* Mobile header - smaller heading */
+      .header h1{font-size:20px;}
+      .brand-love,.brand-wellness{font-size:20px;}
+      .header p{font-size:13px;}
+      
+      /* Mobile profile section - reduced padding */
+      .live{padding:15px 10px;min-height:auto;}
+      #profile{min-height:auto;width:100%;}
+      
+      /* Hide vertical banner on mobile */
+      .vertical-banner-container{display:none;}
+      
+      /* Mobile card - full width, no margin */
+      .card{padding:15px;width:100%;max-width:100%;margin:0;}
+      
+      /* Mobile text sizes - enhanced visibility */
+      .name{font-size:22px;font-weight:700;}
+      .location{font-size:16px;font-weight:600;}
+      .btn{font-size:13px;padding:10px;}
+      
+      /* Mobile avatar - smaller size */
+      .avatar{width:100px;height:100px;}
+      
+      /* Mobile timer - smaller font, adjusted position */
+      .timer{font-size:12px;right:10px;}
+      
+      /* Mobile clickbait elements - optimized for small screens */
+      .activity-stats{font-size:11px;padding:6px 10px;margin:8px 0 12px;}
+      .online-badge-inline{font-size:12px;padding:5px 12px;margin:6px auto 6px;}
+      
+      /* Mobile blog topics - full width, reduced padding */
+      .blog-topics{max-width:100%;padding:15px;margin:15px 10px;}
+      .blog-topics h3{font-size:16px;}
+      .blog-topic-link{padding:12px;}
+      .blog-topic-link strong{font-size:14px;margin-bottom:6px;}
+      .blog-topic-link p{font-size:12px;line-height:1.5;}
+      .blog-topic-item{margin-bottom:10px;}
+      
+      /* Mobile ad section - optimized for 320x50 banner (Mobile Banner) */
+      .ad{max-width:320px;width:100%;height:50px;padding:8px;}
+      
+      /* Mobile clickbait posts - optimized for small screens */
+      .clickbait-post{padding:15px;margin-bottom:20px;}
+      .clickbait-post h3{font-size:18px;line-height:1.3;}
+      .clickbait-post p{font-size:14px;}
+      .trending-badge{font-size:10px;padding:3px 10px;margin-bottom:8px;}
+      .read-more-btn{font-size:13px;padding:8px 16px;width:100%;text-align:center;}
+    }
+  </style>
+  
+  <!-- Google Fonts - Load fonts for all Indian languages -->
+  <!-- These fonts support: Gujarati, Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Odia, Punjabi, Assamese -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Tamil:wght@700&family=Noto+Sans+Telugu:wght@700&family=Noto+Sans+Kannada:wght@700&family=Noto+Sans+Malayalam:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Oriya:wght@700&family=Noto+Sans+Punjabi:wght@700&family=Noto+Sans+Assamese:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Ad Script -->
+  <script type='text/javascript' src='//pl28050161.effectivegatecpm.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'></script>
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION BAR - Top menu
+       ============================================ -->
+  <!-- Navigation links - clicking switches between pages -->
+  <div class="nav">
+    <a href="#" class="active" data-page="home">Home</a>
+    <a href="#" data-page="blog">Blog</a>
+    <a href="#" data-page="about">About Us</a>
+    <a href="#" data-page="contact">Contact Us</a>
+  </div>
+
+  <!-- ============================================
+       HOME PAGE - Main profile page
+       ============================================ -->
+  <div id="home" class="page active">
+    <!-- Header shows detected city and state (updates after IP detection) -->
+    <div class="header">
+      <h1><span class="brand-love">LOVE</span> <span class="brand-wellness">WELLNESS</span></h1>
+      <p>Live Chat with Expert from <span id="city">Ahmedabad</span>, <span id="state">Gujarat</span></p>
+    </div>
+
+    <!-- Advertisement Section - 320x50 Banner Above Profile -->
+    <script async="async" data-cfasync="false" src="//pl28056117.effectivegatecpm.com/98f2e9c268a52df1595981d40041fa8e/invoke.js"></script>
+    <div id="container-98f2e9c268a52df1595981d40041fa8e"></div>
+
+    <!-- Profile section - displays girl profile card -->
+    <div class="live">
+      <div id="profile">
+        <!-- Loading placeholder - shows until profile loads -->
+        <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+          <div style="text-align:center;color:#64748b;">Loading profile...</div>
+        </div>
+      </div>
+      
+      <!-- Vertical Banner Ad (160x600) - Next to Profile -->
+      <div class="vertical-banner-container">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '3d1d0688e20f079caed69323c1710843',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
+      </div>
+    </div>
+
+    <!-- Advertisement Section - 320x50 Banner Below Profile -->
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '320x50',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/320x50/invoke.js"></script>
+
+    <!-- Sexual Health Blog Topics Section -->
+    <div class="blog-topics">
+      <h3>Sexual Health Topics</h3>
+      <div class="blog-topics-list">
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>1. Understanding Safe Sex Practices and Contraception</strong>
+            <p>Learn about different contraceptive methods, their effectiveness rates, and how to practice safe sex. Get expert advice on birth control options including oral contraceptives, condoms, IUDs, implants, patches, and emergency contraception. Understand the pros and cons of each method, how to use them correctly, and which option might be best for your lifestyle. Protect yourself and your partner with proper knowledge about pregnancy prevention and STI protection. We cover everything from hormonal methods to barrier methods, helping you make informed decisions about your reproductive health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>2. STI Prevention and Regular Health Checkups</strong>
+            <p>Important information about sexually transmitted infections (STIs), prevention strategies, and the importance of regular health screenings. Know when to get tested, what tests are available, and how to maintain your sexual health. Learn about common STIs like chlamydia, gonorrhea, HPV, herpes, HIV, and syphilis - their symptoms, transmission methods, and treatment options. Understand the importance of regular checkups, how often you should get tested, and what to expect during a sexual health exam. Discover prevention methods including vaccines, safe sex practices, and open communication with partners. Early detection and treatment are crucial for maintaining your health and preventing complications.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>3. Menstrual Health and Hygiene Management</strong>
+            <p>Comprehensive guide to menstrual cycles, hygiene practices, and managing period symptoms. Learn about menstrual products including pads, tampons, menstrual cups, and period underwear - their benefits, how to use them safely, and which might work best for you. Understand your menstrual cycle phases, what's normal, and when to be concerned. Get tips for managing cramps, bloating, mood changes, and other period symptoms naturally and with medication. Learn about tracking your cycle, understanding ovulation, and recognizing irregularities. Discover when to consult a doctor about heavy bleeding, missed periods, severe pain, or other concerns. Proper menstrual hygiene is essential for preventing infections and maintaining comfort during your period.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>4. Reproductive Health Education for Teens</strong>
+            <p>Age-appropriate information for teenagers about puberty, body changes, and reproductive health. Safe, accurate information to help young people make informed decisions about their health and relationships. Learn about the physical and emotional changes during puberty, including menstruation, breast development, body hair, and voice changes. Understand reproductive anatomy, how the body works, and what to expect as you grow. Get guidance on healthy relationships, peer pressure, and making responsible choices. Learn about consent, boundaries, and communication skills. Discover resources for support, how to talk to parents or trusted adults, and where to find reliable health information. This education helps build confidence and prepares teens for healthy adulthood.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>5. Consent and Healthy Relationships</strong>
+            <p>Understanding consent, communication in relationships, and building healthy intimate connections. Learn about boundaries, respect, and how to have open conversations about sexual health with your partner. Consent must be enthusiastic, ongoing, and can be withdrawn at any time. Discover how to communicate your needs, desires, and limits clearly. Learn to recognize red flags in relationships, understand what healthy intimacy looks like, and how to build trust and respect. Get tips for discussing contraception, STI testing, and sexual preferences with your partner. Understand the difference between healthy and unhealthy relationships, how to set boundaries, and when to seek help. Building strong communication skills leads to more satisfying and safe intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>6. Pregnancy Planning and Preconception Care</strong>
+            <p>Essential information for couples planning to have a baby. Learn about fertility, preconception health, nutrition, and lifestyle changes that can improve your chances of a healthy pregnancy. Discover how to track ovulation, understand your fertile window, and optimize timing for conception. Get guidance on preconception vitamins, especially folic acid, and dietary recommendations. Learn about lifestyle factors that affect fertility including smoking, alcohol, weight, exercise, and stress management. Understand when to see a fertility specialist, common fertility issues, and treatment options. Get information about genetic screening, vaccinations before pregnancy, and managing existing health conditions. Proper planning and care before conception significantly improves pregnancy outcomes and baby's health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>7. Menopause and Women's Health After 40</strong>
+            <p>Navigate menopause with confidence. Learn about symptoms, treatment options, hormonal changes, and maintaining sexual health during and after menopause. Expert advice for this important life transition. Understand the stages of menopause including perimenopause, menopause, and postmenopause. Learn about common symptoms like hot flashes, night sweats, mood changes, sleep problems, and vaginal dryness. Discover treatment options including hormone replacement therapy (HRT), natural remedies, and lifestyle modifications. Get tips for managing weight changes, bone health, heart health, and maintaining intimacy during this transition. Learn about the importance of regular health screenings, bone density tests, and cardiovascular health. This guide helps you understand what's normal, when to seek help, and how to maintain your quality of life and sexual wellbeing during and after menopause.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>8. Mental Health and Sexual Wellbeing</strong>
+            <p>Explore the connection between mental health and sexual wellness. Learn how stress, anxiety, depression, and other mental health conditions can affect intimacy and what you can do to improve both. Understand how mental health impacts libido, arousal, and sexual satisfaction. Discover how medications for mental health conditions can affect sexual function and what alternatives might be available. Learn about the role of therapy, counseling, and support groups in improving both mental and sexual health. Get strategies for managing performance anxiety, body image issues, and relationship stress that affect intimacy. Understand the importance of self-care, stress management, and communication with partners and healthcare providers. Building mental wellness creates a foundation for healthy and satisfying intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>9. Body Positivity and Self-Confidence</strong>
+            <p>Build confidence and positive body image for better intimate relationships. Learn to embrace your body, overcome insecurities, and develop a healthy relationship with yourself and your sexuality. Discover how negative body image affects intimacy and self-esteem. Learn practical strategies for building body confidence, challenging negative thoughts, and focusing on what your body can do rather than how it looks. Get tips for communicating with partners about body concerns and building acceptance. Understand the role of media, social media, and societal pressures on body image. Learn about self-care practices, positive affirmations, and surrounding yourself with supportive people. Building a positive relationship with your body enhances confidence, improves intimacy, and leads to more satisfying sexual experiences. Your body is unique and beautiful - learn to appreciate it.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>10. Common Sexual Health Myths Debunked</strong>
+            <p>Separate fact from fiction. We debunk common myths about sexual health, contraception, STIs, and more. Get accurate, evidence-based information to make informed decisions about your health. Learn the truth about myths like "you can't get pregnant during your period," "pulling out is effective contraception," or "STIs always show symptoms." Understand the real facts about virginity, hymen, and first-time experiences. Discover the truth about birth control causing weight gain, infertility, or other side effects. Learn about common misconceptions regarding sexual orientation, gender identity, and sexual function. Get accurate information about what's normal versus what requires medical attention. Understanding the facts helps you make better health decisions, reduces anxiety, and promotes healthier attitudes toward sexuality. Don't let myths guide your health choices - get the facts.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>11. When to See a Gynecologist: Warning Signs</strong>
+            <p>Know when to seek medical attention. Learn about warning signs, symptoms that require immediate care, and the importance of regular gynecological checkups. Your health is important - don't ignore red flags. Understand when symptoms like unusual bleeding, severe pain, unusual discharge, or changes in your cycle require immediate medical attention. Learn about the importance of annual exams, Pap smears, breast exams, and other routine screenings. Discover what to expect during a gynecological visit and how to prepare. Get information about when to see a doctor for irregular periods, pelvic pain, unusual symptoms, or concerns about sexual health. Learn about emergency situations that require immediate care. Regular checkups help detect issues early when they're most treatable. Don't delay seeking care - your health and wellbeing are worth prioritizing. Early detection saves lives.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>12. Healthy Lifestyle Choices for Better Intimacy</strong>
+            <p>Discover how diet, exercise, sleep, and stress management can improve your intimate life. Learn about foods that boost libido, exercises that enhance sexual health, and lifestyle habits that support overall wellbeing. Understand how nutrition affects hormone levels, energy, and sexual function. Discover foods rich in zinc, omega-3s, and antioxidants that support sexual health. Learn about exercises like Kegels, yoga, and cardio that improve circulation, flexibility, and sexual function. Understand the importance of adequate sleep for hormone production and energy levels. Get tips for managing stress, which can significantly impact libido and sexual satisfaction. Learn about the effects of smoking, excessive alcohol, and drug use on sexual health. Discover how maintaining a healthy weight, staying hydrated, and managing chronic conditions can improve intimacy. Small lifestyle changes can make a big difference in your sexual health and overall satisfaction.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       BLOG PAGE - Sexual Health Topics (Clickbait Style)
+       ============================================ -->
+  <div id="blog" class="page">
+    <h2 style="text-align:center;color:#1e40af;margin-bottom:25px;">🔥 Trending Sexual Health Topics</h2>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🔥 TRENDING</span>
+      <h3>1. 7 Contraception Methods Doctors Don't Tell You About (You'll Be Shocked!)</h3>
+      <p>Discover secret birth control options that could change your life forever. Most women don't know about #3...</p>
+      <button class="read-more-btn" onclick="showArticle(1)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ MUST READ</span>
+      <h3>2. STI Symptoms You're Ignoring Right Now (This Could Save Your Life!)</h3>
+      <p>Warning signs that 90% of people miss. Don't wait until it's too late - read this NOW!</p>
+      <button class="read-more-btn" onclick="showArticle(2)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">💡 EXPERT TIP</span>
+      <h3>3. Period Hacks That Will Change Everything (Gynecologists Hate #5!)</h3>
+      <p>Simple tricks to make your period easier. Thousands of women swear by these methods...</p>
+      <button class="read-more-btn" onclick="showArticle(3)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">📚 FOR TEENS</span>
+      <h3>4. What Your Parents Never Told You About Puberty (The Truth Will Shock You)</h3>
+      <p>Everything you need to know but were too afraid to ask. Real talk about growing up...</p>
+      <button class="read-more-btn" onclick="showArticle(4)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">❤️ RELATIONSHIPS</span>
+      <h3>5. The Consent Conversation That Could Save Your Relationship</h3>
+      <p>How to talk about boundaries without ruining the mood. Expert-approved communication tips...</p>
+      <button class="read-more-btn" onclick="showArticle(5)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">👶 PREGNANCY</span>
+      <h3>6. Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know</h3>
+      <p>Natural methods that boost fertility by 300%. Couples are getting pregnant in weeks, not months...</p>
+      <button class="read-more-btn" onclick="showArticle(6)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🌟 OVER 40</span>
+      <h3>7. Menopause Secrets: How to Feel 20 Again (Women Over 40 Are Obsessed!)</h3>
+      <p>Life-changing tips for navigating menopause. You don't have to suffer - here's how...</p>
+      <button class="read-more-btn" onclick="showArticle(7)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🧠 MENTAL HEALTH</span>
+      <h3>8. Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)</h3>
+      <p>The hidden connection between mental health and intimacy. This will change everything...</p>
+      <button class="read-more-btn" onclick="showArticle(8)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">✨ CONFIDENCE</span>
+      <h3>9. Body Confidence Hacks: Love Yourself Naked (The Secret Nobody Talks About)</h3>
+      <p>Transform your relationship with your body. These techniques work for 95% of women...</p>
+      <button class="read-more-btn" onclick="showArticle(9)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🚫 MYTHS</span>
+      <h3>10. Sexual Health Lies You've Been Told Your Whole Life (Number 4 Will Blow Your Mind!)</h3>
+      <p>Debunking dangerous myths that could be harming your health. The truth will surprise you...</p>
+      <button class="read-more-btn" onclick="showArticle(10)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ URGENT</span>
+      <h3>11. 5 Warning Signs You Need to See a Doctor TODAY (Don't Ignore #2!)</h3>
+      <p>Red flags that require immediate attention. Your health could depend on reading this...</p>
+      <button class="read-more-btn" onclick="showArticle(11)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">💪 LIFESTYLE</span>
+      <h3>12. Boost Your Libido Naturally: Foods That Make You Want More (Try #7 Tonight!)</h3>
+      <p>Simple lifestyle changes that dramatically improve intimacy. Results in just 3 days...</p>
+      <button class="read-more-btn" onclick="showArticle(12)">Read Full Article →</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ABOUT PAGE - Information about the site
+       ============================================ -->
+  <div id="about" class="page">
+    <h2>About Us</h2>
+    <p>LOVE WELLNESS connects you with expert counselors and wellness advisors across India.</p>
+  </div>
+
+  <!-- ============================================
+       CONTACT PAGE - Contact form
+       ============================================ -->
+  <div id="contact" class="page">
+    <h2>Contact Us</h2>
+    <!-- Contact form - email and message fields -->
+    <form id="contactForm">
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <!-- ============================================
+       FOOTER - Copyright
+       ============================================ -->
+  <div class="footer">© 2025 <span class="brand-love" style="color:#ec4899;">LOVE</span> <span style="color:#e2e8f0;">WELLNESS</span></div>
+
+  <!-- ============================================
+       JAVASCRIPT - All functionality code
+       ============================================ -->
+  <script>
+    /* ============================================
+       DATA STRUCTURES - State and location data
+       ============================================ */
+    
+    // STATE MAPPING - Maps API state names to our internal state names
+    // This ensures consistent state names regardless of API response format
+    const stateMapping = {
+      "Gujarat": "Gujarat", "Maharashtra": "Maharashtra", "Tamil Nadu": "Tamil Nadu",
+      "Karnataka": "Karnataka", "Kerala": "Kerala", "Andhra Pradesh": "Andhra Pradesh",
+      "Telangana": "Telangana", "West Bengal": "West Bengal", "Odisha": "Odisha",
+      "Punjab": "Punjab", "Rajasthan": "Rajasthan", "Uttar Pradesh": "Uttar Pradesh",
+      "Madhya Pradesh": "Madhya Pradesh", "Bihar": "Bihar", "Assam": "Assam",
+      "Haryana": "Haryana", "Jharkhand": "Jharkhand", "Chhattisgarh": "Chhattisgarh",
+      "Himachal Pradesh": "Himachal Pradesh", "Uttarakhand": "Uttarakhand",
+      "Delhi": "Delhi", "Goa": "Goa", "Manipur": "Manipur", "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram", "Nagaland": "Nagaland", "Tripura": "Tripura",
+      "Sikkim": "Sikkim", "Arunachal Pradesh": "Arunachal Pradesh"
+    };
+
+    // CUSTOM PHOTOS - Photo files are in the "photos" folder
+    // Photo files: P1.jpg, P2.jpg, P3.jpg, P4.jpg, P5.jpg, P6.jpg, P7.jpg
+    // Photos are displayed in circular format
+    //
+    const customPhotos = {
+      "Gujarat": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Maharashtra": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tamil Nadu": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Karnataka": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Kerala": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Andhra Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Telangana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "West Bengal": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Odisha": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Punjab": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Rajasthan": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttar Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Madhya Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Bihar": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Assam": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Haryana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Jharkhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Chhattisgarh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Himachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttarakhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Delhi": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Goa": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Manipur": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Meghalaya": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Mizoram": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Nagaland": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tripura": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Sikkim": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Arunachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "default": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"]
+    };
+
+    // GIRL NAMES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const girlNames = {
+      "Gujarat": ["પર્વતી પટેલ", "દીપા શાહ", "રિયા ઠક્કર", "કાવ્યા મહેતા", "પ્રિયા ગાંધી"],
+      "Maharashtra": ["प्रिया जोशी", "सानिका देशमुख", "आराधना पाटिल", "स्वाती कुलकर्णी"],
+      "Tamil Nadu": ["பிரியா செல்வம்", "கார்த்திகா ராஜா", "சுவேதா குமார்", "மாதவி ராமன்"],
+      "Karnataka": ["ಪ್ರಿಯಾ ರೆಡ್ಡಿ", "ಕಾವ್ಯಾ ಮೂರ್ತಿ", "ಸ್ವೇತಾ ನಾಯಕ್", "ಮಾಧವಿ ಶೆಟ್ಟಿ"],
+      "Kerala": ["പ്രിയ രാജ്", "സ്വേത മേനൻ", "കാവ്യ ഗോപാൽ", "മാധവി നായർ"],
+      "Andhra Pradesh": ["ప్రియ రెడ్డి", "స్వేత నాయక్", "కావ్య మూర్తి", "మాధవి శర్మ"],
+      "Telangana": ["ప్రియ రావు", "స్వేత రెడ్డి", "కావ్య నాయక్", "మాధవి రావు"],
+      "West Bengal": ["প্রিয়া ঘোষ", "স্বেতা দাস", "কাব্য চক্রবর্তী", "মাধবী মুখার্জী"],
+      "Odisha": ["ପ୍ରିୟା ମହାନ୍ତି", "ସ୍ୱେତା ଦାସ", "କାବ୍ୟା ପଟ୍ଟନାୟକ", "ମାଧବୀ ମିଶ୍ର"],
+      "Punjab": ["ਪ੍ਰਿਯਾ ਸਿੰਘ", "ਸਵੇਤਾ ਕੌਰ", "ਕਾਵਿਆ ਗਿੱਲ", "ਮਾਧਵੀ ਸਿੱਧੂ"],
+      "Rajasthan": ["प्रिया शर्मा", "स्वेता जैन", "काव्या गुप्ता", "माधवी सिंह"],
+      "Uttar Pradesh": ["प्रिया वर्मा", "स्वेता सिंह", "काव्या तिवारी", "माधवी यादव"],
+      "Madhya Pradesh": ["प्रिया पाटिल", "स्वेता शर्मा", "काव्या जैन", "माधवी दुबे"],
+      "Bihar": ["प्रिया कुमारी", "स्वेता सिंह", "काव्या राय", "माधवी पासवान"],
+      "Assam": ["প্ৰিয়া দাস", "স্বেতা বৰুৱা", "কাব্য গগৈ", "মাধবী শৰ্মা"],
+      "Haryana": ["प्रिया यादव", "स्वेता शर्मा", "काव्या सिंह", "माधवी कुमारी"],
+      "Jharkhand": ["प्रिया झा", "स्वेता मुंडा", "काव्या टोप्पो", "माधवी सिंह"],
+      "Chhattisgarh": ["प्रिया साहू", "स्वेता यादव", "काव्या देवांगन", "माधवी पांडे"],
+      "Himachal Pradesh": ["प्रिया शर्मा", "स्वेता ठाकुर", "काव्या कपूर", "माधवी सिंह"],
+      "Uttarakhand": ["प्रिया रावत", "स्वेता बिष्ट", "काव्या नेगी", "माधवी पंत"],
+      "Delhi": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"],
+      "Goa": ["Priya Naik", "Sweta Desai", "Kavya Kamat", "Madhavi Gaonkar"],
+      "Manipur": ["Priya Devi", "Sweta Singh", "Kavya Thokchom", "Madhavi Ningthoujam"],
+      "Meghalaya": ["Priya Kharbuli", "Sweta Lyngdoh", "Kavya Marak", "Madhavi Sangma"],
+      "Mizoram": ["Priya Zote", "Sweta Chhakchhuak", "Kavya Lalthang", "Madhavi Ralte"],
+      "Nagaland": ["Priya Yepthomi", "Sweta Kikon", "Kavya Ao", "Madhavi Jamir"],
+      "Tripura": ["প্রিয়া দেব", "স্বেতা দাস", "কাব্য দেববর্মা", "মাধবী চক্রবর্তী"],
+      "Sikkim": ["प्रिया शेर्पा", "स्वेता लामा", "काव्या गुरुंग", "माधवी राई"],
+      "Arunachal Pradesh": ["Priya Katoch", "Sweta Tadu", "Kavya Yirang", "Madhavi Mibang"],
+      "default": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"]
+    };
+
+    // CITIES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const citiesByState = {
+      "Gujarat": ["અમદાવાદ", "સુરત", "વડોદરા", "રાજકોટ", "ભાવનગર"],
+      "Maharashtra": ["मुंबई", "पुणे", "नागपूर", "औरंगाबाद", "नाशिक"],
+      "Tamil Nadu": ["சென்னை", "கோயம்புத்தூர்", "மதுரை", "திருச்சி", "சேலம்"],
+      "Karnataka": ["ಬೆಂಗಳೂರು", "ಮೈಸೂರು", "ಹುಬ್ಬಳ್ಳಿ", "ಮಂಗಳೂರು", "ಬೆಳಗಾವಿ"],
+      "Kerala": ["തിരുവനന്തപുരം", "കൊച്ചി", "കോഴിക്കോട്", "തൃശൂർ", "കണ്ണൂർ"],
+      "Andhra Pradesh": ["హైదరాబాద్", "విజయవాడ", "విశాఖపట్నం", "తిరుపతి", "గుంటూరు"],
+      "Telangana": ["హైదరాబాద్", "వరంగల్", "నిజామాబాద్", "కరీంనగర్", "ఖమ్మం"],
+      "West Bengal": ["কলকাতা", "হাওড়া", "দুর্গাপুর", "আসানসোল", "শিলিগুড়ি"],
+      "Odisha": ["ଭୁବନେଶ୍ୱର", "କଟକ", "ରାଉରକେଲା", "ସମ୍ବଲପୁର", "ପୁରୀ"],
+      "Punjab": ["ਅੰਮ੍ਰਿਤਸਰ", "ਲੁਧਿਆਣਾ", "ਜਲੰਧਰ", "ਪਟਿਆਲਾ", "ਬਠਿੰਡਾ"],
+      "Rajasthan": ["जयपुर", "जोधपुर", "उदयपुर", "अजमेर", "कोटा"],
+      "Uttar Pradesh": ["लखनऊ", "कानपुर", "आगरा", "वाराणसी", "मेरठ"],
+      "Madhya Pradesh": ["भोपाल", "इंदौर", "ग्वालियर", "जबलपुर", "उज्जैन"],
+      "Bihar": ["पटना", "गया", "भागलपुर", "मुजफ्फरपुर", "दरभंगा"],
+      "Assam": ["গুৱাহাটী", "শিলচৰ", "যোৰহাট", "ডিব্ৰুগড়", "তেজপুৰ"],
+      "Haryana": ["गुरुग्राम", "फरीदाबाद", "अंबाला", "करनाल", "पानीपत"],
+      "Jharkhand": ["रांची", "जमशेदपुर", "धनबाद", "बोकारो", "हजारीबाग"],
+      "Chhattisgarh": ["रायपुर", "बिलासपुर", "दुर्ग", "भिलाई", "राजनांदगांव"],
+      "Himachal Pradesh": ["शिमला", "मनाली", "धर्मशाला", "सोलन", "कुल्लू"],
+      "Uttarakhand": ["देहरादून", "हरिद्वार", "ऋषिकेश", "नैनीताल", "मसूरी"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Ukhrul"],
+      "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh", "Williamnagar"],
+      "Mizoram": ["Aizawl", "Lunglei", "Saiha", "Champhai", "Kolasib"],
+      "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha"],
+      "Tripura": ["আগরতলা", "ধর্মনগর", "উদয়পুর", "খোয়াই", "বেলোনিয়া"],
+      "Sikkim": ["गंगटोक", "नामची", "मंगन", "जोरेथांग", "रंगपो"],
+      "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang", "Bomdila"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // FONT FAMILIES FOR EACH STATE
+    const stateFonts = {
+      "Gujarat": "Noto Sans Gujarati",
+      "Maharashtra": "Noto Sans Devanagari",
+      "Tamil Nadu": "Noto Sans Tamil",
+      "Karnataka": "Noto Sans Kannada",
+      "Kerala": "Noto Sans Malayalam",
+      "Andhra Pradesh": "Noto Sans Telugu",
+      "Telangana": "Noto Sans Telugu",
+      "West Bengal": "Noto Sans Bengali",
+      "Odisha": "Noto Sans Oriya",
+      "Punjab": "Noto Sans Punjabi",
+      "Rajasthan": "Noto Sans Devanagari",
+      "Uttar Pradesh": "Noto Sans Devanagari",
+      "Madhya Pradesh": "Noto Sans Devanagari",
+      "Bihar": "Noto Sans Devanagari",
+      "Assam": "Noto Sans Assamese",
+      "Haryana": "Noto Sans Devanagari",
+      "Jharkhand": "Noto Sans Devanagari",
+      "Chhattisgarh": "Noto Sans Devanagari",
+      "Himachal Pradesh": "Noto Sans Devanagari",
+      "Uttarakhand": "Noto Sans Devanagari",
+      "Delhi": "Arial",
+      "Goa": "Noto Sans Devanagari",
+      "Manipur": "Noto Sans Devanagari",
+      "Meghalaya": "Arial",
+      "Mizoram": "Arial",
+      "Nagaland": "Arial",
+      "Tripura": "Noto Sans Bengali",
+      "Sikkim": "Noto Sans Devanagari",
+      "Arunachal Pradesh": "Arial",
+      "default": "Arial"
+    };
+
+    // STATE NAMES IN LOCAL LANGUAGES
+    const stateNamesLocal = {
+      "Gujarat": "ગુજરાત",
+      "Maharashtra": "महाराष्ट्र",
+      "Tamil Nadu": "தமிழ்நாடு",
+      "Karnataka": "ಕರ್ನಾಟಕ",
+      "Kerala": "കേരളം",
+      "Andhra Pradesh": "ఆంధ్ర ప్రదేశ్",
+      "Telangana": "తెలంగాణ",
+      "West Bengal": "পশ্চিমবঙ্গ",
+      "Odisha": "ଓଡ଼ିଶା",
+      "Punjab": "ਪੰਜਾਬ",
+      "Rajasthan": "राजस्थान",
+      "Uttar Pradesh": "उत्तर प्रदेश",
+      "Madhya Pradesh": "मध्य प्रदेश",
+      "Bihar": "बिहार",
+      "Assam": "অসম",
+      "Haryana": "हरियाणा",
+      "Jharkhand": "झारखंड",
+      "Chhattisgarh": "छत्तीसगढ़",
+      "Himachal Pradesh": "हिमाचल प्रदेश",
+      "Uttarakhand": "उत्तराखंड",
+      "Delhi": "Delhi",
+      "Goa": "गोवा",
+      "Manipur": "মণিপুর",
+      "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram",
+      "Nagaland": "Nagaland",
+      "Tripura": "ত্রিপুরা",
+      "Sikkim": "सिक्किम",
+      "Arunachal Pradesh": "Arunachal Pradesh",
+      "default": "Gujarat"
+    };
+
+    let currentState = "Gujarat";
+    let detectedCity = null; // Store detected city from API
+    let useEnglishMode = false; // Flag to use English when IP detection fails
+
+    // ENGLISH DATA - Used when IP detection fails or default is used
+    const englishGirlNames = ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma", "Madhavi Patel", "Anjali Desai", "Riya Shah", "Sneha Mehta"];
+    
+    const englishStates = ["Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh", "Telangana", "West Bengal", "Odisha", "Punjab", "Rajasthan", "Uttar Pradesh", "Madhya Pradesh", "Bihar", "Assam", "Haryana", "Jharkhand", "Chhattisgarh", "Himachal Pradesh", "Uttarakhand", "Delhi", "Goa"];
+    
+    // ENGLISH CITIES BY STATE - Cities in English for each state
+    const englishCitiesByState = {
+      "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Nashik"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+      "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belagavi"],
+      "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kannur"],
+      "Andhra Pradesh": ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Guntur"],
+      "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
+      "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+      "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri"],
+      "Punjab": ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda"],
+      "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota"],
+      "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Meerut"],
+      "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain"],
+      "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga"],
+      "Assam": ["Guwahati", "Silchar", "Jorhat", "Dibrugarh", "Tezpur"],
+      "Haryana": ["Gurugram", "Faridabad", "Ambala", "Karnal", "Panipat"],
+      "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
+      "Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Bhilai", "Rajnandgaon"],
+      "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Solan", "Kullu"],
+      "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // City name mapping - English to Local Language
+    const cityMapping = {
+      "Ahmedabad": "અમદાવાદ", "Surat": "સુરત", "Vadodara": "વડોદરા", "Rajkot": "રાજકોટ", "Bhavnagar": "ભાવનગર",
+      "Mumbai": "मुंबई", "Pune": "पुणे", "Nagpur": "नागपूर", "Aurangabad": "औरंगाबाद", "Nashik": "नाशिक",
+      "Chennai": "சென்னை", "Coimbatore": "கோயம்புத்தூர்", "Madurai": "மதுரை", "Tiruchirappalli": "திருச்சி", "Salem": "சேலம்",
+      "Bangalore": "ಬೆಂಗಳೂರು", "Mysore": "ಮೈಸೂರು", "Hubli": "ಹುಬ್ಬಳ್ಳಿ", "Mangalore": "ಮಂಗಳೂರು", "Belagavi": "ಬೆಳಗಾವಿ",
+      "Thiruvananthapuram": "തിരുവനന്തപുരം", "Kochi": "കൊച്ചി", "Kozhikode": "കോഴിക്കോട്", "Thrissur": "തൃശൂർ", "Kannur": "കണ്ണൂർ",
+      "Hyderabad": "హైదరాబాద్", "Vijayawada": "విజయవాడ", "Visakhapatnam": "విశాఖపట్నం", "Tirupati": "తిరుపతి", "Guntur": "గుంటూరు",
+      "Warangal": "వరంగల్", "Nizamabad": "నిజామాబాద్", "Karimnagar": "కరీంనగర్", "Khammam": "ఖమ్మం",
+      "Kolkata": "কলকাতা", "Howrah": "হাওড়া", "Durgapur": "দুর্গাপুর", "Asansol": "আসানসোল", "Siliguri": "শিলিগুড়ি",
+      "Bhubaneswar": "ଭୁବନେଶ୍ୱର", "Cuttack": "କଟକ", "Rourkela": "ରାଉରକେଲା", "Sambalpur": "ସମ୍ବଲପୁର", "Puri": "ପୁରୀ",
+      "Amritsar": "ਅੰਮ੍ਰਿਤਸਰ", "Ludhiana": "ਲੁਧਿਆਣਾ", "Jalandhar": "ਜਲੰਧਰ", "Patiala": "ਪਟਿਆਲਾ", "Bathinda": "ਬਠਿੰਡਾ",
+      "Jaipur": "जयपुर", "Jodhpur": "जोधपुर", "Udaipur": "उदयपुर", "Ajmer": "अजमेर", "Kota": "कोटा",
+      "Lucknow": "लखनऊ", "Kanpur": "कानपुर", "Agra": "आगरा", "Varanasi": "वाराणसी", "Meerut": "मेरठ",
+      "Bhopal": "भोपाल", "Indore": "इंदौर", "Gwalior": "ग्वालियर", "Jabalpur": "जबलपुर", "Ujjain": "उज्जैन",
+      "Patna": "पटना", "Gaya": "गया", "Bhagalpur": "भागलपुर", "Muzaffarpur": "मुजफ्फरपुर", "Darbhanga": "दरभंगा",
+      "Guwahati": "গুৱাহাটী", "Silchar": "শিলচৰ", "Jorhat": "যোৰহাট", "Dibrugarh": "ডিব্ৰুগড়", "Tezpur": "তেজপুৰ",
+      "Gurugram": "गुरुग्राम", "Faridabad": "फरीदाबाद", "Ambala": "अंबाला", "Karnal": "करनाल", "Panipat": "पानीपत",
+      "Ranchi": "रांची", "Jamshedpur": "जमशेदपुर", "Dhanbad": "धनबाद", "Bokaro": "बोकारो", "Hazaribagh": "हजारीबाग",
+      "Raipur": "रायपुर", "Bilaspur": "बिलासपुर", "Durg": "दुर्ग", "Bhilai": "भिलाई", "Rajnandgaon": "राजनांदगांव",
+      "Shimla": "शिमला", "Manali": "मनाली", "Dharamshala": "धर्मशाला", "Solan": "सोलन", "Kullu": "कुल्लू",
+      "Dehradun": "देहरादून", "Haridwar": "हरिद्वार", "Rishikesh": "ऋषिकेश", "Nainital": "नैनीताल", "Mussoorie": "मसूरी",
+      "New Delhi": "New Delhi", "Delhi": "Delhi", "Noida": "Noida", "Gurgaon": "Gurgaon", "Faridabad": "Faridabad",
+      "Panaji": "Panaji", "Margao": "Margao", "Vasco": "Vasco", "Mapusa": "Mapusa", "Ponda": "Ponda"
+    };
+
+    function getLocalCity(englishCity, state) {
+      if (!englishCity) return null;
+      
+      // Try direct mapping first
+      const localCity = cityMapping[englishCity];
+      if (localCity) return localCity;
+      
+      // Try case-insensitive match
+      const lowerCity = englishCity.toLowerCase();
+      for (const [eng, local] of Object.entries(cityMapping)) {
+        if (eng.toLowerCase() === lowerCity) {
+          return local;
+        }
+      }
+      
+      // If no mapping found, check if it's in our cities list for the state
+      const stateCities = citiesByState[state] || [];
+      for (const localCity of stateCities) {
+        // Try to match by checking if English city name appears in any local city
+        // This is a fallback - ideally we'd have full mapping
+        if (localCity.toLowerCase().includes(lowerCity) || lowerCity.includes(localCity.toLowerCase())) {
+          return localCity;
+        }
+      }
+      
+      return null;
+    }
+
+    /* ============================================
+       HELPER FUNCTIONS - Utility functions
+       ============================================ */
+    
+    // Get a random photo for the given state
+    // Returns a photo path from the state's photo array, or default if state not found
+    function getPhoto(state) {
+      const statePhotos = customPhotos[state] || customPhotos.default;
+      return statePhotos[Math.floor(Math.random() * statePhotos.length)];
+    }
+
+    /* ============================================
+       PROFILE FUNCTIONS - Display and update profile
+       ============================================ */
+    
+    // Show profile skeleton with buttons instantly (before detection)
+    // This function displays the profile card structure immediately when page loads
+    // Shows "Loading..." for name/location, but buttons are visible and functional
+    function showProfileSkeleton() {
+      const profileElement = document.getElementById("profile");
+      if (!profileElement) return;
+      
+      profileElement.innerHTML = `
+        <div class="card">
+          <div class="activity-stats">🔥 2,345 people chatting right now!</div>
+          <img src="photos/P1.jpg" class="avatar" alt="Girl" id="profileAvatar">
+          <div class="name" id="profileName">Loading...</div>
+          <div class="location" id="profileLocation">Loading...</div>
+          <div class="online-badge-inline">🟢 Online Now</div>
+          <button class="btn video" id="btnVideo" onclick="startCall('video')">📹 Video Call Now</button>
+          <button class="btn chat" id="btnChat" onclick="startCall('chat')">💬 Chat Now</button>
+          <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+        </div>`;
+      
+      // Buttons are instantly available - no delay needed
+    }
+
+    // Update profile details after IP detection completes
+    // This function updates only the name, state, city, and avatar after location is detected
+    // It doesn't recreate the entire profile - just updates the dynamic content
+    function updateProfileDetails() {
+      let names, cities, name, font, avatar, stateNameLocal, city;
+      
+      if (useEnglishMode) {
+        // Use English data when IP detection fails
+        names = englishGirlNames;
+        cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = "Arial";
+        avatar = getPhoto(currentState);
+        stateNameLocal = currentState; // Use English state name
+        city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+      } else {
+        // Use local language data when IP detection succeeds
+        names = girlNames[currentState] || girlNames.default;
+        cities = citiesByState[currentState] || citiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = stateFonts[currentState] || stateFonts.default;
+        avatar = getPhoto(currentState);
+        stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+        // Use detected city if available, otherwise use random city from state
+        if (detectedCity) {
+          // Try to get local language version of detected city
+          const localCity = getLocalCity(detectedCity, currentState);
+          if (localCity) {
+            city = localCity;
+          } else {
+            // If no mapping found, use random city from state
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        } else {
+          // Use random city from state
+          city = cities[Math.floor(Math.random() * cities.length)];
+        }
+      }
+
+      // Update profile elements
+      const nameElement = document.getElementById("profileName");
+      const locationElement = document.getElementById("profileLocation");
+      const avatarElement = document.getElementById("profileAvatar");
+      
+      if (nameElement) {
+        nameElement.innerHTML = `<span class="local" style="font-family:'${font}'">${name}</span>`;
+      }
+      if (locationElement) {
+        locationElement.innerHTML = `<span style="font-family:'${font}'">${city}, ${stateNameLocal} 🇮🇳</span>`;
+      }
+      if (avatarElement) {
+        avatarElement.src = avatar;
+      }
+      
+      // Update clickbait stats dynamically for engagement
+      const activityStats = document.querySelector('.activity-stats');
+      
+      if (activityStats) {
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000;
+        activityStats.textContent = `🔥 ${randomUsers.toLocaleString()} people chatting right now!`;
+      }
+
+      // Update header city and state display
+      const cityElement = document.getElementById("city");
+      const stateElement = document.getElementById("state");
+      if (cityElement) {
+        cityElement.innerText = city;
+        cityElement.style.fontFamily = font;
+      }
+      if (stateElement) {
+        stateElement.innerHTML = `${stateNameLocal} 🇮🇳`;
+        stateElement.style.fontFamily = font;
+      }
+    }
+
+    // Generate complete profile (used when user clicks "Find New Girl")
+    // useRandomCity: if true, uses random city instead of detected city
+    // This function recreates the entire profile card with new random data
+    function generateProfile(useRandomCity = false) {
+      try {
+        const profileElement = document.getElementById("profile");
+        if (!profileElement) {
+          console.error("Profile element not found");
+          return;
+        }
+
+        let names, cities, name, font, avatar, stateNameLocal, city;
+        
+        if (useEnglishMode) {
+          // Use English data when IP detection failed
+          // Pick a new random state when user clicks "Find New Girl"
+          if (useRandomCity) {
+            currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+          }
+          names = englishGirlNames;
+          cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = "Arial";
+          avatar = getPhoto(currentState);
+          stateNameLocal = currentState; // Use English state name
+          city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+        } else {
+          // Use local language data when IP detection succeeded
+          names = girlNames[currentState] || girlNames.default;
+          cities = citiesByState[currentState] || citiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = stateFonts[currentState] || stateFonts.default;
+          avatar = getPhoto(currentState);
+          stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+          // Use detected city if available and not manually refreshing, otherwise use random city from state
+          if (!useRandomCity && detectedCity) {
+            // Try to get local language version of detected city
+            const localCity = getLocalCity(detectedCity, currentState);
+            if (localCity) {
+              city = localCity;
+            } else {
+              // If no mapping found, use random city from state
+              city = cities[Math.floor(Math.random() * cities.length)];
+              console.log(`City "${detectedCity}" not found in mapping, using random city from state`);
+            }
+          } else {
+            // Use random city from state (for "Find New Girl" button or if no city detected)
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        }
+
+        // Update header city and state display
+        const cityElement = document.getElementById("city");
+        const stateElement = document.getElementById("state");
+        if (cityElement) {
+          cityElement.innerText = city;
+          cityElement.style.fontFamily = font;
+        }
+        if (stateElement) {
+          stateElement.innerHTML = `${stateNameLocal} 🇮🇳`;
+          stateElement.style.fontFamily = font;
+        }
+
+        // Generate random stats for clickbait effect
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000; // 2000-4000
+        
+        profileElement.innerHTML = `
+          <div class="card">
+            <div class="activity-stats">🔥 ${randomUsers.toLocaleString()} people chatting right now!</div>
+            <img src="${avatar}" class="avatar" alt="Girl" onerror="this.src='photos/P1.jpg'">
+            <div class="name"><span class="local" style="font-family:'${font}'">${name}</span></div>
+            <div class="location" style="font-family:'${font}'">${city}, ${stateNameLocal} 🇮🇳</div>
+            <div class="online-badge-inline">🟢 Online Now</div>
+            <button class="btn video" id="btnVideo" onclick="startCall('video')">📹 Video Call Now</button>
+            <button class="btn chat" id="btnChat" onclick="startCall('chat')">💬 Chat Now</button>
+            <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+          </div>`;
+        
+        // Buttons are instantly available - no delay needed
+      } catch (error) {
+        console.error("Error generating profile:", error);
+        const profileElement = document.getElementById("profile");
+        if (profileElement) {
+          profileElement.innerHTML = `
+            <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+              <div style="text-align:center;color:#64748b;">Error loading profile. Please refresh.</div>
+            </div>`;
+        }
+      }
+    }
+
+    /* ============================================
+       BUTTON FUNCTIONS - Video/Chat button handlers
+       ============================================ */
+    
+    // Handle video call or chat button click
+    // type: 'video' or 'chat' - determines which action to perform
+    // Currently shows alert - can be replaced with actual call/chat functionality
+    function startCall(type) {
+      // Load and execute ad script when Video Call button is clicked
+      if (type === 'video') {
+        document.head.appendChild(Object.assign(document.createElement('script'), {type:'text/javascript', src:'//pl28050161.effectivegatecpm.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'}));
+        alert("Starting Video Call...");
+      }
+      // Redirect to chat URL when Chat Now button is clicked
+      if (type === 'chat') {
+        window.location.href = 'https://www.effectivegatecpm.com/xuvdemicgb?key=d2b30a20a52745bbc2a15d62ac60ceb5';
+      }
+    }
+
+    // Start countdown timer for video/chat buttons
+    // timerId: ID of the timer element to update
+    // buttonId: ID of the button to enable/disable
+    // originalColor: Button color to restore when timer completes
+    // seconds: Countdown duration (8 seconds)
+    // Button starts disabled (gray), becomes enabled with original color when timer reaches 0
+    function startTimer(timerId, buttonId, originalColor, seconds) {
+      let t = seconds;
+      const timerEl = document.getElementById(timerId);
+      const buttonEl = document.getElementById(buttonId);
+      if (!timerEl || !buttonEl) return;
+      
+      // Button starts disabled (gray)
+      buttonEl.disabled = true;
+      buttonEl.style.background = '#9ca3af';
+      
+      const interval = setInterval(() => {
+        t--;
+        timerEl.innerText = `wait...${t}`;
+        
+        if (t <= 0) {
+          clearInterval(interval);
+          timerEl.innerText = "Now!";
+          
+          // Enable button and restore original color
+          buttonEl.disabled = false;
+          buttonEl.style.background = originalColor;
+        }
+      }, 1000);
+    }
+
+    /* ============================================
+       IP DETECTION FUNCTIONS - Location detection
+       ============================================ */
+    
+    // Fetch with timeout - makes API call with automatic timeout
+    // url: API endpoint to call
+    // timeout: Maximum time to wait (3000ms = 3 seconds)
+    // Uses AbortController to cancel request if timeout exceeded
+    function fetchWithTimeout(url, timeout = 3000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      return fetch(url, { 
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-cache',
+        signal: controller.signal
+      }).finally(() => clearTimeout(timeoutId));
+    }
+
+    // Normalize state name from API to our internal format
+    // Handles variations in state names from API (case differences, abbreviations, etc.)
+    // Returns normalized state name that matches our stateMapping, or null if not found
+    function normalizeStateName(apiState) {
+      if (!apiState) return null;
+      
+      // Direct match
+      if (stateMapping[apiState]) return stateMapping[apiState];
+      
+      // Case-insensitive match
+      const lowerApiState = apiState.toLowerCase();
+      for (const key in stateMapping) {
+        if (key.toLowerCase() === lowerApiState) {
+          return stateMapping[key];
+        }
+      }
+      
+      // Partial match for common variations
+      const variations = {
+        "uttar pradesh": "Uttar Pradesh",
+        "madhya pradesh": "Madhya Pradesh",
+        "himachal pradesh": "Himachal Pradesh",
+        "arunachal pradesh": "Arunachal Pradesh",
+        "andhra pradesh": "Andhra Pradesh",
+        "west bengal": "West Bengal",
+        "tamil nadu": "Tamil Nadu",
+        "jammu and kashmir": "Jammu and Kashmir"
+      };
+      
+      if (variations[lowerApiState]) {
+        return variations[lowerApiState];
+      }
+      
+      return null;
+    }
+
+    // Detect visitor's location using ipapi.co API
+    // This function runs in the background (non-blocking)
+    // When detection completes, it updates the profile with detected state and city
+    // If detection fails, uses English mode with random state
+    async function detectLocation() {
+      try {
+        const response = await fetchWithTimeout('https://ipapi.co/json/', 3000);
+        
+        if (!response.ok) {
+          console.log('IP detection failed, using English mode with random state');
+          useEnglishMode = true;
+          // Pick random state from English states list
+          currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+          detectedCity = null;
+          updateProfileDetails();
+          return;
+        }
+        
+        const data = await response.json();
+        
+        // Check if we got valid Indian location
+        if (data.country_code === 'IN' && data.region) {
+          const normalizedState = normalizeStateName(data.region);
+          
+          if (normalizedState && stateMapping[normalizedState]) {
+            currentState = normalizedState;
+            // Store detected city from API
+            detectedCity = data.city || null;
+            useEnglishMode = false; // Use local language when detection succeeds
+            console.log(`✓ Location detected: ${normalizedState}, City: ${detectedCity} via ipapi.co`);
+            updateProfileDetails();
+            return;
+          }
+        }
+        
+        // Not India or invalid state - use English mode with random state
+        console.log('IP detection: Not India or invalid state, using English mode with random state');
+        useEnglishMode = true;
+        // Pick random state from English states list
+        currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      } catch (error) {
+        // Error occurred - use English mode with random state
+        console.log('IP detection error, using English mode with random state');
+        useEnglishMode = true;
+        // Pick random state from English states list
+        currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      }
+    }
+
+    /* ============================================
+       INITIALIZATION - Page load setup
+       ============================================ */
+    
+    // Initialize page - shows profile skeleton instantly, then detects location
+    // This ensures fast page load - user sees content immediately
+    // IP detection runs in background and updates profile when complete
+    (function init() {
+      // Show profile skeleton with buttons IMMEDIATELY (no waiting)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          showProfileSkeleton();
+        });
+      } else {
+        // DOM already loaded - show profile skeleton instantly
+        showProfileSkeleton();
+      }
+      
+      // Run IP detection in background (non-blocking)
+      // Profile details (name, state, city) will update automatically when detection completes
+      detectLocation();
+    })();
+
+    /* ============================================
+       EVENT HANDLERS - User interactions
+       ============================================ */
+    
+    // Navigation menu - handles page switching
+    // When user clicks a nav link, hides all pages and shows selected page
+    // If home page is selected, generates new profile
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        const page = e.target.dataset.page;
+        document.getElementById(page).classList.add('active');
+        e.target.classList.add('active');
+        if (page === 'home') generateProfile();
+      });
+    });
+
+    // ============================================
+    // CLICKBAIT ARTICLE HANDLER - Keeps users engaged
+    // ============================================
+    // Shows engaging content when user clicks "Read More"
+    // This keeps users on the page longer and increases engagement
+    function showArticle(articleNum) {
+      // Article titles for display
+      const articles = {
+        1: "7 Contraception Methods Doctors Don't Tell You About",
+        2: "STI Symptoms You're Ignoring Right Now",
+        3: "Period Hacks That Will Change Everything",
+        4: "What Your Parents Never Told You About Puberty",
+        5: "The Consent Conversation That Could Save Your Relationship",
+        6: "Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know",
+        7: "Menopause Secrets: How to Feel 20 Again",
+        8: "Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)",
+        9: "Body Confidence Hacks: Love Yourself Naked",
+        10: "Sexual Health Lies You've Been Told Your Whole Life",
+        11: "5 Warning Signs You Need to See a Doctor TODAY",
+        12: "Boost Your Libido Naturally: Foods That Make You Want More"
+      };
+      
+      // Show engaging message to keep user on page
+      // You can replace this with actual article content or redirect
+      const title = articles[articleNum] || "Article";
+      
+      // Create modal-like experience
+      const message = `📖 ${title}\n\n✨ Full article content coming soon!\n\n💬 Want to chat with our expert about this topic?\n\nClick "Chat Now" on the Home page to connect with a wellness advisor in your area!`;
+      
+      if (confirm(message + "\n\nWould you like to go to Home page to chat with an expert?")) {
+        // Switch to home page
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('home').classList.add('active');
+        document.querySelector('.nav a[data-page="home"]').classList.add('active');
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    // Make entire clickbait post clickable for better UX
+    document.querySelectorAll('.clickbait-post').forEach(post => {
+      post.addEventListener('click', function(e) {
+        // Don't trigger if clicking the button (button has its own handler)
+        if (e.target.classList.contains('read-more-btn')) return;
+        
+        // Find the button in this post and trigger it
+        const btn = this.querySelector('.read-more-btn');
+        if (btn) {
+          const articleNum = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+          showArticle(articleNum);
+        }
+      });
+    });
+
+    // Contact form submission handler
+    // Prevents default form submission, shows thank you message, resets form
+    // Can be modified to send data to server
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      e.target.reset();
+    });
+
+    // Auto-refresh page after 30 seconds
+    // This ensures fresh profiles and updated location data
+    setTimeout(() => location.reload(), 30000);
+  </script>
+  
+  <!-- Ad Script - Right above closing body tag -->
+  <script async="async" data-cfasync="false" type='text/javascript' src='//pl28052480.effectivegatecpm.com/38/e5/4d/38e54d28d348873c7a9be3edace3d86c.js'></script>
+</body>
+</html>
