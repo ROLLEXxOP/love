@@ -1,0 +1,2467 @@
+<!DOCTYPE html>
+<!-- 
+  LOVE WELLNESS - Live Chat Website
+  This website detects visitor's location and shows profiles in local language
+  Features: IP-based location detection, multi-language support, instant profile loading
+-->
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.shopify.com/s/files/1/0730/6261/3220/files/newspaperly-ads-1-js.js?v=1761652344"></script>
+  <script data-cfasync="false" async type="text/javascript" src="//cg.frskulk.com/rEM9S6USx8G7ba/126945"></script>
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="185619" async data-cfasync="false"></script>
+  <!-- Basic HTML Meta Tags -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="google-adsense-account" content="ca-pub-2636831580579886">
+  <title>LOVE WELLNESS - Live Chat with Expert</title>
+  
+  <!-- CSS STYLES - All styling for the website -->
+  <style>
+    /* ============================================
+       GLOBAL STYLES - Reset and base styles
+       ============================================ */
+    /* Reset all margins and paddings, use border-box for easier sizing */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    
+    /* Prevent horizontal scrolling on mobile */
+    html,body{width:100%;overflow-x:hidden;}
+    
+    /* Main body styling - light gray background, full height */
+    body{font-family:Arial;background:#f8fafc;color:#1e293b;min-height:100vh;}
+    
+    /* ============================================
+       NAVIGATION BAR - Top sticky navigation
+       ============================================ */
+    /* Navigation bar - blue background, sticky at top, scrollable on mobile */
+    .nav{background:#1e40af;padding:12px 8px;text-align:center;position:sticky;top:0;z-index:100;overflow-x:auto;}
+    
+    /* Navigation links - white text, inline display */
+    .nav a{color:white;margin:0 8px;text-decoration:none;font-weight:600;display:inline-block;padding:6px 10px;white-space:nowrap;font-size:14px;}
+    
+    /* Active and hover state for nav links - lighter blue background */
+    .nav a:hover,.nav a.active{background:#3b82f6;border-radius:6px;}
+    
+    /* ============================================
+       HEADER SECTION - Page title and location
+       ============================================ */
+    /* Header container - white background, centered text */
+    .header{padding:20px 15px;text-align:center;background:#fff;border-bottom:1px solid #eee;}
+    
+    /* Main heading - LOVE in pink, WELLNESS in blue */
+    .header h1{font-size:24px;}
+    .brand-love{color:#ec4899;font-weight:700;}
+    .brand-wellness{color:#1e40af;font-weight:700;}
+    
+    /* Subtitle text - smaller font, spacing */
+    .header p{font-size:14px;margin-top:8px;}
+    
+    /* ============================================
+       PROFILE SECTION - Main content area
+       ============================================ */
+    /* Live chat section - white background, centered content, minimum height */
+    .live{padding:20px 15px;background:#fff;display:flex;justify-content:center;min-height:400px;flex-wrap:wrap;gap:20px;align-items:flex-start;}
+    
+    /* Profile container - full width, block display, minimum height */
+    #profile{width:100%;display:block;min-height:400px;flex:1;min-width:300px;}
+    
+    /* Vertical banner container - for side-by-side layout with profile */
+    .vertical-banner-container{display:flex;justify-content:center;align-items:flex-start;padding:10px;min-width:160px;}
+    
+    /* Profile card - white card with shadow, rounded corners, centered */
+    .card{
+      width:100%;max-width:450px;background:#fff;padding:25px;border-radius:20px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);text-align:center;position:relative;
+      margin:0 auto;display:block;
+    }
+    
+    /* Profile avatar image - circular, pink border, centered - larger for bigger card */
+    .avatar{
+      width:130px;height:130px;border-radius:50%;border:5px solid #f472b6;
+      object-fit:cover;object-position:center top;margin:0 auto 18px;display:block;
+    }
+    
+    /* Online status badge - green badge in top-right corner of card */
+    .online-badge{
+      position:absolute;top:15px;right:15px;background:#10b981;color:white;
+      padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;
+    }
+    
+    /* Name display - large, bold, word-wrap for long names - enhanced visibility */
+    .name{font-size:26px;font-weight:700;margin:12px 0 8px;word-wrap:break-word;color:#1e293b;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+    
+    /* Location text - larger, darker, more visible */
+    .location{font-size:18px;color:#334155;font-weight:600;margin-bottom:15px;text-shadow:0 1px 1px rgba(0,0,0,0.05);}
+    
+    /* ============================================
+       CLICKBAIT PROFILE ELEMENTS - Engagement boosters
+       ============================================ */
+    /* Activity stats - shows fake user count for social proof */
+    .activity-stats{
+      background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
+      padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;
+      text-align:center;margin:10px 0 15px;box-shadow:0 2px 8px rgba(251,191,36,0.3);
+      animation:pulse 2s ease-in-out infinite;
+    }
+    
+    /* Online badge inline - centered badge where rating was */
+    .online-badge-inline{
+      background:#10b981;color:white;padding:6px 14px;
+      border-radius:20px;font-size:13px;font-weight:bold;
+      text-align:center;margin:8px auto 8px;display:block;width:fit-content;
+    }
+    
+    /* Pulse animation for activity stats */
+    @keyframes pulse{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.02);}
+    }
+    
+    /* ============================================
+       BUTTONS - Action buttons with timers
+       ============================================ */
+    /* Base button style - full width, rounded, smooth transitions - slightly smaller */
+    .btn{
+      padding:11px;width:100%;margin:6px 0;border:none;border-radius:12px;
+      color:white;font-weight:600;cursor:pointer;position:relative;font-size:14px;
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+      transition:background 0.3s ease;
+    }
+    
+    /* Disabled button state - gray background, not clickable, reduced opacity */
+    .btn:disabled{
+      background:#9ca3af !important;cursor:not-allowed;opacity:0.7;
+    }
+    
+    /* Button color variants - pink for video, blue for chat, red for find */
+    .video{background:#ec4899;}.chat{background:#3b82f6;}.find{background:#ef4444;}
+    
+    /* Timer text inside button - positioned on right side, vertically centered */
+    .timer{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:bold;}
+    
+    /* ============================================
+       ADVERTISEMENT SECTION
+       ============================================ */
+    /* Ad placeholder - dashed border, gray background, centered */
+    /* Desktop: Optimized for 300x250 banner ads (Medium Rectangle) */
+    /* Mobile: Optimized for 320x50 banner ads (Mobile Banner) - see @media query */
+    .ad{
+      width:100%;max-width:300px;height:250px;margin:20px auto;background:#e2e8f0;
+      border:2px dashed #94a3b8;border-radius:12px;display:flex;align-items:center;
+      justify-content:center;color:#64748b;font-size:14px;padding:15px;
+    }
+    
+    /* ============================================
+       SEXUAL HEALTH BLOG TOPICS SECTION
+       ============================================ */
+    /* Blog topics container - white card with shadow */
+    .blog-topics{
+      max-width:380px;margin:20px auto;padding:20px;background:#fff;
+      border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Blog topics heading */
+    .blog-topics h3{
+      color:#1e40af;margin-bottom:15px;font-size:18px;text-align:center;
+    }
+    
+    /* Blog topics list container */
+    .blog-topics-list{
+      display:block;width:100%;
+    }
+    
+    /* Individual blog topic item container */
+    .blog-topic-item{
+      margin-bottom:12px;
+    }
+    
+    /* Individual blog topic link - now with title and description */
+    .blog-topic-link{
+      display:block;padding:15px;background:#fff;border-left:4px solid #ec4899;
+      border-radius:8px;text-decoration:none;color:#1e293b;
+      transition:all 0.2s ease;box-shadow:0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    /* Topic title (strong tag) */
+    .blog-topic-link strong{
+      display:block;color:#1e40af;font-size:15px;margin-bottom:8px;font-weight:600;
+    }
+    
+    /* Topic description (p tag) */
+    .blog-topic-link p{
+      color:#64748b;font-size:13px;line-height:1.6;margin:0;
+    }
+    
+    /* Blog topic link hover effect */
+    .blog-topic-link:hover{
+      background:#f8fafc;transform:translateX(5px);box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    }
+    
+    .blog-topic-link:hover strong{
+      color:#ec4899;
+    }
+    
+    /* ============================================
+       PAGE SYSTEM - Multi-page navigation
+       ============================================ */
+    /* Hidden page - default state, all pages hidden */
+    .page{display:none;padding:20px 15px;min-height:calc(100vh - 200px);}
+    
+    /* Active page - only one page visible at a time */
+    .page.active{display:block;}
+    
+    /* ============================================
+       BLOG POSTS - Study tips section
+       ============================================ */
+    /* Blog post card - light background, blue left border */
+    .post{margin-bottom:25px;padding:18px;background:#f8fafc;border-left:4px solid #1e40af;border-radius:8px;}
+    
+    /* Post title - dark text, larger font */
+    .post h3{font-size:18px;color:#1e293b;margin-bottom:8px;}
+    
+    /* Post content - gray text, readable line height */
+    .post p{font-size:14px;color:#475569;line-height:1.6;}
+    
+    /* ============================================
+       CLICKBAIT BLOG STYLES - Engaging elements
+       ============================================ */
+    /* Clickbait post - enhanced styling with hover effects */
+    .clickbait-post{position:relative;transition:all 0.3s ease;cursor:pointer;}
+    .clickbait-post:hover{transform:translateX(5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);background:#fff;}
+    
+    /* Trending badge - eye-catching labels */
+    .trending-badge{
+      display:inline-block;background:linear-gradient(135deg,#ec4899,#f472b6);
+      color:white;padding:4px 12px;border-radius:20px;font-size:11px;
+      font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;
+    }
+    
+    /* Clickbait headlines - larger, more engaging */
+    .clickbait-post h3{font-size:20px;color:#1e293b;margin-bottom:12px;line-height:1.4;font-weight:700;}
+    .clickbait-post:hover h3{color:#ec4899;}
+    
+    /* Preview text - creates curiosity */
+    .clickbait-post p{font-size:15px;color:#64748b;margin-bottom:15px;line-height:1.6;font-style:italic;}
+    
+    /* Read More button - call to action */
+    .read-more-btn{
+      background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;
+      border:none;padding:10px 20px;border-radius:8px;font-size:14px;
+      font-weight:600;cursor:pointer;transition:all 0.3s ease;
+      display:inline-block;margin-top:5px;
+    }
+    .read-more-btn:hover{
+      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+      transform:translateX(5px);box-shadow:0 4px 12px rgba(59,130,246,0.4);
+    }
+    .read-more-btn:active{transform:scale(0.98);}
+    
+    /* ============================================
+       FOOTER - Copyright section
+       ============================================ */
+    /* Footer - dark background, light text, centered */
+    .footer{padding:25px 15px;background:#1e293b;color:#e2e8f0;text-align:center;font-size:13px;}
+    
+    /* ============================================
+       LOCAL LANGUAGE TEXT - Special styling
+       ============================================ */
+    /* Local language text - bold, red color for emphasis */
+    .local{font-weight:700;color:#dc2626;}
+    
+    /* ============================================
+       CONTACT FORM - Contact page styling
+       ============================================ */
+    /* Contact page heading - blue, centered */
+    #contact h2{text-align:center;color:#1e40af;margin-bottom:20px;font-size:22px;}
+    
+    /* Contact form container - full width, centered */
+    #contact form{max-width:100%;margin:0 auto;padding:0 10px;}
+    
+    /* Form inputs and textarea - full width, rounded, proper spacing */
+    #contact input,#contact textarea{
+      width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;
+      font-size:16px;font-family:Arial;box-sizing:border-box;
+    }
+    
+    /* Textarea - minimum height, vertical resize only */
+    #contact textarea{min-height:120px;resize:vertical;}
+    
+    /* Submit button - blue background, full width, touch-friendly */
+    #contact button[type="submit"]{
+      width:100%;padding:14px;background:#3b82f6;color:white;border:none;
+      border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;
+      touch-action:manipulation;margin-top:10px;
+    }
+    
+    /* Submit button hover state - darker blue */
+    #contact button[type="submit"]:hover{background:#2563eb;}
+    
+    /* Submit button active state - even darker blue */
+    #contact button[type="submit"]:active{background:#1d4ed8;}
+    
+    /* ============================================
+       MOBILE RESPONSIVE - Styles for small screens
+       ============================================ */
+    @media (max-width:480px){
+      /* Mobile navigation - smaller margins and font */
+      .nav a{margin:0 5px;font-size:13px;padding:6px 8px;}
+      
+      /* Mobile header - smaller heading */
+      .header h1{font-size:20px;}
+      .brand-love,.brand-wellness{font-size:20px;}
+      .header p{font-size:13px;}
+      
+      /* Mobile profile section - reduced padding */
+      .live{padding:15px 10px;min-height:auto;}
+      #profile{min-height:auto;width:100%;}
+      
+      /* Hide vertical banner on mobile */
+      .vertical-banner-container{display:none;}
+      
+      /* Mobile card - full width, no margin */
+      .card{padding:15px;width:100%;max-width:100%;margin:0;}
+      
+      /* Mobile text sizes - enhanced visibility */
+      .name{font-size:22px;font-weight:700;}
+      .location{font-size:16px;font-weight:600;}
+      .btn{font-size:13px;padding:10px;}
+      
+      /* Mobile avatar - smaller size */
+      .avatar{width:100px;height:100px;}
+      
+      /* Mobile timer - smaller font, adjusted position */
+      .timer{font-size:12px;right:10px;}
+      
+      /* Mobile clickbait elements - optimized for small screens */
+      .activity-stats{font-size:11px;padding:6px 10px;margin:8px 0 12px;}
+      .online-badge-inline{font-size:12px;padding:5px 12px;margin:6px auto 6px;}
+      
+      /* Mobile blog topics - full width, reduced padding */
+      .blog-topics{max-width:100%;padding:15px;margin:15px 10px;}
+      .blog-topics h3{font-size:16px;}
+      .blog-topic-link{padding:12px;}
+      .blog-topic-link strong{font-size:14px;margin-bottom:6px;}
+      .blog-topic-link p{font-size:12px;line-height:1.5;}
+      .blog-topic-item{margin-bottom:10px;}
+      
+      /* Mobile ad section - optimized for 320x50 banner (Mobile Banner) */
+      .ad{max-width:320px;width:100%;height:50px;padding:8px;}
+      
+      /* Mobile clickbait posts - optimized for small screens */
+      .clickbait-post{padding:15px;margin-bottom:20px;}
+      .clickbait-post h3{font-size:18px;line-height:1.3;}
+      .clickbait-post p{font-size:14px;}
+      .trending-badge{font-size:10px;padding:3px 10px;margin-bottom:8px;}
+      .read-more-btn{font-size:13px;padding:8px 16px;width:100%;text-align:center;}
+    }
+  </style>
+  
+  <!-- Google Fonts - Load fonts for all Indian languages -->
+  <!-- These fonts support: Gujarati, Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Odia, Punjabi, Assamese -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Tamil:wght@700&family=Noto+Sans+Telugu:wght@700&family=Noto+Sans+Kannada:wght@700&family=Noto+Sans+Malayalam:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Oriya:wght@700&family=Noto+Sans+Punjabi:wght@700&family=Noto+Sans+Assamese:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Ad Script -->
+  <script type='text/javascript' src='//pl28050161.effectivegatecpm.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'></script>
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION BAR - Top menu
+       ============================================ -->
+  <!-- Navigation links - clicking switches between pages -->
+  <div class="nav">
+    <a href="#" class="active" data-page="home">Home</a>
+    <a href="#" data-page="blog">Blog</a>
+    <a href="#" data-page="about">About Us</a>
+    <a href="#" data-page="contact">Contact Us</a>
+  </div>
+
+  <!-- ============================================
+       HOME PAGE - Main profile page
+       ============================================ -->
+  <div id="home" class="page active">
+    <!-- Header shows detected city and state (updates after IP detection) -->
+    <div class="header">
+      <h1><span class="brand-love">LOVE</span> <span class="brand-wellness">WELLNESS</span></h1>
+      <p>Live Chat with Expert from <span id="city">Ahmedabad</span>, <span id="state">Gujarat</span></p>
+    </div>
+
+    <!-- Advertisement Section - 320x50 Banner Above Profile -->
+    <script async="async" data-cfasync="false" src="//pl28056117.effectivegatecpm.com/98f2e9c268a52df1595981d40041fa8e/invoke.js"></script>
+    <div id="container-98f2e9c268a52df1595981d40041fa8e"></div>
+
+    <!-- Profile section - displays girl profile card -->
+    <div class="live">
+      <div id="profile">
+        <!-- Loading placeholder - shows until profile loads -->
+        <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+          <div style="text-align:center;color:#64748b;">Loading profile...</div>
+        </div>
+      </div>
+      
+      <!-- Vertical Banner Ad (160x600) - Next to Profile -->
+      <div class="vertical-banner-container">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '3d1d0688e20f079caed69323c1710843',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
+      </div>
+    </div>
+
+    <!-- Advertisement Section - 320x50 Banner Below Profile -->
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '320x50',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/320x50/invoke.js"></script>
+
+    <!-- Sexual Health Blog Topics Section -->
+    <div class="blog-topics">
+      <h3>Sexual Health Topics</h3>
+      <div class="blog-topics-list">
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>1. Understanding Safe Sex Practices and Contraception</strong>
+            <p>Learn about different contraceptive methods, their effectiveness rates, and how to practice safe sex. Get expert advice on birth control options including oral contraceptives, condoms, IUDs, implants, patches, and emergency contraception. Understand the pros and cons of each method, how to use them correctly, and which option might be best for your lifestyle. Protect yourself and your partner with proper knowledge about pregnancy prevention and STI protection. We cover everything from hormonal methods to barrier methods, helping you make informed decisions about your reproductive health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>2. STI Prevention and Regular Health Checkups</strong>
+            <p>Important information about sexually transmitted infections (STIs), prevention strategies, and the importance of regular health screenings. Know when to get tested, what tests are available, and how to maintain your sexual health. Learn about common STIs like chlamydia, gonorrhea, HPV, herpes, HIV, and syphilis - their symptoms, transmission methods, and treatment options. Understand the importance of regular checkups, how often you should get tested, and what to expect during a sexual health exam. Discover prevention methods including vaccines, safe sex practices, and open communication with partners. Early detection and treatment are crucial for maintaining your health and preventing complications.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>3. Menstrual Health and Hygiene Management</strong>
+            <p>Comprehensive guide to menstrual cycles, hygiene practices, and managing period symptoms. Learn about menstrual products including pads, tampons, menstrual cups, and period underwear - their benefits, how to use them safely, and which might work best for you. Understand your menstrual cycle phases, what's normal, and when to be concerned. Get tips for managing cramps, bloating, mood changes, and other period symptoms naturally and with medication. Learn about tracking your cycle, understanding ovulation, and recognizing irregularities. Discover when to consult a doctor about heavy bleeding, missed periods, severe pain, or other concerns. Proper menstrual hygiene is essential for preventing infections and maintaining comfort during your period.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>4. Reproductive Health Education for Teens</strong>
+            <p>Age-appropriate information for teenagers about puberty, body changes, and reproductive health. Safe, accurate information to help young people make informed decisions about their health and relationships. Learn about the physical and emotional changes during puberty, including menstruation, breast development, body hair, and voice changes. Understand reproductive anatomy, how the body works, and what to expect as you grow. Get guidance on healthy relationships, peer pressure, and making responsible choices. Learn about consent, boundaries, and communication skills. Discover resources for support, how to talk to parents or trusted adults, and where to find reliable health information. This education helps build confidence and prepares teens for healthy adulthood.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>5. Consent and Healthy Relationships</strong>
+            <p>Understanding consent, communication in relationships, and building healthy intimate connections. Learn about boundaries, respect, and how to have open conversations about sexual health with your partner. Consent must be enthusiastic, ongoing, and can be withdrawn at any time. Discover how to communicate your needs, desires, and limits clearly. Learn to recognize red flags in relationships, understand what healthy intimacy looks like, and how to build trust and respect. Get tips for discussing contraception, STI testing, and sexual preferences with your partner. Understand the difference between healthy and unhealthy relationships, how to set boundaries, and when to seek help. Building strong communication skills leads to more satisfying and safe intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>6. Pregnancy Planning and Preconception Care</strong>
+            <p>Essential information for couples planning to have a baby. Learn about fertility, preconception health, nutrition, and lifestyle changes that can improve your chances of a healthy pregnancy. Discover how to track ovulation, understand your fertile window, and optimize timing for conception. Get guidance on preconception vitamins, especially folic acid, and dietary recommendations. Learn about lifestyle factors that affect fertility including smoking, alcohol, weight, exercise, and stress management. Understand when to see a fertility specialist, common fertility issues, and treatment options. Get information about genetic screening, vaccinations before pregnancy, and managing existing health conditions. Proper planning and care before conception significantly improves pregnancy outcomes and baby's health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>7. Menopause and Women's Health After 40</strong>
+            <p>Navigate menopause with confidence. Learn about symptoms, treatment options, hormonal changes, and maintaining sexual health during and after menopause. Expert advice for this important life transition. Understand the stages of menopause including perimenopause, menopause, and postmenopause. Learn about common symptoms like hot flashes, night sweats, mood changes, sleep problems, and vaginal dryness. Discover treatment options including hormone replacement therapy (HRT), natural remedies, and lifestyle modifications. Get tips for managing weight changes, bone health, heart health, and maintaining intimacy during this transition. Learn about the importance of regular health screenings, bone density tests, and cardiovascular health. This guide helps you understand what's normal, when to seek help, and how to maintain your quality of life and sexual wellbeing during and after menopause.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>8. Mental Health and Sexual Wellbeing</strong>
+            <p>Explore the connection between mental health and sexual wellness. Learn how stress, anxiety, depression, and other mental health conditions can affect intimacy and what you can do to improve both. Understand how mental health impacts libido, arousal, and sexual satisfaction. Discover how medications for mental health conditions can affect sexual function and what alternatives might be available. Learn about the role of therapy, counseling, and support groups in improving both mental and sexual health. Get strategies for managing performance anxiety, body image issues, and relationship stress that affect intimacy. Understand the importance of self-care, stress management, and communication with partners and healthcare providers. Building mental wellness creates a foundation for healthy and satisfying intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>9. Body Positivity and Self-Confidence</strong>
+            <p>Build confidence and positive body image for better intimate relationships. Learn to embrace your body, overcome insecurities, and develop a healthy relationship with yourself and your sexuality. Discover how negative body image affects intimacy and self-esteem. Learn practical strategies for building body confidence, challenging negative thoughts, and focusing on what your body can do rather than how it looks. Get tips for communicating with partners about body concerns and building acceptance. Understand the role of media, social media, and societal pressures on body image. Learn about self-care practices, positive affirmations, and surrounding yourself with supportive people. Building a positive relationship with your body enhances confidence, improves intimacy, and leads to more satisfying sexual experiences. Your body is unique and beautiful - learn to appreciate it.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>10. Common Sexual Health Myths Debunked</strong>
+            <p>Separate fact from fiction. We debunk common myths about sexual health, contraception, STIs, and more. Get accurate, evidence-based information to make informed decisions about your health. Learn the truth about myths like "you can't get pregnant during your period," "pulling out is effective contraception," or "STIs always show symptoms." Understand the real facts about virginity, hymen, and first-time experiences. Discover the truth about birth control causing weight gain, infertility, or other side effects. Learn about common misconceptions regarding sexual orientation, gender identity, and sexual function. Get accurate information about what's normal versus what requires medical attention. Understanding the facts helps you make better health decisions, reduces anxiety, and promotes healthier attitudes toward sexuality. Don't let myths guide your health choices - get the facts.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>11. When to See a Gynecologist: Warning Signs</strong>
+            <p>Know when to seek medical attention. Learn about warning signs, symptoms that require immediate care, and the importance of regular gynecological checkups. Your health is important - don't ignore red flags. Understand when symptoms like unusual bleeding, severe pain, unusual discharge, or changes in your cycle require immediate medical attention. Learn about the importance of annual exams, Pap smears, breast exams, and other routine screenings. Discover what to expect during a gynecological visit and how to prepare. Get information about when to see a doctor for irregular periods, pelvic pain, unusual symptoms, or concerns about sexual health. Learn about emergency situations that require immediate care. Regular checkups help detect issues early when they're most treatable. Don't delay seeking care - your health and wellbeing are worth prioritizing. Early detection saves lives.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>12. Healthy Lifestyle Choices for Better Intimacy</strong>
+            <p>Discover how diet, exercise, sleep, and stress management can improve your intimate life. Learn about foods that boost libido, exercises that enhance sexual health, and lifestyle habits that support overall wellbeing. Understand how nutrition affects hormone levels, energy, and sexual function. Discover foods rich in zinc, omega-3s, and antioxidants that support sexual health. Learn about exercises like Kegels, yoga, and cardio that improve circulation, flexibility, and sexual function. Understand the importance of adequate sleep for hormone production and energy levels. Get tips for managing stress, which can significantly impact libido and sexual satisfaction. Learn about the effects of smoking, excessive alcohol, and drug use on sexual health. Discover how maintaining a healthy weight, staying hydrated, and managing chronic conditions can improve intimacy. Small lifestyle changes can make a big difference in your sexual health and overall satisfaction.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       BLOG PAGE - Sexual Health Topics (Clickbait Style)
+       ============================================ -->
+  <div id="blog" class="page">
+    <h2 style="text-align:center;color:#1e40af;margin-bottom:25px;">🔥 Trending Sexual Health Topics</h2>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🔥 TRENDING</span>
+      <h3>1. 7 Contraception Methods Doctors Don't Tell You About (You'll Be Shocked!)</h3>
+      <p>Discover secret birth control options that could change your life forever. Most women don't know about #3...</p>
+      <button class="read-more-btn" onclick="showArticle(1)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ MUST READ</span>
+      <h3>2. STI Symptoms You're Ignoring Right Now (This Could Save Your Life!)</h3>
+      <p>Warning signs that 90% of people miss. Don't wait until it's too late - read this NOW!</p>
+      <button class="read-more-btn" onclick="showArticle(2)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">💡 EXPERT TIP</span>
+      <h3>3. Period Hacks That Will Change Everything (Gynecologists Hate #5!)</h3>
+      <p>Simple tricks to make your period easier. Thousands of women swear by these methods...</p>
+      <button class="read-more-btn" onclick="showArticle(3)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">📚 FOR TEENS</span>
+      <h3>4. What Your Parents Never Told You About Puberty (The Truth Will Shock You)</h3>
+      <p>Everything you need to know but were too afraid to ask. Real talk about growing up...</p>
+      <button class="read-more-btn" onclick="showArticle(4)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">❤️ RELATIONSHIPS</span>
+      <h3>5. The Consent Conversation That Could Save Your Relationship</h3>
+      <p>How to talk about boundaries without ruining the mood. Expert-approved communication tips...</p>
+      <button class="read-more-btn" onclick="showArticle(5)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">👶 PREGNANCY</span>
+      <h3>6. Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know</h3>
+      <p>Natural methods that boost fertility by 300%. Couples are getting pregnant in weeks, not months...</p>
+      <button class="read-more-btn" onclick="showArticle(6)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🌟 OVER 40</span>
+      <h3>7. Menopause Secrets: How to Feel 20 Again (Women Over 40 Are Obsessed!)</h3>
+      <p>Life-changing tips for navigating menopause. You don't have to suffer - here's how...</p>
+      <button class="read-more-btn" onclick="showArticle(7)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🧠 MENTAL HEALTH</span>
+      <h3>8. Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)</h3>
+      <p>The hidden connection between mental health and intimacy. This will change everything...</p>
+      <button class="read-more-btn" onclick="showArticle(8)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">✨ CONFIDENCE</span>
+      <h3>9. Body Confidence Hacks: Love Yourself Naked (The Secret Nobody Talks About)</h3>
+      <p>Transform your relationship with your body. These techniques work for 95% of women...</p>
+      <button class="read-more-btn" onclick="showArticle(9)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🚫 MYTHS</span>
+      <h3>10. Sexual Health Lies You've Been Told Your Whole Life (Number 4 Will Blow Your Mind!)</h3>
+      <p>Debunking dangerous myths that could be harming your health. The truth will surprise you...</p>
+      <button class="read-more-btn" onclick="showArticle(10)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ URGENT</span>
+      <h3>11. 5 Warning Signs You Need to See a Doctor TODAY (Don't Ignore #2!)</h3>
+      <p>Red flags that require immediate attention. Your health could depend on reading this...</p>
+      <button class="read-more-btn" onclick="showArticle(11)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">💪 LIFESTYLE</span>
+      <h3>12. Boost Your Libido Naturally: Foods That Make You Want More (Try #7 Tonight!)</h3>
+      <p>Simple lifestyle changes that dramatically improve intimacy. Results in just 3 days...</p>
+      <button class="read-more-btn" onclick="showArticle(12)">Read Full Article →</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ABOUT PAGE - Information about the site
+       ============================================ -->
+  <div id="about" class="page">
+    <h2>About Us</h2>
+    <p>LOVE WELLNESS connects you with expert counselors and wellness advisors across India.</p>
+  </div>
+
+  <!-- ============================================
+       CONTACT PAGE - Contact form
+       ============================================ -->
+  <div id="contact" class="page">
+    <h2>Contact Us</h2>
+    <!-- Contact form - email and message fields -->
+    <form id="contactForm">
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <!-- ============================================
+       FOOTER - Copyright
+       ============================================ -->
+  <div class="footer">© 2025 <span class="brand-love" style="color:#ec4899;">LOVE</span> <span style="color:#e2e8f0;">WELLNESS</span></div>
+
+  <!-- ============================================
+       JAVASCRIPT - All functionality code
+       ============================================ -->
+  <script>
+    /* ============================================
+       DATA STRUCTURES - State and location data
+       ============================================ */
+    
+    // STATE MAPPING - Maps API state names to our internal state names
+    // This ensures consistent state names regardless of API response format
+    const stateMapping = {
+      // India
+      "Gujarat": "Gujarat", "Maharashtra": "Maharashtra", "Tamil Nadu": "Tamil Nadu",
+      "Karnataka": "Karnataka", "Kerala": "Kerala", "Andhra Pradesh": "Andhra Pradesh",
+      "Telangana": "Telangana", "West Bengal": "West Bengal", "Odisha": "Odisha",
+      "Punjab": "Punjab", "Rajasthan": "Rajasthan", "Uttar Pradesh": "Uttar Pradesh",
+      "Madhya Pradesh": "Madhya Pradesh", "Bihar": "Bihar", "Assam": "Assam",
+      "Haryana": "Haryana", "Jharkhand": "Jharkhand", "Chhattisgarh": "Chhattisgarh",
+      "Himachal Pradesh": "Himachal Pradesh", "Uttarakhand": "Uttarakhand",
+      "Delhi": "Delhi", "Goa": "Goa", "Manipur": "Manipur", "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram", "Nagaland": "Nagaland", "Tripura": "Tripura",
+      "Sikkim": "Sikkim", "Arunachal Pradesh": "Arunachal Pradesh",
+      // US
+      "California": "California", "New York": "New York", "Texas": "Texas", "Florida": "Florida",
+      "Illinois": "Illinois", "Pennsylvania": "Pennsylvania", "Ohio": "Ohio", "Georgia": "Georgia",
+      "North Carolina": "North Carolina", "Michigan": "Michigan", "New Jersey": "New Jersey",
+      "Virginia": "Virginia", "Washington": "Washington", "Arizona": "Arizona",
+      "Massachusetts": "Massachusetts", "Tennessee": "Tennessee", "Indiana": "Indiana", "Missouri": "Missouri",
+      "Maryland": "Maryland", "Wisconsin": "Wisconsin", "Colorado": "Colorado", "Minnesota": "Minnesota",
+      "South Carolina": "South Carolina", "Alabama": "Alabama", "Louisiana": "Louisiana", "Kentucky": "Kentucky",
+      "Oregon": "Oregon", "Oklahoma": "Oklahoma", "Connecticut": "Connecticut", "Utah": "Utah",
+      "Nevada": "Nevada", "Iowa": "Iowa", "Arkansas": "Arkansas", "Mississippi": "Mississippi",
+      "Kansas": "Kansas", "New Mexico": "New Mexico", "Nebraska": "Nebraska", "West Virginia": "West Virginia",
+      "Idaho": "Idaho", "Hawaii": "Hawaii", "New Hampshire": "New Hampshire", "Maine": "Maine",
+      "Rhode Island": "Rhode Island", "Montana": "Montana", "Delaware": "Delaware", "South Dakota": "South Dakota",
+      "North Dakota": "North Dakota", "Alaska": "Alaska", "Vermont": "Vermont", "Wyoming": "Wyoming",
+      // Canada
+      "Ontario": "Ontario", "Quebec": "Quebec", "British Columbia": "British Columbia",
+      "Alberta": "Alberta", "Manitoba": "Manitoba", "Saskatchewan": "Saskatchewan",
+      "Nova Scotia": "Nova Scotia", "New Brunswick": "New Brunswick",
+      "Newfoundland and Labrador": "Newfoundland and Labrador", "Prince Edward Island": "Prince Edward Island",
+      "Northwest Territories": "Northwest Territories", "Yukon": "Yukon", "Nunavut": "Nunavut",
+      // Brazil
+      "São Paulo": "São Paulo", "Rio de Janeiro": "Rio de Janeiro", "Minas Gerais": "Minas Gerais",
+      "Bahia": "Bahia", "Paraná": "Paraná", "Rio Grande do Sul": "Rio Grande do Sul",
+      "Pernambuco": "Pernambuco", "Ceará": "Ceará", "Pará": "Pará",
+      "Goiás": "Goiás", "Maranhão": "Maranhão", "Amazonas": "Amazonas", "Espírito Santo": "Espírito Santo",
+      "Paraíba": "Paraíba", "Rio Grande do Norte": "Rio Grande do Norte", "Mato Grosso": "Mato Grosso",
+      "Alagoas": "Alagoas", "Piauí": "Piauí", "Distrito Federal": "Distrito Federal", "Mato Grosso do Sul": "Mato Grosso do Sul",
+      "Sergipe": "Sergipe", "Rondônia": "Rondônia", "Tocantins": "Tocantins", "Acre": "Acre",
+      "Amapá": "Amapá", "Roraima": "Roraima",
+      // Malaysia
+      "Selangor": "Selangor", "Johor": "Johor", "Sabah": "Sabah", "Sarawak": "Sarawak",
+      "Perak": "Perak", "Kedah": "Kedah", "Kelantan": "Kelantan", "Penang": "Penang",
+      "Pahang": "Pahang", "Terengganu": "Terengganu", "Melaka": "Melaka", "Negeri Sembilan": "Negeri Sembilan",
+      "Perlis": "Perlis", "Kuala Lumpur": "Kuala Lumpur", "Labuan": "Labuan", "Putrajaya": "Putrajaya",
+      // Mexico
+      "Mexico City": "Mexico City", "Jalisco": "Jalisco", "Nuevo León": "Nuevo León",
+      "Puebla": "Puebla", "Guanajuato": "Guanajuato", "Veracruz": "Veracruz",
+      "Yucatán": "Yucatán", "Quintana Roo": "Quintana Roo",
+      "México": "México", "Chihuahua": "Chihuahua", "Coahuila": "Coahuila", "Sonora": "Sonora",
+      "Tamaulipas": "Tamaulipas", "Oaxaca": "Oaxaca", "Chiapas": "Chiapas", "Michoacán": "Michoacán",
+      "Baja California": "Baja California", "Baja California Sur": "Baja California Sur", "Sinaloa": "Sinaloa",
+      "Durango": "Durango", "Aguascalientes": "Aguascalientes", "Morelos": "Morelos", "Zacatecas": "Zacatecas",
+      "Tlaxcala": "Tlaxcala", "Nayarit": "Nayarit", "Campeche": "Campeche", "Tabasco": "Tabasco",
+      "Hidalgo": "Hidalgo", "Colima": "Colima", "San Luis Potosí": "San Luis Potosí", "Querétaro": "Querétaro",
+      // South Africa
+      "Gauteng": "Gauteng", "Western Cape": "Western Cape", "KwaZulu-Natal": "KwaZulu-Natal",
+      "Eastern Cape": "Eastern Cape", "Free State": "Free State", "Limpopo": "Limpopo",
+      "Mpumalanga": "Mpumalanga", "Northern Cape": "Northern Cape", "North West": "North West",
+      // Japan
+      "Tokyo": "Tokyo", "Osaka": "Osaka", "Kanagawa": "Kanagawa", "Aichi": "Aichi",
+      "Fukuoka": "Fukuoka", "Hokkaido": "Hokkaido", "Hyogo": "Hyogo", "Kyoto": "Kyoto",
+      "Saitama": "Saitama", "Chiba": "Chiba", "Miyagi": "Miyagi",
+      "Ibaraki": "Ibaraki", "Shizuoka": "Shizuoka", "Gifu": "Gifu", "Tochigi": "Tochigi",
+      "Nagano": "Nagano", "Okayama": "Okayama", "Hiroshima": "Hiroshima", "Kumamoto": "Kumamoto",
+      "Miyazaki": "Miyazaki", "Kagoshima": "Kagoshima", "Okinawa": "Okinawa", "Yamaguchi": "Yamaguchi",
+      "Gunma": "Gunma", "Niigata": "Niigata", "Ehime": "Ehime", "Nagasaki": "Nagasaki",
+      // South Korea
+      "Seoul": "Seoul", "Busan": "Busan", "Incheon": "Incheon", "Gyeonggi": "Gyeonggi",
+      "Gyeongsangnam": "Gyeongsangnam", "Gyeongsangbuk": "Gyeongsangbuk", "Jeollanam": "Jeollanam",
+      "Daegu": "Daegu", "Daejeon": "Daejeon", "Gwangju": "Gwangju", "Ulsan": "Ulsan",
+      "Jeollabuk": "Jeollabuk", "Chungcheongnam": "Chungcheongnam", "Chungcheongbuk": "Chungcheongbuk",
+      "Gangwon": "Gangwon", "Jeju": "Jeju"
+    };
+
+    // CUSTOM PHOTOS - Photo files are in the "photos" folder
+    // Photo files: P1.jpg, P2.jpg, P3.jpg, P4.jpg, P5.jpg, P6.jpg, P7.jpg
+    // Photos are displayed in circular format
+    //
+    const customPhotos = {
+      "Gujarat": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Maharashtra": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tamil Nadu": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Karnataka": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Kerala": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Andhra Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Telangana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "West Bengal": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Odisha": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Punjab": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Rajasthan": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttar Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Madhya Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Bihar": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Assam": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Haryana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Jharkhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Chhattisgarh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Himachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttarakhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Delhi": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Goa": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Manipur": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Meghalaya": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Mizoram": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Nagaland": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tripura": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Sikkim": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Arunachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      // US - using C1-C7 photos
+      "California": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "New York": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Texas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Florida": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Illinois": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Pennsylvania": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Ohio": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Georgia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "North Carolina": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Michigan": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "New Jersey": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Virginia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Washington": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Arizona": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Canada - using C1-C7 photos
+      "Ontario": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Quebec": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "British Columbia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Alberta": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Manitoba": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Saskatchewan": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nova Scotia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "New Brunswick": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Brazil - using C1-C7 photos
+      "São Paulo": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Rio de Janeiro": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Minas Gerais": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Bahia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Paraná": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Rio Grande do Sul": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Pernambuco": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Ceará": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Pará": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Malaysia - using C1-C7 photos
+      "Selangor": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Johor": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Sabah": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Sarawak": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Perak": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Kedah": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Kelantan": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Penang": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Mexico - using C1-C7 photos
+      "Mexico City": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Jalisco": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nuevo León": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Puebla": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Guanajuato": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Veracruz": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Yucatán": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Quintana Roo": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // South Africa - using C1-C7 photos
+      "Gauteng": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Western Cape": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "KwaZulu-Natal": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Eastern Cape": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Free State": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Limpopo": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Japan - using J1-J5 photos
+      "Tokyo": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Osaka": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Kanagawa": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Aichi": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Fukuoka": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Hokkaido": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Hyogo": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Kyoto": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      // South Korea - using J1-J5 photos
+      "Seoul": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Busan": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Incheon": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gyeonggi": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gyeongsangnam": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gyeongsangbuk": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Jeollanam": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      // US - Additional states using C1-C7 photos
+      "Massachusetts": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Tennessee": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Indiana": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Missouri": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Maryland": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Wisconsin": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Colorado": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Minnesota": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "South Carolina": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Alabama": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Louisiana": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Kentucky": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Oregon": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Oklahoma": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Connecticut": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Utah": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nevada": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Iowa": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Arkansas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Mississippi": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Kansas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "New Mexico": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nebraska": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "West Virginia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Idaho": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Hawaii": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "New Hampshire": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Maine": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Rhode Island": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Montana": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Delaware": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "South Dakota": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "North Dakota": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Alaska": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Vermont": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Wyoming": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Canada - Additional provinces using C1-C7 photos
+      "Newfoundland and Labrador": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Prince Edward Island": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Northwest Territories": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Yukon": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nunavut": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Brazil - Additional states using C1-C7 photos
+      "Goiás": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Maranhão": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Amazonas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Espírito Santo": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Paraíba": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Rio Grande do Norte": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Mato Grosso": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Alagoas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Piauí": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Distrito Federal": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Mato Grosso do Sul": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Sergipe": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Rondônia": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Tocantins": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Acre": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Amapá": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Roraima": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Malaysia - Additional states using C1-C7 photos
+      "Pahang": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Terengganu": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Melaka": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Negeri Sembilan": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Perlis": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Kuala Lumpur": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Labuan": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Putrajaya": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Mexico - Additional states using C1-C7 photos
+      "México": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Chihuahua": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Coahuila": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Sonora": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Tamaulipas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Oaxaca": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Chiapas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Michoacán": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Baja California": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Baja California Sur": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Sinaloa": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Durango": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Aguascalientes": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Morelos": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Zacatecas": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Tlaxcala": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Nayarit": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Campeche": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Tabasco": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Hidalgo": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Colima": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "San Luis Potosí": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Querétaro": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // South Africa - Additional provinces using C1-C7 photos
+      "Mpumalanga": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "Northern Cape": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      "North West": ["photos/C1.jpg", "photos/C2.jpg", "photos/C3.jpg", "photos/C4.jpg", "photos/C5.jpg", "photos/C6.jpg", "photos/C7.jpg"],
+      // Japan - Additional prefectures using J1-J5 photos
+      "Saitama": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Chiba": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Miyagi": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Ibaraki": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Shizuoka": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gifu": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Tochigi": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Nagano": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Okayama": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Hiroshima": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Kumamoto": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Miyazaki": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Kagoshima": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Okinawa": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Yamaguchi": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gunma": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Niigata": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Ehime": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Nagasaki": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      // South Korea - Additional provinces using J1-J5 photos
+      "Daegu": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Daejeon": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gwangju": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Ulsan": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Jeollabuk": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Chungcheongnam": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Chungcheongbuk": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Gangwon": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "Jeju": ["photos/J1.jpeg", "photos/J2.jpeg", "photos/J3.jpeg", "photos/J4.jpeg", "photos/J5.jpeg"],
+      "default": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"]
+    };
+
+    // GIRL NAMES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const girlNames = {
+      "Gujarat": ["પર્વતી પટેલ", "દીપા શાહ", "રિયા ઠક્કર", "કાવ્યા મહેતા", "પ્રિયા ગાંધી"],
+      "Maharashtra": ["प्रिया जोशी", "सानिका देशमुख", "आराधना पाटिल", "स्वाती कुलकर्णी"],
+      "Tamil Nadu": ["பிரியா செல்வம்", "கார்த்திகா ராஜா", "சுவேதா குமார்", "மாதவி ராமன்"],
+      "Karnataka": ["ಪ್ರಿಯಾ ರೆಡ್ಡಿ", "ಕಾವ್ಯಾ ಮೂರ್ತಿ", "ಸ್ವೇತಾ ನಾಯಕ್", "ಮಾಧವಿ ಶೆಟ್ಟಿ"],
+      "Kerala": ["പ്രിയ രാജ്", "സ്വേത മേനൻ", "കാവ്യ ഗോപാൽ", "മാധവി നായർ"],
+      "Andhra Pradesh": ["ప్రియ రెడ్డి", "స్వేత నాయక్", "కావ్య మూర్తి", "మాధవి శర్మ"],
+      "Telangana": ["ప్రియ రావు", "స్వేత రెడ్డి", "కావ్య నాయక్", "మాధవి రావు"],
+      "West Bengal": ["প্রিয়া ঘোষ", "স্বেতা দাস", "কাব্য চক্রবর্তী", "মাধবী মুখার্জী"],
+      "Odisha": ["ପ୍ରିୟା ମହାନ୍ତି", "ସ୍ୱେତା ଦାସ", "କାବ୍ୟା ପଟ୍ଟନାୟକ", "ମାଧବୀ ମିଶ୍ର"],
+      "Punjab": ["ਪ੍ਰਿਯਾ ਸਿੰਘ", "ਸਵੇਤਾ ਕੌਰ", "ਕਾਵਿਆ ਗਿੱਲ", "ਮਾਧਵੀ ਸਿੱਧੂ"],
+      "Rajasthan": ["प्रिया शर्मा", "स्वेता जैन", "काव्या गुप्ता", "माधवी सिंह"],
+      "Uttar Pradesh": ["प्रिया वर्मा", "स्वेता सिंह", "काव्या तिवारी", "माधवी यादव"],
+      "Madhya Pradesh": ["प्रिया पाटिल", "स्वेता शर्मा", "काव्या जैन", "माधवी दुबे"],
+      "Bihar": ["प्रिया कुमारी", "स्वेता सिंह", "काव्या राय", "माधवी पासवान"],
+      "Assam": ["প্ৰিয়া দাস", "স্বেতা বৰুৱা", "কাব্য গগৈ", "মাধবী শৰ্মা"],
+      "Haryana": ["प्रिया यादव", "स्वेता शर्मा", "काव्या सिंह", "माधवी कुमारी"],
+      "Jharkhand": ["प्रिया झा", "स्वेता मुंडा", "काव्या टोप्पो", "माधवी सिंह"],
+      "Chhattisgarh": ["प्रिया साहू", "स्वेता यादव", "काव्या देवांगन", "माधवी पांडे"],
+      "Himachal Pradesh": ["प्रिया शर्मा", "स्वेता ठाकुर", "काव्या कपूर", "माधवी सिंह"],
+      "Uttarakhand": ["प्रिया रावत", "स्वेता बिष्ट", "काव्या नेगी", "माधवी पंत"],
+      "Delhi": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"],
+      "Goa": ["Priya Naik", "Sweta Desai", "Kavya Kamat", "Madhavi Gaonkar"],
+      "Manipur": ["Priya Devi", "Sweta Singh", "Kavya Thokchom", "Madhavi Ningthoujam"],
+      "Meghalaya": ["Priya Kharbuli", "Sweta Lyngdoh", "Kavya Marak", "Madhavi Sangma"],
+      "Mizoram": ["Priya Zote", "Sweta Chhakchhuak", "Kavya Lalthang", "Madhavi Ralte"],
+      "Nagaland": ["Priya Yepthomi", "Sweta Kikon", "Kavya Ao", "Madhavi Jamir"],
+      "Tripura": ["প্রিয়া দেব", "স্বেতা দাস", "কাব্য দেববর্মা", "মাধবী চক্রবর্তী"],
+      "Sikkim": ["प्रिया शेर्पा", "स्वेता लामा", "काव्या गुरुंग", "माधवी राई"],
+      "Arunachal Pradesh": ["Priya Katoch", "Sweta Tadu", "Kavya Yirang", "Madhavi Mibang"],
+      // US - English names
+      "California": ["Emma Johnson", "Olivia Martinez", "Sophia Rodriguez", "Isabella Garcia", "Mia Wilson"],
+      "New York": ["Charlotte Brown", "Amelia Davis", "Harper Miller", "Evelyn Anderson", "Abigail Taylor"],
+      "Texas": ["Emily Thomas", "Elizabeth Jackson", "Mila White", "Ella Harris", "Avery Clark"],
+      "Florida": ["Sofia Lewis", "Camila Walker", "Aria Hall", "Scarlett Allen", "Victoria Young"],
+      "Illinois": ["Madison King", "Luna Wright", "Grace Lopez", "Chloe Hill", "Penelope Green"],
+      "Pennsylvania": ["Layla Adams", "Riley Nelson", "Zoe Baker", "Nora Carter", "Lily Mitchell"],
+      "Ohio": ["Hannah Roberts", "Aubrey Turner", "Savannah Phillips", "Audrey Campbell", "Brooklyn Parker"],
+      "Georgia": ["Leah Evans", "Zoe Edwards", "Bella Collins", "Stella Stewart", "Ariana Sanchez"],
+      "North Carolina": ["Maya Morris", "Willow Rogers", "Lucy Reed", "Paisley Cook", "Natalie Morgan"],
+      "Michigan": ["Elena Bell", "Addison Murphy", "Aurora Bailey", "Claire Rivera", "Skylar Cooper"],
+      "New Jersey": ["Violet Richardson", "Savannah Cox", "Aurora Howard", "Hazel Ward", "Lillian Torres"],
+      "Virginia": ["Nora Peterson", "Aria Gray", "Scarlett Ramirez", "Grace James", "Chloe Watson"],
+      "Washington": ["Lily Brooks", "Ellie Kelly", "Zoe Sanders", "Stella Price", "Violet Bennett"],
+      "Arizona": ["Luna Wood", "Aria Barnes", "Layla Ross", "Hannah Henderson", "Addison Coleman"],
+      // Canada - English and French names
+      "Ontario": ["Emma Thompson", "Olivia Martin", "Sophia Tremblay", "Isabella Gagnon", "Mia Roy"],
+      "Quebec": ["Sophie Dubois", "Emma Lefebvre", "Olivia Bernard", "Charlotte Moreau", "Amélie Bouchard"],
+      "British Columbia": ["Aria Chen", "Luna Wang", "Maya Singh", "Zoe Kim", "Stella Li"],
+      "Alberta": ["Charlotte MacDonald", "Amelia Campbell", "Harper Wilson", "Evelyn Brown", "Abigail Taylor"],
+      "Manitoba": ["Victoria Johnson", "Grace Anderson", "Chloe Miller", "Penelope Davis", "Layla White"],
+      "Saskatchewan": ["Aurora Thompson", "Nora Martin", "Aria Wilson", "Hazel Brown", "Skylar Taylor"],
+      "Nova Scotia": ["Willow MacDonald", "Lucy Campbell", "Paisley Fraser", "Natalie MacLeod", "Elena Morrison"],
+      "New Brunswick": ["Sophia LeBlanc", "Emma Cormier", "Olivia Arseneault", "Charlotte Gallant", "Amélie Thibodeau"],
+      // Brazil - Portuguese names
+      "São Paulo": ["Maria Silva", "Ana Santos", "Juliana Oliveira", "Fernanda Costa", "Mariana Ferreira"],
+      "Rio de Janeiro": ["Gabriela Alves", "Beatriz Pereira", "Camila Rodrigues", "Larissa Gomes", "Isabella Ribeiro"],
+      "Minas Gerais": ["Amanda Lima", "Patricia Carvalho", "Jessica Araújo", "Bianca Martins", "Renata Barbosa"],
+      "Bahia": ["Leticia Rocha", "Vanessa Souza", "Priscila Melo", "Tatiana Cardoso", "Daniela Freitas"],
+      "Paraná": ["Thais Nunes", "Bruna Moura", "Andressa Dias", "Raquel Castro", "Cristina Monteiro"],
+      "Rio Grande do Sul": ["Roberta Mendes", "Sabrina Farias", "Claudia Nascimento", "Eliane Teixeira", "Simone Machado"],
+      "Pernambuco": ["Adriana Moreira", "Luciana Ramos", "Débora Cavalcanti", "Aline Barros", "Fernanda Mendonça"],
+      "Ceará": ["Marcia Almeida", "Lilian Correia", "Sandra Azevedo", "Mônica Lopes", "Tania Campos"],
+      "Pará": ["Paula Duarte", "Rita Pinheiro", "Carla Rezende", "Márcia Braga", "Elaine Tavares"],
+      // Malaysia - Malaysian names
+      "Selangor": ["Siti Nurhaliza", "Nor Ashikin", "Nurul Izzah", "Fatin Shidqia", "Farah Diana"],
+      "Johor": ["Aina Abdul", "Syahirah Zain", "Aishah Rahman", "Nurul Huda", "Maisarah Ahmad"],
+      "Sabah": ["Rachel Yapp", "Fiona Chong", "Melissa Wong", "Michelle Tan", "Amanda Lee"],
+      "Sarawak": ["Christina Ling", "Janice Sim", "Joyce Khoo", "Serena Lim", "Elaine Ng"],
+      "Perak": ["Intan Syazwani", "Nur Amirah", "Siti Aisyah", "Nurul Ain", "Fatimah Zahra"],
+      "Kedah": ["Nor Fazira", "Siti Fatimah", "Nur Haziqah", "Noor Haslinda", "Salmiah Ahmad"],
+      "Kelantan": ["Nik Nur Madihah", "Siti Norfazira", "Nur Izzati", "Nurul Fadhilah", "Nur Afiqah"],
+      "Penang": ["Lee Mei Ling", "Tan Su Lin", "Chua Bee Kuan", "Lim Siew Choo", "Ooi Bee Hoon"],
+      // Mexico - Spanish names
+      "Mexico City": ["María García", "Ana Martínez", "Carmen López", "Laura Rodríguez", "Patricia Hernández"],
+      "Jalisco": ["Guadalupe González", "Sofía Pérez", "Andrea Sánchez", "Gabriela Ramírez", "Valentina Torres"],
+      "Nuevo León": ["Fernanda Flores", "Isabella Gutiérrez", "Diana Morales", "Alejandra Cruz", "Natalia Vázquez"],
+      "Puebla": ["Mariana Jiménez", "Daniela Reyes", "Valeria Mendoza", "Estefanía Ortega", "Paola Delgado"],
+      "Guanajuato": ["Adriana Vega", "Michelle Navarro", "Vanessa Cortés", "Carla Castro", "Liliana Peña"],
+      "Veracruz": ["Brenda Ríos", "Diana Medina", "Alicia Campos", "Lucía Aguirre", "Lorena Vargas"],
+      "Yucatán": ["Karla Solís", "Yessica Herrera", "Rosa Ruiz", "Claudia Méndez", "Esperanza Juárez"],
+      "Quintana Roo": ["Araceli Contreras", "Silvia Espinoza", "Rosa Guerrero", "Marisol Álvarez", "Alejandra Pacheco"],
+      // South Africa - English and African names
+      "Gauteng": ["Precious Mkhize", "Zinhle Ndlovu", "Thandiwe Nkomo", "Nomvula Dlamini", "Nompumelelo Ncube"],
+      "Western Cape": ["Amy Botha", "Sarah van der Merwe", "Emma de Villiers", "Olivia Coetzee", "Sophia Nel"],
+      "KwaZulu-Natal": ["Lindiwe Khumalo", "Ntombizodwa Mthembu", "Zandile Zulu", "Buhle Gumede", "Sindiswa Mbatha"],
+      "Eastern Cape": ["Nompumelelo Tshabalala", "Thulisile Mhlongo", "Nontle Msimang", "Khanyisile Cele", "Sibongile Ntuli"],
+      "Free State": ["Masego Mokone", "Kgomotso Moeketsi", "Dineo Motsamai", "Lerato Mofokeng", "Palesa Monyane"],
+      "Limpopo": ["Refilwe Mahlangu", "Karabo Modise", "Thato Makgoba", "Boitumelo Selepe", "Tshidi Mokgohloa"],
+      // Japan - Japanese names
+      "Tokyo": ["Yuki Tanaka", "Sakura Suzuki", "Akari Watanabe", "Hana Yamamoto", "Mio Nakamura"],
+      "Osaka": ["Mei Kobayashi", "Rin Kato", "Aoi Yoshida", "Sora Yamada", "Noa Inoue"],
+      "Kanagawa": ["Yui Kimura", "Miku Hayashi", "Riko Shimizu", "Ema Yamaguchi", "Nina Matsumoto"],
+      "Aichi": ["Kana Okada", "Rio Hasegawa", "Maya Ogawa", "Rika Ono", "Sana Ishikawa"],
+      "Fukuoka": ["Haruka Fujita", "Momoka Ikeda", "Yuna Maeda", "Honoka Fujii", "Nanami Sato"],
+      "Hokkaido": ["Ayaka Saito", "Mana Takeuchi", "Akane Ito", "Rena Yamashita", "Ami Mori"],
+      "Hyogo": ["Saki Nakajima", "Miyu Kuroda", "Yui Hirai", "Kaho Sugiyama", "Rina Ito"],
+      "Kyoto": ["Akiko Nishimura", "Yuka Fukuda", "Mayu Oshima", "Mizuki Hara", "Shiori Takeda"],
+      // South Korea - Korean names
+      "Seoul": ["Min-ji Kim", "Soo-jin Lee", "Ji-hye Park", "Hye-in Choi", "Yeon-ah Jung"],
+      "Busan": ["Seo-yeon Kang", "Eun-ji Yoon", "Na-young Jang", "Mi-ae Shin", "Ji-woo Han"],
+      "Incheon": ["Seung-hee Moon", "Da-eun Kwon", "Hae-won Oh", "So-young Baek", "Ji-min Ryu"],
+      "Gyeonggi": ["Yeon-hee Cho", "Ji-soo Kim", "Min-seo Lee", "Ha-na Park", "Yu-jin Choi"],
+      "Gyeongsangnam": ["Seo-hyun Jang", "Eun-bi Kang", "So-mi Yoon", "Na-ra Shin", "Mi-so Han"],
+      "Gyeongsangbuk": ["Ji-eun Moon", "Da-yoon Kwon", "Hae-in Oh", "So-ri Baek", "Ji-ah Ryu"],
+      "Jeollanam": ["Yeon-ji Cho", "Ji-ae Kim", "Min-ah Lee", "Ha-yoon Park", "Yu-na Choi"],
+      // US - Additional states - English names
+      "Massachusetts": ["Emma Williams", "Olivia Thompson", "Sophia Davis", "Isabella Brown", "Mia Anderson"],
+      "Tennessee": ["Charlotte Jackson", "Amelia White", "Harper Harris", "Evelyn Martin", "Abigail Garcia"],
+      "Indiana": ["Emily Robinson", "Elizabeth Clark", "Mila Rodriguez", "Ella Lewis", "Avery Walker"],
+      "Missouri": ["Sofia Hall", "Camila Allen", "Aria Young", "Scarlett King", "Victoria Wright"],
+      "Maryland": ["Madison Lopez", "Luna Hill", "Grace Green", "Chloe Adams", "Penelope Baker"],
+      "Wisconsin": ["Layla Nelson", "Riley Carter", "Zoe Mitchell", "Nora Perez", "Lily Roberts"],
+      "Colorado": ["Hannah Turner", "Aubrey Phillips", "Savannah Campbell", "Audrey Parker", "Brooklyn Evans"],
+      "Minnesota": ["Leah Edwards", "Zoe Collins", "Bella Stewart", "Stella Sanchez", "Ariana Morris"],
+      "South Carolina": ["Maya Rogers", "Willow Reed", "Lucy Cook", "Paisley Morgan", "Natalie Bell"],
+      "Alabama": ["Elena Murphy", "Addison Bailey", "Aurora Rivera", "Claire Cooper", "Skylar Richardson"],
+      "Louisiana": ["Violet Cox", "Savannah Howard", "Aurora Ward", "Hazel Torres", "Lillian Peterson"],
+      "Kentucky": ["Nora Gray", "Aria Ramirez", "Scarlett James", "Grace Watson", "Chloe Brooks"],
+      "Oregon": ["Lily Kelly", "Ellie Sanders", "Zoe Price", "Stella Bennett", "Violet Wood"],
+      "Oklahoma": ["Luna Barnes", "Aria Ross", "Layla Henderson", "Hannah Coleman", "Addison Jenkins"],
+      "Connecticut": ["Victoria Perry", "Grace Powell", "Chloe Long", "Penelope Patterson", "Layla Hughes"],
+      "Utah": ["Aurora Flores", "Nora Washington", "Aria Butler", "Hazel Simmons", "Skylar Foster"],
+      "Nevada": ["Violet Gonzales", "Savannah Bryant", "Aurora Alexander", "Hazel Russell", "Lillian Griffin"],
+      "Iowa": ["Elena Diaz", "Addison Hayes", "Aurora Myers", "Claire Ford", "Skylar Hamilton"],
+      "Arkansas": ["Victoria Graham", "Grace Sullivan", "Chloe Wallace", "Penelope Woods", "Layla Cole"],
+      "Mississippi": ["Maya West", "Willow Jordan", "Lucy Owens", "Paisley Reynolds", "Natalie Fisher"],
+      "Kansas": ["Elena Ellis", "Addison Harrison", "Aurora Gibson", "Claire Mcdonald", "Skylar Wells"],
+      "New Mexico": ["Violet Barnes", "Savannah Vasquez", "Aurora Webb", "Hazel Tucker", "Lillian Hoffman"],
+      "Nebraska": ["Nora Blair", "Aria Christensen", "Scarlett Parry", "Grace Eaton", "Chloe Nielson"],
+      "West Virginia": ["Lily Hutchins", "Ellie McKay", "Zoe Livingston", "Stella Farley", "Violet Baird"],
+      "Idaho": ["Luna Betts", "Aria Singleton", "Layla Quinn", "Hannah Harrell", "Addison Bowman"],
+      "Hawaii": ["Victoria Kaimana", "Grace Leilani", "Chloe Malia", "Penelope Nalani", "Layla Kailani"],
+      "New Hampshire": ["Aurora Foster", "Nora Thornton", "Aria Bentley", "Hazel Cramer", "Skylar Tucker"],
+      "Maine": ["Violet Mitchell", "Savannah Richards", "Aurora Collins", "Hazel Peterson", "Lillian Wilson"],
+      "Rhode Island": ["Elena Brooks", "Addison Sullivan", "Aurora Phillips", "Claire Ross", "Skylar Anderson"],
+      "Montana": ["Maya Johnson", "Willow Brown", "Lucy Davis", "Paisley Miller", "Natalie Garcia"],
+      "Delaware": ["Victoria Martinez", "Grace Rodriguez", "Chloe Lewis", "Penelope Walker", "Layla Hall"],
+      "South Dakota": ["Aurora Young", "Nora Hernandez", "Aria King", "Hazel Wright", "Skylar Lopez"],
+      "North Dakota": ["Violet Hill", "Savannah Green", "Aurora Adams", "Hazel Baker", "Lillian Nelson"],
+      "Alaska": ["Elena Carter", "Addison Mitchell", "Aurora Roberts", "Claire Turner", "Skylar Phillips"],
+      "Vermont": ["Victoria Campbell", "Grace Parker", "Chloe Evans", "Penelope Edwards", "Layla Collins"],
+      "Wyoming": ["Maya Stewart", "Willow Sanchez", "Lucy Morris", "Paisley Rogers", "Natalie Reed"],
+      // Canada - Additional provinces - English and French names
+      "Newfoundland and Labrador": ["Emma Power", "Olivia Walsh", "Sophia O'Brien", "Isabella Murphy", "Mia Connors"],
+      "Prince Edward Island": ["Charlotte MacDonald", "Amelia Campbell", "Harper MacLeod", "Evelyn Fraser", "Abigail Morrison"],
+      "Northwest Territories": ["Emily Yellowknife", "Elizabeth Inuvik", "Mila Fort Smith", "Ella Hay River", "Avery Norman Wells"],
+      "Yukon": ["Sofia Whitehorse", "Camila Dawson City", "Aria Watson Lake", "Scarlett Haines Junction", "Victoria Carmacks"],
+      "Nunavut": ["Madison Iqaluit", "Luna Rankin Inlet", "Grace Arviat", "Chloe Baker Lake", "Penelope Cambridge Bay"],
+      // Brazil - Additional states - Portuguese names
+      "Goiás": ["Juliana Costa", "Fernanda Almeida", "Mariana Barbosa", "Patricia Rocha", "Gabriela Araújo"],
+      "Maranhão": ["Amanda Sousa", "Jessica Lima", "Bianca Carvalho", "Renata Ferreira", "Thais Ribeiro"],
+      "Amazonas": ["Leticia Castro", "Vanessa Dias", "Priscila Correia", "Tatiana Azevedo", "Daniela Martins"],
+      "Espírito Santo": ["Roberta Mendes", "Sabrina Nascimento", "Claudia Moura", "Eliane Teixeira", "Simone Oliveira"],
+      "Paraíba": ["Adriana Santos", "Luciana Silva", "Débora Pereira", "Aline Rodrigues", "Fernanda Gomes"],
+      "Rio Grande do Norte": ["Marcia Alves", "Lilian Pinto", "Sandra Lopes", "Mônica Campos", "Tania Monteiro"],
+      "Mato Grosso": ["Paula Cardoso", "Rita Souza", "Carla Freitas", "Márcia Machado", "Elaine Nunes"],
+      "Alagoas": ["Roberta Rocha", "Sabrina Melo", "Claudia Cavalcanti", "Eliane Barros", "Simone Mendonça"],
+      "Piauí": ["Amanda Farias", "Jessica Pinheiro", "Bianca Duarte", "Renata Rezende", "Thais Braga"],
+      "Distrito Federal": ["Juliana Tavares", "Fernanda Gonçalves", "Mariana Moreira", "Patricia Ramos", "Gabriela Fernandes"],
+      "Mato Grosso do Sul": ["Leticia Brito", "Vanessa Dantas", "Priscila Xavier", "Tatiana Sales", "Daniela Caetano"],
+      "Sergipe": ["Roberta Matos", "Sabrina Vasconcelos", "Claudia Fonseca", "Eliane Guimarães", "Simone Peixoto"],
+      "Rondônia": ["Amanda Campos", "Jessica Teles", "Bianca Araújo", "Renata Andrade", "Thais Mota"],
+      "Tocantins": ["Juliana Barros", "Fernanda Aguiar", "Mariana Caldas", "Patricia Maia", "Gabriela Bezerra"],
+      "Acre": ["Leticia Viana", "Vanessa Souza", "Priscila Melo", "Tatiana Cardoso", "Daniela Freitas"],
+      "Amapá": ["Roberta Lima", "Sabrina Costa", "Claudia Almeida", "Eliane Barbosa", "Simone Rocha"],
+      "Roraima": ["Amanda Araújo", "Jessica Sousa", "Bianca Lima", "Renata Carvalho", "Thais Ferreira"],
+      // Malaysia - Additional states - Malaysian names
+      "Pahang": ["Nor Fathiah", "Siti Amirah", "Nur Farah", "Nurul Syahirah", "Fatin Zahirah"],
+      "Terengganu": ["Nik Nurul", "Siti Norfazirah", "Nur Izzati", "Nurul Fadilah", "Nur Afiqah"],
+      "Melaka": ["Nurul Aini", "Siti Aisyah", "Nur Amirah", "Nor Ashikin", "Fatin Shidqia"],
+      "Negeri Sembilan": ["Intan Syazwani", "Nor Fazira", "Siti Fatimah", "Nur Haziqah", "Noor Haslinda"],
+      "Perlis": ["Salmiah Ahmad", "Nor Ashikin", "Siti Aisyah", "Nur Amirah", "Fatimah Zahra"],
+      "Kuala Lumpur": ["Lee Mei Ling", "Tan Su Lin", "Chua Bee Kuan", "Lim Siew Choo", "Ooi Bee Hoon"],
+      "Labuan": ["Rachel Yapp", "Fiona Chong", "Melissa Wong", "Michelle Tan", "Amanda Lee"],
+      "Putrajaya": ["Christina Ling", "Janice Sim", "Joyce Khoo", "Serena Lim", "Elaine Ng"],
+      // Mexico - Additional states - Spanish names
+      "México": ["María Hernández", "Ana García", "Carmen Martínez", "Laura López", "Patricia González"],
+      "Chihuahua": ["Guadalupe Pérez", "Sofía Sánchez", "Andrea Ramírez", "Gabriela Torres", "Valentina Flores"],
+      "Coahuila": ["Fernanda Gutiérrez", "Isabella Morales", "Diana Cruz", "Alejandra Vázquez", "Natalia Jiménez"],
+      "Sonora": ["Mariana Reyes", "Daniela Mendoza", "Valeria Ortega", "Estefanía Delgado", "Paola Vega"],
+      "Tamaulipas": ["Adriana Navarro", "Michelle Cortés", "Vanessa Castro", "Carla Peña", "Liliana Ríos"],
+      "Oaxaca": ["Brenda Medina", "Diana Campos", "Alicia Aguirre", "Lucía Vargas", "Lorena Solís"],
+      "Chiapas": ["Karla Herrera", "Yessica Ruiz", "Rosa Méndez", "Claudia Juárez", "Esperanza Contreras"],
+      "Michoacán": ["Araceli Espinoza", "Silvia Guerrero", "Rosa Álvarez", "Marisol Pacheco", "Alejandra Castañeda"],
+      "Baja California": ["María Vega", "Ana Navarro", "Carmen Cortés", "Laura Castro", "Patricia Peña"],
+      "Baja California Sur": ["Guadalupe Ríos", "Sofía Medina", "Andrea Campos", "Gabriela Aguirre", "Valentina Vargas"],
+      "Sinaloa": ["Fernanda Solís", "Isabella Herrera", "Diana Ruiz", "Alejandra Méndez", "Natalia Juárez"],
+      "Durango": ["Mariana Contreras", "Daniela Espinoza", "Valeria Guerrero", "Estefanía Álvarez", "Paola Pacheco"],
+      "Aguascalientes": ["Adriana Castañeda", "Michelle Vega", "Vanessa Navarro", "Carla Cortés", "Liliana Castro"],
+      "Morelos": ["Brenda Peña", "Diana Ríos", "Alicia Medina", "Lucía Campos", "Lorena Aguirre"],
+      "Zacatecas": ["Karla Vargas", "Yessica Solís", "Rosa Herrera", "Claudia Ruiz", "Esperanza Méndez"],
+      "Tlaxcala": ["Araceli Juárez", "Silvia Contreras", "Rosa Espinoza", "Marisol Guerrero", "Alejandra Álvarez"],
+      "Nayarit": ["María Pacheco", "Ana Castañeda", "Carmen Vega", "Laura Navarro", "Patricia Cortés"],
+      "Campeche": ["Guadalupe Castro", "Sofía Peña", "Andrea Ríos", "Gabriela Medina", "Valentina Campos"],
+      "Tabasco": ["Fernanda Aguirre", "Isabella Vargas", "Diana Solís", "Alejandra Herrera", "Natalia Ruiz"],
+      "Hidalgo": ["Mariana Méndez", "Daniela Juárez", "Valeria Contreras", "Estefanía Espinoza", "Paola Guerrero"],
+      "Colima": ["Adriana Álvarez", "Michelle Pacheco", "Vanessa Castañeda", "Carla Vega", "Liliana Navarro"],
+      "San Luis Potosí": ["Brenda Cortés", "Diana Castro", "Alicia Peña", "Lucía Ríos", "Lorena Medina"],
+      "Querétaro": ["Karla Campos", "Yessica Aguirre", "Rosa Vargas", "Claudia Solís", "Esperanza Herrera"],
+      // South Africa - Additional provinces - English and African names
+      "Mpumalanga": ["Nomsa Mkhize", "Thembi Ndlovu", "Nomusa Nkomo", "Thulisile Dlamini", "Nompumelelo Ncube"],
+      "Northern Cape": ["Masego Botha", "Kgomotso van der Merwe", "Dineo de Villiers", "Lerato Coetzee", "Palesa Nel"],
+      "North West": ["Refilwe Khumalo", "Karabo Mthembu", "Thato Zulu", "Boitumelo Gumede", "Tshidi Mbatha"],
+      // Japan - Additional prefectures - Japanese names
+      "Saitama": ["Yui Saito", "Miku Tanaka", "Riko Suzuki", "Ema Watanabe", "Nina Yamamoto"],
+      "Chiba": ["Kana Nakamura", "Rio Kobayashi", "Maya Kato", "Rika Yoshida", "Sana Yamada"],
+      "Miyagi": ["Haruka Inoue", "Momoka Kimura", "Yuna Hayashi", "Honoka Shimizu", "Nanami Yamaguchi"],
+      "Ibaraki": ["Ayaka Matsumoto", "Mana Okada", "Akane Hasegawa", "Rena Ogawa", "Ami Ono"],
+      "Shizuoka": ["Saki Ishikawa", "Miyu Fujita", "Yui Ikeda", "Kaho Maeda", "Rina Fujii"],
+      "Gifu": ["Akiko Sato", "Yuka Saito", "Mayu Takeuchi", "Mizuki Ito", "Shiori Yamashita"],
+      "Tochigi": ["Akari Mori", "Hana Nakajima", "Sakura Kuroda", "Mio Hirai", "Mei Sugiyama"],
+      "Nagano": ["Rin Ito", "Aoi Nishimura", "Sora Fukuda", "Noa Oshima", "Yuki Hara"],
+      "Okayama": ["Yui Takeda", "Miku Tanaka", "Riko Suzuki", "Ema Watanabe", "Nina Yamamoto"],
+      "Hiroshima": ["Kana Nakamura", "Rio Kobayashi", "Maya Kato", "Rika Yoshida", "Sana Yamada"],
+      "Kumamoto": ["Haruka Inoue", "Momoka Kimura", "Yuna Hayashi", "Honoka Shimizu", "Nanami Yamaguchi"],
+      "Miyazaki": ["Ayaka Matsumoto", "Mana Okada", "Akane Hasegawa", "Rena Ogawa", "Ami Ono"],
+      "Kagoshima": ["Saki Ishikawa", "Miyu Fujita", "Yui Ikeda", "Kaho Maeda", "Rina Fujii"],
+      "Okinawa": ["Akiko Sato", "Yuka Saito", "Mayu Takeuchi", "Mizuki Ito", "Shiori Yamashita"],
+      "Yamaguchi": ["Akari Mori", "Hana Nakajima", "Sakura Kuroda", "Mio Hirai", "Mei Sugiyama"],
+      "Gunma": ["Rin Ito", "Aoi Nishimura", "Sora Fukuda", "Noa Oshima", "Yuki Hara"],
+      "Niigata": ["Yui Takeda", "Miku Tanaka", "Riko Suzuki", "Ema Watanabe", "Nina Yamamoto"],
+      "Ehime": ["Kana Nakamura", "Rio Kobayashi", "Maya Kato", "Rika Yoshida", "Sana Yamada"],
+      "Nagasaki": ["Haruka Inoue", "Momoka Kimura", "Yuna Hayashi", "Honoka Shimizu", "Nanami Yamaguchi"],
+      // South Korea - Additional provinces - Korean names
+      "Daegu": ["Ji-eun Kim", "Soo-mi Lee", "Min-ji Park", "Hye-jin Choi", "Yeon-ah Jung"],
+      "Daejeon": ["Seo-hyun Kang", "Eun-bi Yoon", "Na-young Jang", "Mi-ae Shin", "Ji-woo Han"],
+      "Gwangju": ["Seung-hee Moon", "Da-eun Kwon", "Hae-won Oh", "So-young Baek", "Ji-min Ryu"],
+      "Ulsan": ["Yeon-hee Cho", "Ji-soo Kim", "Min-seo Lee", "Ha-na Park", "Yu-jin Choi"],
+      "Jeollabuk": ["Seo-yeon Jang", "Eun-ji Kang", "Na-ra Yoon", "Mi-so Shin", "Ji-ah Han"],
+      "Chungcheongnam": ["Ji-young Moon", "Da-hyun Kwon", "Hae-in Oh", "So-ri Baek", "Ji-ae Ryu"],
+      "Chungcheongbuk": ["Yeon-ji Cho", "Ji-ae Kim", "Min-ah Lee", "Ha-yoon Park", "Yu-na Choi"],
+      "Gangwon": ["Seo-hyun Jang", "Eun-bi Kang", "So-mi Yoon", "Na-ra Shin", "Mi-so Han"],
+      "Jeju": ["Ji-eun Moon", "Da-yoon Kwon", "Hae-in Oh", "So-ri Baek", "Ji-ah Ryu"],
+      "default": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"]
+    };
+
+    // CITIES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const citiesByState = {
+      "Gujarat": ["અમદાવાદ", "સુરત", "વડોદરા", "રાજકોટ", "ભાવનગર"],
+      "Maharashtra": ["मुंबई", "पुणे", "नागपूर", "औरंगाबाद", "नाशिक"],
+      "Tamil Nadu": ["சென்னை", "கோயம்புத்தூர்", "மதுரை", "திருச்சி", "சேலம்"],
+      "Karnataka": ["ಬೆಂಗಳೂರು", "ಮೈಸೂರು", "ಹುಬ್ಬಳ್ಳಿ", "ಮಂಗಳೂರು", "ಬೆಳಗಾವಿ"],
+      "Kerala": ["തിരുവനന്തപുരം", "കൊച്ചി", "കോഴിക്കോട്", "തൃശൂർ", "കണ്ണൂർ"],
+      "Andhra Pradesh": ["హైదరాబాద్", "విజయవాడ", "విశాఖపట్నం", "తిరుపతి", "గుంటూరు"],
+      "Telangana": ["హైదరాబాద్", "వరంగల్", "నిజామాబాద్", "కరీంనగర్", "ఖమ్మం"],
+      "West Bengal": ["কলকাতা", "হাওড়া", "দুর্গাপুর", "আসানসোল", "শিলিগুড়ি"],
+      "Odisha": ["ଭୁବନେଶ୍ୱର", "କଟକ", "ରାଉରକେଲା", "ସମ୍ବଲପୁର", "ପୁରୀ"],
+      "Punjab": ["ਅੰਮ੍ਰਿਤਸਰ", "ਲੁਧਿਆਣਾ", "ਜਲੰਧਰ", "ਪਟਿਆਲਾ", "ਬਠਿੰਡਾ"],
+      "Rajasthan": ["जयपुर", "जोधपुर", "उदयपुर", "अजमेर", "कोटा"],
+      "Uttar Pradesh": ["लखनऊ", "कानपुर", "आगरा", "वाराणसी", "मेरठ"],
+      "Madhya Pradesh": ["भोपाल", "इंदौर", "ग्वालियर", "जबलपुर", "उज्जैन"],
+      "Bihar": ["पटना", "गया", "भागलपुर", "मुजफ्फरपुर", "दरभंगा"],
+      "Assam": ["গুৱাহাটী", "শিলচৰ", "যোৰহাট", "ডিব্ৰুগড়", "তেজপুৰ"],
+      "Haryana": ["गुरुग्राम", "फरीदाबाद", "अंबाला", "करनाल", "पानीपत"],
+      "Jharkhand": ["रांची", "जमशेदपुर", "धनबाद", "बोकारो", "हजारीबाग"],
+      "Chhattisgarh": ["रायपुर", "बिलासपुर", "दुर्ग", "भिलाई", "राजनांदगांव"],
+      "Himachal Pradesh": ["शिमला", "मनाली", "धर्मशाला", "सोलन", "कुल्लू"],
+      "Uttarakhand": ["देहरादून", "हरिद्वार", "ऋषिकेश", "नैनीताल", "मसूरी"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Ukhrul"],
+      "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh", "Williamnagar"],
+      "Mizoram": ["Aizawl", "Lunglei", "Saiha", "Champhai", "Kolasib"],
+      "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha"],
+      "Tripura": ["আগরতলা", "ধর্মনগর", "উদয়পুর", "খোয়াই", "বেলোনিয়া"],
+      "Sikkim": ["गंगटोक", "नामची", "मंगन", "जोरेथांग", "रंगपो"],
+      "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang", "Bomdila"],
+      // US - Major cities by state
+      "California": ["Los Angeles", "San Francisco", "San Diego", "San Jose", "Sacramento"],
+      "New York": ["New York City", "Buffalo", "Rochester", "Albany", "Syracuse"],
+      "Texas": ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth"],
+      "Florida": ["Miami", "Tampa", "Orlando", "Jacksonville", "Fort Lauderdale"],
+      "Illinois": ["Chicago", "Aurora", "Naperville", "Rockford", "Joliet"],
+      "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+      "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+      "Georgia": ["Atlanta", "Augusta", "Columbus", "Savannah", "Athens"],
+      "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+      "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Lansing"],
+      "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+      "Virginia": ["Virginia Beach", "Norfolk", "Richmond", "Newport News", "Alexandria"],
+      "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+      "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+      // Canada - Major cities by province
+      "Ontario": ["Toronto", "Ottawa", "Mississauga", "Brampton", "Hamilton"],
+      "Quebec": ["Montreal", "Quebec City", "Laval", "Gatineau", "Longueuil"],
+      "British Columbia": ["Vancouver", "Victoria", "Surrey", "Burnaby", "Richmond"],
+      "Alberta": ["Calgary", "Edmonton", "Red Deer", "Lethbridge", "St. Albert"],
+      "Manitoba": ["Winnipeg", "Brandon", "Steinbach", "Thompson", "Portage la Prairie"],
+      "Saskatchewan": ["Saskatoon", "Regina", "Prince Albert", "Moose Jaw", "Swift Current"],
+      "Nova Scotia": ["Halifax", "Dartmouth", "Sydney", "Truro", "New Glasgow"],
+      "New Brunswick": ["Saint John", "Moncton", "Fredericton", "Dieppe", "Miramichi"],
+      // Brazil - Major cities by state
+      "São Paulo": ["São Paulo", "Guarulhos", "Campinas", "São Bernardo", "Santo André"],
+      "Rio de Janeiro": ["Rio de Janeiro", "Niterói", "Duque de Caxias", "São Gonçalo", "Nova Iguaçu"],
+      "Minas Gerais": ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim"],
+      "Bahia": ["Salvador", "Feira de Santana", "Vitória da Conquista", "Camaçari", "Juazeiro"],
+      "Paraná": ["Curitiba", "Londrina", "Maringá", "Ponta Grossa", "Cascavel"],
+      "Rio Grande do Sul": ["Porto Alegre", "Caxias do Sul", "Pelotas", "Canoas", "Santa Maria"],
+      "Pernambuco": ["Recife", "Jaboatão", "Olinda", "Caruaru", "Petrolina"],
+      "Ceará": ["Fortaleza", "Caucaia", "Juazeiro do Norte", "Maracanaú", "Sobral"],
+      "Pará": ["Belém", "Ananindeua", "Santarém", "Marabá", "Paragominas"],
+      // Malaysia - Major cities by state
+      "Selangor": ["Shah Alam", "Petaling Jaya", "Klang", "Subang Jaya", "Ampang"],
+      "Johor": ["Johor Bahru", "Iskandar Puteri", "Pasir Gudang", "Batu Pahat", "Muar"],
+      "Sabah": ["Kota Kinabalu", "Sandakan", "Tawau", "Lahad Datu", "Keningau"],
+      "Sarawak": ["Kuching", "Miri", "Sibu", "Bintulu", "Limbang"],
+      "Perak": ["Ipoh", "Taiping", "Seri Iskandar", "Teluk Intan", "Kampar"],
+      "Kedah": ["Alor Setar", "Sungai Petani", "Kulim", "Langkawi", "Yan"],
+      "Kelantan": ["Kota Bharu", "Pasir Mas", "Tanah Merah", "Gua Musang", "Kuala Krai"],
+      "Penang": ["George Town", "Butterworth", "Bukit Mertajam", "Bayan Lepas", "Nibong Tebal"],
+      // Mexico - Major cities by state
+      "Mexico City": ["Mexico City", "Iztapalapa", "Gustavo A. Madero", "Álvaro Obregón", "Coyoacán"],
+      "Jalisco": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá", "Puerto Vallarta"],
+      "Nuevo León": ["Monterrey", "San Pedro Garza García", "Apodaca", "Guadalupe", "Santa Catarina"],
+      "Puebla": ["Puebla", "Cholula", "Tehuacán", "San Martín Texmelucan", "Huauchinango"],
+      "Guanajuato": ["León", "Irapuato", "Celaya", "Salamanca", "Guanajuato"],
+      "Veracruz": ["Veracruz", "Xalapa", "Coatzacoalcos", "Córdoba", "Poza Rica"],
+      "Yucatán": ["Mérida", "Valladolid", "Progreso", "Tizimín", "Kanasín"],
+      "Quintana Roo": ["Cancún", "Playa del Carmen", "Chetumal", "Cozumel", "Tulum"],
+      // South Africa - Major cities by province
+      "Gauteng": ["Johannesburg", "Pretoria", "Soweto", "East Rand", "Centurion"],
+      "Western Cape": ["Cape Town", "Stellenbosch", "Paarl", "Worcester", "George"],
+      "KwaZulu-Natal": ["Durban", "Pietermaritzburg", "Umlazi", "Pinetown", "Newcastle"],
+      "Eastern Cape": ["Port Elizabeth", "East London", "Uitenhage", "Queenstown", "Bhisho"],
+      "Free State": ["Bloemfontein", "Welkom", "Kroonstad", "Bethlehem", "Sasolburg"],
+      "Limpopo": ["Polokwane", "Thohoyandou", "Mokopane", "Musina", "Bela-Bela"],
+      // Japan - Major cities by prefecture
+      "Tokyo": ["Tokyo", "Shibuya", "Shinjuku", "Ikebukuro", "Ginza"],
+      "Osaka": ["Osaka", "Sakai", "Higashiosaka", "Yao", "Suita"],
+      "Kanagawa": ["Yokohama", "Kawasaki", "Sagamihara", "Yokosuka", "Fujisawa"],
+      "Aichi": ["Nagoya", "Toyohashi", "Toyota", "Okazaki", "Ichinomiya"],
+      "Fukuoka": ["Fukuoka", "Kitakyushu", "Kurume", "Omuta", "Yanagawa"],
+      "Hokkaido": ["Sapporo", "Asahikawa", "Hakodate", "Kushiro", "Obihiro"],
+      "Hyogo": ["Kobe", "Himeji", "Nishinomiya", "Amagasaki", "Akashi"],
+      "Kyoto": ["Kyoto", "Uji", "Kameoka", "Maizuru", "Ayabe"],
+      // South Korea - Major cities by province
+      "Seoul": ["Seoul", "Gangnam", "Gangbuk", "Jongno", "Mapo"],
+      "Busan": ["Busan", "Haeundae", "Seomyeon", "Jung-gu", "Saha"],
+      "Incheon": ["Incheon", "Songdo", "Yeonsu", "Bupyeong", "Namdong"],
+      "Gyeonggi": ["Suwon", "Seongnam", "Goyang", "Yongin", "Bucheon"],
+      "Gyeongsangnam": ["Changwon", "Jinju", "Geoje", "Gimhae", "Yangsan"],
+      "Gyeongsangbuk": ["Daegu", "Gyeongju", "Andong", "Pohang", "Gumi"],
+      "Jeollanam": ["Gwangju", "Mokpo", "Yeosu", "Suncheon", "Naju"],
+      // US - Additional states - English cities
+      "Massachusetts": ["Boston", "Worcester", "Springfield", "Cambridge", "Lowell"],
+      "Tennessee": ["Nashville", "Memphis", "Knoxville", "Chattanooga", "Murfreesboro"],
+      "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+      "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+      "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+      "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+      "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+      "Minnesota": ["Minneapolis", "St. Paul", "Rochester", "Duluth", "Bloomington"],
+      "South Carolina": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+      "Alabama": ["Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa"],
+      "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+      "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+      "Oregon": ["Portland", "Eugene", "Salem", "Gresham", "Hillsboro"],
+      "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+      "Connecticut": ["Bridgeport", "New Haven", "Hartford", "Stamford", "Waterbury"],
+      "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+      "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+      "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+      "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+      "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+      "Kansas": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+      "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+      "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+      "West Virginia": ["Charleston", "Huntington", "Parkersburg", "Morgantown", "Wheeling"],
+      "Idaho": ["Boise", "Nampa", "Meridian", "Idaho Falls", "Pocatello"],
+      "Hawaii": ["Honolulu", "Pearl City", "Hilo", "Kailua", "Kaneohe"],
+      "New Hampshire": ["Manchester", "Nashua", "Concord", "Derry", "Rochester"],
+      "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+      "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+      "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+      "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+      "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+      "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+      "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+      "Vermont": ["Burlington", "Essex", "South Burlington", "Colchester", "Montpelier"],
+      "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"],
+      // Canada - Additional provinces - English cities
+      "Newfoundland and Labrador": ["St. John's", "Mount Pearl", "Corner Brook", "Conception Bay South", "Grand Falls-Windsor"],
+      "Prince Edward Island": ["Charlottetown", "Summerside", "Stratford", "Cornwall", "Montague"],
+      "Northwest Territories": ["Yellowknife", "Hay River", "Inuvik", "Fort Smith", "Behchokǫ̀"],
+      "Yukon": ["Whitehorse", "Dawson City", "Watson Lake", "Haines Junction", "Carmacks"],
+      "Nunavut": ["Iqaluit", "Rankin Inlet", "Arviat", "Baker Lake", "Cambridge Bay"],
+      // Brazil - Additional states - Portuguese cities
+      "Goiás": ["Goiânia", "Aparecida de Goiânia", "Anápolis", "Rio Verde", "Luziânia"],
+      "Maranhão": ["São Luís", "Imperatriz", "Caxias", "Timon", "Codó"],
+      "Amazonas": ["Manaus", "Parintins", "Itacoatiara", "Manacapuru", "Coari"],
+      "Espírito Santo": ["Vitória", "Vila Velha", "Cariacica", "Serra", "Cachoeiro de Itapemirim"],
+      "Paraíba": ["João Pessoa", "Campina Grande", "Santa Rita", "Patos", "Bayeux"],
+      "Rio Grande do Norte": ["Natal", "Mossoró", "Parnamirim", "São Gonçalo do Amarante", "Macaíba"],
+      "Mato Grosso": ["Cuiabá", "Várzea Grande", "Rondonópolis", "Sinop", "Tangará da Serra"],
+      "Alagoas": ["Maceió", "Arapiraca", "Rio Largo", "Palmeira dos Índios", "União dos Palmares"],
+      "Piauí": ["Teresina", "Parnaíba", "Picos", "Piripiri", "Campo Maior"],
+      "Distrito Federal": ["Brasília", "Ceilândia", "Taguatinga", "Sobradinho", "Gama"],
+      "Mato Grosso do Sul": ["Campo Grande", "Dourados", "Três Lagoas", "Corumbá", "Ponta Porã"],
+      "Sergipe": ["Aracaju", "Nossa Senhora do Socorro", "Lagarto", "Itabaiana", "São Cristóvão"],
+      "Rondônia": ["Porto Velho", "Ji-Paraná", "Ariquemes", "Vilhena", "Cacoal"],
+      "Tocantins": ["Palmas", "Araguaína", "Gurupi", "Porto Nacional", "Paraíso do Tocantins"],
+      "Acre": ["Rio Branco", "Cruzeiro do Sul", "Sena Madureira", "Tarauacá", "Feijó"],
+      "Amapá": ["Macapá", "Santana", "Laranjal do Jari", "Oiapoque", "Mazagão"],
+      "Roraima": ["Boa Vista", "Rorainópolis", "Caracaraí", "Alto Alegre", "Pacaraima"],
+      // Malaysia - Additional states - Malaysian cities
+      "Pahang": ["Kuantan", "Temerloh", "Bentong", "Raub", "Pekan"],
+      "Terengganu": ["Kuala Terengganu", "Kemaman", "Dungun", "Besut", "Hulu Terengganu"],
+      "Melaka": ["Malacca City", "Alor Gajah", "Jasin", "Masjid Tanah", "Tangkak"],
+      "Negeri Sembilan": ["Seremban", "Nilai", "Port Dickson", "Tampin", "Rembau"],
+      "Perlis": ["Kangar", "Arau", "Padang Besar", "Kuala Perlis", "Simpang Empat"],
+      "Kuala Lumpur": ["Kuala Lumpur", "Bukit Bintang", "Ampang", "Cheras", "Bangsar"],
+      "Labuan": ["Victoria", "Layang-Layangan", "Kiamsam", "Bukit Kuda", "Sungai Lada"],
+      "Putrajaya": ["Putrajaya", "Presint 1", "Presint 2", "Presint 3", "Presint 8"],
+      // Mexico - Additional states - Spanish cities
+      "México": ["Toluca", "Naucalpan", "Ecatepec", "Tlalnepantla", "Atizapán"],
+      "Chihuahua": ["Ciudad Juárez", "Chihuahua", "Delicias", "Parral", "Cuauhtémoc"],
+      "Coahuila": ["Saltillo", "Torreón", "Monclova", "Piedras Negras", "Acuña"],
+      "Sonora": ["Hermosillo", "Ciudad Obregón", "Nogales", "San Luis Río Colorado", "Navojoa"],
+      "Tamaulipas": ["Reynosa", "Matamoros", "Nuevo Laredo", "Tampico", "Ciudad Victoria"],
+      "Oaxaca": ["Oaxaca", "San Juan Bautista Tuxtepec", "Salina Cruz", "Juchitán", "Puerto Escondido"],
+      "Chiapas": ["Tuxtla Gutiérrez", "Tapachula", "San Cristóbal", "Palenque", "Comitán"],
+      "Michoacán": ["Morelia", "Uruapan", "Zamora", "Lázaro Cárdenas", "Apatzingán"],
+      "Baja California": ["Tijuana", "Mexicali", "Ensenada", "Rosarito", "Tecate"],
+      "Baja California Sur": ["La Paz", "San José del Cabo", "Cabo San Lucas", "Ciudad Constitución", "Todos Santos"],
+      "Sinaloa": ["Culiacán", "Mazatlán", "Los Mochis", "Guamúchil", "Navolato"],
+      "Durango": ["Durango", "Gómez Palacio", "Lerdo", "Santiago Papasquiaro", "El Salto"],
+      "Aguascalientes": ["Aguascalientes", "Jesús María", "Calvillo", "Rincón de Romos", "Pabellón de Arteaga"],
+      "Morelos": ["Cuernavaca", "Cuautla", "Jiutepec", "Temixco", "Yautepec"],
+      "Zacatecas": ["Zacatecas", "Fresnillo", "Guadalupe", "Jerez", "Río Grande"],
+      "Tlaxcala": ["Tlaxcala", "Apizaco", "Chiautempan", "Huamantla", "San Pablo del Monte"],
+      "Nayarit": ["Tepic", "Xalisco", "Bahía de Banderas", "Santiago Ixcuintla", "Compostela"],
+      "Campeche": ["Campeche", "Ciudad del Carmen", "Champotón", "Escárcega", "Palizada"],
+      "Tabasco": ["Villahermosa", "Cárdenas", "Comalcalco", "Macuspana", "Paraíso"],
+      "Hidalgo": ["Pachuca", "Tulancingo", "Tizayuca", "Ixmiquilpan", "Actopan"],
+      "Colima": ["Colima", "Manzanillo", "Tecomán", "Villa de Álvarez", "Armería"],
+      "San Luis Potosí": ["San Luis Potosí", "Soledad", "Ciudad Valles", "Matehuala", "Río Verde"],
+      "Querétaro": ["Querétaro", "San Juan del Río", "Corregidora", "El Marqués", "Pedro Escobedo"],
+      // South Africa - Additional provinces - English cities
+      "Mpumalanga": ["Nelspruit", "Witbank", "Middelburg", "Secunda", "Standerton"],
+      "Northern Cape": ["Kimberley", "Upington", "Kuruman", "Springbok", "Kathu"],
+      "North West": ["Mahikeng", "Klerksdorp", "Potchefstroom", "Rustenburg", "Brits"],
+      // Japan - Additional prefectures - Japanese cities
+      "Saitama": ["Saitama", "Kawaguchi", "Koshigaya", "Tokorozawa", "Kawagoe"],
+      "Chiba": ["Chiba", "Funabashi", "Matsudo", "Ichikawa", "Kashiwa"],
+      "Miyagi": ["Sendai", "Ishinomaki", "Shiogama", "Natori", "Tagajo"],
+      "Ibaraki": ["Mito", "Tsukuba", "Hitachi", "Tsuchiura", "Koga"],
+      "Shizuoka": ["Shizuoka", "Hamamatsu", "Numazu", "Fujieda", "Fuji"],
+      "Gifu": ["Gifu", "Ogaki", "Kakamigahara", "Tajimi", "Seki"],
+      "Tochigi": ["Utsunomiya", "Ashikaga", "Tochigi", "Kanuma", "Oyama"],
+      "Nagano": ["Nagano", "Matsumoto", "Ueda", "Ina", "Iida"],
+      "Okayama": ["Okayama", "Kurashiki", "Tsuyama", "Tamano", "Kasaoka"],
+      "Hiroshima": ["Hiroshima", "Fukuyama", "Kure", "Higashihiroshima", "Onomichi"],
+      "Kumamoto": ["Kumamoto", "Yatsushiro", "Hitoyoshi", "Arao", "Minamata"],
+      "Miyazaki": ["Miyazaki", "Miyakonojo", "Nobeoka", "Hyuga", "Kobayashi"],
+      "Kagoshima": ["Kagoshima", "Kanoya", "Satsumasendai", "Kokubu", "Makurazaki"],
+      "Okinawa": ["Naha", "Okinawa", "Uruma", "Ginowan", "Ishigaki"],
+      "Yamaguchi": ["Yamaguchi", "Shimonoseki", "Ube", "Hofu", "Kudamatsu"],
+      "Gunma": ["Maebashi", "Takasaki", "Isesaki", "Ota", "Kiryu"],
+      "Niigata": ["Niigata", "Nagaoka", "Joetsu", "Sanjo", "Kashiwazaki"],
+      "Ehime": ["Matsuyama", "Niihama", "Imabari", "Uwajima", "Saijo"],
+      "Nagasaki": ["Nagasaki", "Sasebo", "Isahaya", "Omura", "Hirado"],
+      // South Korea - Additional provinces - Korean cities
+      "Daegu": ["Daegu", "Dalseo", "Seo", "Nam", "Buk"],
+      "Daejeon": ["Daejeon", "Yuseong", "Jung", "Dong", "Seo"],
+      "Gwangju": ["Gwangju", "Gwangsan", "Dong", "Buk", "Nam"],
+      "Ulsan": ["Ulsan", "Nam", "Buk", "Jung", "Ulju"],
+      "Jeollabuk": ["Jeonju", "Iksan", "Gunsan", "Jeongeup", "Gimje"],
+      "Chungcheongnam": ["Cheonan", "Asan", "Seosan", "Dangjin", "Gongju"],
+      "Chungcheongbuk": ["Cheongju", "Chungju", "Jecheon", "Boeun", "Okcheon"],
+      "Gangwon": ["Chuncheon", "Wonju", "Gangneung", "Donghae", "Sokcho"],
+      "Jeju": ["Jeju", "Seogwipo", "Aewol", "Jocheon", "Gujwa"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // FONT FAMILIES FOR EACH STATE
+    const stateFonts = {
+      "Gujarat": "Noto Sans Gujarati",
+      "Maharashtra": "Noto Sans Devanagari",
+      "Tamil Nadu": "Noto Sans Tamil",
+      "Karnataka": "Noto Sans Kannada",
+      "Kerala": "Noto Sans Malayalam",
+      "Andhra Pradesh": "Noto Sans Telugu",
+      "Telangana": "Noto Sans Telugu",
+      "West Bengal": "Noto Sans Bengali",
+      "Odisha": "Noto Sans Oriya",
+      "Punjab": "Noto Sans Punjabi",
+      "Rajasthan": "Noto Sans Devanagari",
+      "Uttar Pradesh": "Noto Sans Devanagari",
+      "Madhya Pradesh": "Noto Sans Devanagari",
+      "Bihar": "Noto Sans Devanagari",
+      "Assam": "Noto Sans Assamese",
+      "Haryana": "Noto Sans Devanagari",
+      "Jharkhand": "Noto Sans Devanagari",
+      "Chhattisgarh": "Noto Sans Devanagari",
+      "Himachal Pradesh": "Noto Sans Devanagari",
+      "Uttarakhand": "Noto Sans Devanagari",
+      "Delhi": "Arial",
+      "Goa": "Noto Sans Devanagari",
+      "Manipur": "Noto Sans Devanagari",
+      "Meghalaya": "Arial",
+      "Mizoram": "Arial",
+      "Nagaland": "Arial",
+      "Tripura": "Noto Sans Bengali",
+      "Sikkim": "Noto Sans Devanagari",
+      "Arunachal Pradesh": "Arial",
+      // US - English
+      "California": "Arial", "New York": "Arial", "Texas": "Arial", "Florida": "Arial",
+      "Illinois": "Arial", "Pennsylvania": "Arial", "Ohio": "Arial", "Georgia": "Arial",
+      "North Carolina": "Arial", "Michigan": "Arial", "New Jersey": "Arial",
+      "Virginia": "Arial", "Washington": "Arial", "Arizona": "Arial",
+      "Massachusetts": "Arial", "Tennessee": "Arial", "Indiana": "Arial", "Missouri": "Arial",
+      "Maryland": "Arial", "Wisconsin": "Arial", "Colorado": "Arial", "Minnesota": "Arial",
+      "South Carolina": "Arial", "Alabama": "Arial", "Louisiana": "Arial", "Kentucky": "Arial",
+      "Oregon": "Arial", "Oklahoma": "Arial", "Connecticut": "Arial", "Utah": "Arial",
+      "Nevada": "Arial", "Iowa": "Arial", "Arkansas": "Arial", "Mississippi": "Arial",
+      "Kansas": "Arial", "New Mexico": "Arial", "Nebraska": "Arial", "West Virginia": "Arial",
+      "Idaho": "Arial", "Hawaii": "Arial", "New Hampshire": "Arial", "Maine": "Arial",
+      "Rhode Island": "Arial", "Montana": "Arial", "Delaware": "Arial", "South Dakota": "Arial",
+      "North Dakota": "Arial", "Alaska": "Arial", "Vermont": "Arial", "Wyoming": "Arial",
+      // Canada - English
+      "Ontario": "Arial", "Quebec": "Arial", "British Columbia": "Arial",
+      "Alberta": "Arial", "Manitoba": "Arial", "Saskatchewan": "Arial",
+      "Nova Scotia": "Arial", "New Brunswick": "Arial",
+      "Newfoundland and Labrador": "Arial", "Prince Edward Island": "Arial",
+      "Northwest Territories": "Arial", "Yukon": "Arial", "Nunavut": "Arial",
+      // Brazil - Portuguese (using Arial, can add Noto Sans if needed)
+      "São Paulo": "Arial", "Rio de Janeiro": "Arial", "Minas Gerais": "Arial",
+      "Bahia": "Arial", "Paraná": "Arial", "Rio Grande do Sul": "Arial",
+      "Pernambuco": "Arial", "Ceará": "Arial", "Pará": "Arial",
+      "Goiás": "Arial", "Maranhão": "Arial", "Amazonas": "Arial", "Espírito Santo": "Arial",
+      "Paraíba": "Arial", "Rio Grande do Norte": "Arial", "Mato Grosso": "Arial",
+      "Alagoas": "Arial", "Piauí": "Arial", "Distrito Federal": "Arial", "Mato Grosso do Sul": "Arial",
+      "Sergipe": "Arial", "Rondônia": "Arial", "Tocantins": "Arial", "Acre": "Arial",
+      "Amapá": "Arial", "Roraima": "Arial",
+      // Malaysia - English/Malay (using Arial)
+      "Selangor": "Arial", "Johor": "Arial", "Sabah": "Arial", "Sarawak": "Arial",
+      "Perak": "Arial", "Kedah": "Arial", "Kelantan": "Arial", "Penang": "Arial",
+      "Pahang": "Arial", "Terengganu": "Arial", "Melaka": "Arial", "Negeri Sembilan": "Arial",
+      "Perlis": "Arial", "Kuala Lumpur": "Arial", "Labuan": "Arial", "Putrajaya": "Arial",
+      // Mexico - Spanish (using Arial)
+      "Mexico City": "Arial", "Jalisco": "Arial", "Nuevo León": "Arial",
+      "Puebla": "Arial", "Guanajuato": "Arial", "Veracruz": "Arial",
+      "Yucatán": "Arial", "Quintana Roo": "Arial",
+      "México": "Arial", "Chihuahua": "Arial", "Coahuila": "Arial", "Sonora": "Arial",
+      "Tamaulipas": "Arial", "Oaxaca": "Arial", "Chiapas": "Arial", "Michoacán": "Arial",
+      "Baja California": "Arial", "Baja California Sur": "Arial", "Sinaloa": "Arial",
+      "Durango": "Arial", "Aguascalientes": "Arial", "Morelos": "Arial", "Zacatecas": "Arial",
+      "Tlaxcala": "Arial", "Nayarit": "Arial", "Campeche": "Arial", "Tabasco": "Arial",
+      "Hidalgo": "Arial", "Colima": "Arial", "San Luis Potosí": "Arial", "Querétaro": "Arial",
+      // South Africa - English (using Arial)
+      "Gauteng": "Arial", "Western Cape": "Arial", "KwaZulu-Natal": "Arial",
+      "Eastern Cape": "Arial", "Free State": "Arial", "Limpopo": "Arial",
+      "Mpumalanga": "Arial", "Northern Cape": "Arial", "North West": "Arial",
+      // Japan - Japanese (using Arial, can add Noto Sans JP if needed)
+      "Tokyo": "Arial", "Osaka": "Arial", "Kanagawa": "Arial", "Aichi": "Arial",
+      "Fukuoka": "Arial", "Hokkaido": "Arial", "Hyogo": "Arial", "Kyoto": "Arial",
+      "Saitama": "Arial", "Chiba": "Arial", "Miyagi": "Arial",
+      "Ibaraki": "Arial", "Shizuoka": "Arial", "Gifu": "Arial", "Tochigi": "Arial",
+      "Nagano": "Arial", "Okayama": "Arial", "Hiroshima": "Arial", "Kumamoto": "Arial",
+      "Miyazaki": "Arial", "Kagoshima": "Arial", "Okinawa": "Arial", "Yamaguchi": "Arial",
+      "Gunma": "Arial", "Niigata": "Arial", "Ehime": "Arial", "Nagasaki": "Arial",
+      // South Korea - Korean (using Arial, can add Noto Sans KR if needed)
+      "Seoul": "Arial", "Busan": "Arial", "Incheon": "Arial", "Gyeonggi": "Arial",
+      "Gyeongsangnam": "Arial", "Gyeongsangbuk": "Arial", "Jeollanam": "Arial",
+      "Daegu": "Arial", "Daejeon": "Arial", "Gwangju": "Arial", "Ulsan": "Arial",
+      "Jeollabuk": "Arial", "Chungcheongnam": "Arial", "Chungcheongbuk": "Arial",
+      "Gangwon": "Arial", "Jeju": "Arial",
+      "default": "Arial"
+    };
+
+    // STATE NAMES IN LOCAL LANGUAGES
+    const stateNamesLocal = {
+      "Gujarat": "ગુજરાત",
+      "Maharashtra": "महाराष्ट्र",
+      "Tamil Nadu": "தமிழ்நாடு",
+      "Karnataka": "ಕರ್ನಾಟಕ",
+      "Kerala": "കേരളം",
+      "Andhra Pradesh": "ఆంధ్ర ప్రదేశ్",
+      "Telangana": "తెలంగాణ",
+      "West Bengal": "পশ্চিমবঙ্গ",
+      "Odisha": "ଓଡ଼ିଶା",
+      "Punjab": "ਪੰਜਾਬ",
+      "Rajasthan": "राजस्थान",
+      "Uttar Pradesh": "उत्तर प्रदेश",
+      "Madhya Pradesh": "मध्य प्रदेश",
+      "Bihar": "बिहार",
+      "Assam": "অসম",
+      "Haryana": "हरियाणा",
+      "Jharkhand": "झारखंड",
+      "Chhattisgarh": "छत्तीसगढ़",
+      "Himachal Pradesh": "हिमाचल प्रदेश",
+      "Uttarakhand": "उत्तराखंड",
+      "Delhi": "Delhi",
+      "Goa": "गोवा",
+      "Manipur": "মণিপুর",
+      "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram",
+      "Nagaland": "Nagaland",
+      "Tripura": "ত্রিপুরা",
+      "Sikkim": "सिक्किम",
+      "Arunachal Pradesh": "Arunachal Pradesh",
+      // US - English state names
+      "California": "California", "New York": "New York", "Texas": "Texas", "Florida": "Florida",
+      "Illinois": "Illinois", "Pennsylvania": "Pennsylvania", "Ohio": "Ohio", "Georgia": "Georgia",
+      "North Carolina": "North Carolina", "Michigan": "Michigan", "New Jersey": "New Jersey",
+      "Virginia": "Virginia", "Washington": "Washington", "Arizona": "Arizona",
+      "Massachusetts": "Massachusetts", "Tennessee": "Tennessee", "Indiana": "Indiana", "Missouri": "Missouri",
+      "Maryland": "Maryland", "Wisconsin": "Wisconsin", "Colorado": "Colorado", "Minnesota": "Minnesota",
+      "South Carolina": "South Carolina", "Alabama": "Alabama", "Louisiana": "Louisiana", "Kentucky": "Kentucky",
+      "Oregon": "Oregon", "Oklahoma": "Oklahoma", "Connecticut": "Connecticut", "Utah": "Utah",
+      "Nevada": "Nevada", "Iowa": "Iowa", "Arkansas": "Arkansas", "Mississippi": "Mississippi",
+      "Kansas": "Kansas", "New Mexico": "New Mexico", "Nebraska": "Nebraska", "West Virginia": "West Virginia",
+      "Idaho": "Idaho", "Hawaii": "Hawaii", "New Hampshire": "New Hampshire", "Maine": "Maine",
+      "Rhode Island": "Rhode Island", "Montana": "Montana", "Delaware": "Delaware", "South Dakota": "South Dakota",
+      "North Dakota": "North Dakota", "Alaska": "Alaska", "Vermont": "Vermont", "Wyoming": "Wyoming",
+      // Canada - English/French province names
+      "Ontario": "Ontario", "Quebec": "Québec", "British Columbia": "British Columbia",
+      "Alberta": "Alberta", "Manitoba": "Manitoba", "Saskatchewan": "Saskatchewan",
+      "Nova Scotia": "Nova Scotia", "New Brunswick": "Nouveau-Brunswick",
+      "Newfoundland and Labrador": "Terre-Neuve-et-Labrador", "Prince Edward Island": "Île-du-Prince-Édouard",
+      "Northwest Territories": "Territoires du Nord-Ouest", "Yukon": "Yukon", "Nunavut": "Nunavut",
+      // Brazil - Portuguese state names
+      "São Paulo": "São Paulo", "Rio de Janeiro": "Rio de Janeiro", "Minas Gerais": "Minas Gerais",
+      "Bahia": "Bahia", "Paraná": "Paraná", "Rio Grande do Sul": "Rio Grande do Sul",
+      "Pernambuco": "Pernambuco", "Ceará": "Ceará", "Pará": "Pará",
+      "Goiás": "Goiás", "Maranhão": "Maranhão", "Amazonas": "Amazonas", "Espírito Santo": "Espírito Santo",
+      "Paraíba": "Paraíba", "Rio Grande do Norte": "Rio Grande do Norte", "Mato Grosso": "Mato Grosso",
+      "Alagoas": "Alagoas", "Piauí": "Piauí", "Distrito Federal": "Distrito Federal", "Mato Grosso do Sul": "Mato Grosso do Sul",
+      "Sergipe": "Sergipe", "Rondônia": "Rondônia", "Tocantins": "Tocantins", "Acre": "Acre",
+      "Amapá": "Amapá", "Roraima": "Roraima",
+      // Malaysia - English/Malay state names
+      "Selangor": "Selangor", "Johor": "Johor", "Sabah": "Sabah", "Sarawak": "Sarawak",
+      "Perak": "Perak", "Kedah": "Kedah", "Kelantan": "Kelantan", "Penang": "Pulau Pinang",
+      "Pahang": "Pahang", "Terengganu": "Terengganu", "Melaka": "Melaka", "Negeri Sembilan": "Negeri Sembilan",
+      "Perlis": "Perlis", "Kuala Lumpur": "Kuala Lumpur", "Labuan": "Labuan", "Putrajaya": "Putrajaya",
+      // Mexico - Spanish state names
+      "Mexico City": "Ciudad de México", "Jalisco": "Jalisco", "Nuevo León": "Nuevo León",
+      "Puebla": "Puebla", "Guanajuato": "Guanajuato", "Veracruz": "Veracruz",
+      "Yucatán": "Yucatán", "Quintana Roo": "Quintana Roo",
+      "México": "Estado de México", "Chihuahua": "Chihuahua", "Coahuila": "Coahuila", "Sonora": "Sonora",
+      "Tamaulipas": "Tamaulipas", "Oaxaca": "Oaxaca", "Chiapas": "Chiapas", "Michoacán": "Michoacán",
+      "Baja California": "Baja California", "Baja California Sur": "Baja California Sur", "Sinaloa": "Sinaloa",
+      "Durango": "Durango", "Aguascalientes": "Aguascalientes", "Morelos": "Morelos", "Zacatecas": "Zacatecas",
+      "Tlaxcala": "Tlaxcala", "Nayarit": "Nayarit", "Campeche": "Campeche", "Tabasco": "Tabasco",
+      "Hidalgo": "Hidalgo", "Colima": "Colima", "San Luis Potosí": "San Luis Potosí", "Querétaro": "Querétaro",
+      // South Africa - English province names
+      "Gauteng": "Gauteng", "Western Cape": "Western Cape", "KwaZulu-Natal": "KwaZulu-Natal",
+      "Eastern Cape": "Eastern Cape", "Free State": "Free State", "Limpopo": "Limpopo",
+      "Mpumalanga": "Mpumalanga", "Northern Cape": "Northern Cape", "North West": "North West",
+      // Japan - Japanese prefecture names
+      "Tokyo": "東京都", "Osaka": "大阪府", "Kanagawa": "神奈川県", "Aichi": "愛知県",
+      "Fukuoka": "福岡県", "Hokkaido": "北海道", "Hyogo": "兵庫県", "Kyoto": "京都府",
+      "Saitama": "埼玉県", "Chiba": "千葉県", "Miyagi": "宮城県",
+      "Ibaraki": "茨城県", "Shizuoka": "静岡県", "Gifu": "岐阜県", "Tochigi": "栃木県",
+      "Nagano": "長野県", "Okayama": "岡山県", "Hiroshima": "広島県", "Kumamoto": "熊本県",
+      "Miyazaki": "宮崎県", "Kagoshima": "鹿児島県", "Okinawa": "沖縄県", "Yamaguchi": "山口県",
+      "Gunma": "群馬県", "Niigata": "新潟県", "Ehime": "愛媛県", "Nagasaki": "長崎県",
+      // South Korea - Korean province names
+      "Seoul": "서울특별시", "Busan": "부산광역시", "Incheon": "인천광역시", "Gyeonggi": "경기도",
+      "Gyeongsangnam": "경상남도", "Gyeongsangbuk": "경상북도", "Jeollanam": "전라남도",
+      "Daegu": "대구광역시", "Daejeon": "대전광역시", "Gwangju": "광주광역시", "Ulsan": "울산광역시",
+      "Jeollabuk": "전라북도", "Chungcheongnam": "충청남도", "Chungcheongbuk": "충청북도",
+      "Gangwon": "강원도", "Jeju": "제주특별자치도",
+      "default": "Gujarat"
+    };
+
+    let currentState = "Gujarat";
+    let detectedCity = null; // Store detected city from API
+    let useEnglishMode = false; // Flag to use English when IP detection fails
+    let currentCountry = "IN"; // Current country code (IN, US, CA, BR, MY, MX, ZA, JP, KR)
+
+    // COUNTRY MAPPING - Maps states/provinces to country codes
+    const stateToCountry = {
+      // India (IN)
+      "Gujarat": "IN", "Maharashtra": "IN", "Tamil Nadu": "IN", "Karnataka": "IN", "Kerala": "IN",
+      "Andhra Pradesh": "IN", "Telangana": "IN", "West Bengal": "IN", "Odisha": "IN", "Punjab": "IN",
+      "Rajasthan": "IN", "Uttar Pradesh": "IN", "Madhya Pradesh": "IN", "Bihar": "IN", "Assam": "IN",
+      "Haryana": "IN", "Jharkhand": "IN", "Chhattisgarh": "IN", "Himachal Pradesh": "IN", "Uttarakhand": "IN",
+      "Delhi": "IN", "Goa": "IN", "Manipur": "IN", "Meghalaya": "IN", "Mizoram": "IN",
+      "Nagaland": "IN", "Tripura": "IN", "Sikkim": "IN", "Arunachal Pradesh": "IN",
+      // US
+      "California": "US", "New York": "US", "Texas": "US", "Florida": "US", "Illinois": "US",
+      "Pennsylvania": "US", "Ohio": "US", "Georgia": "US", "North Carolina": "US", "Michigan": "US",
+      "New Jersey": "US", "Virginia": "US", "Washington": "US", "Arizona": "US", "Massachusetts": "US",
+      "Tennessee": "US", "Indiana": "US", "Missouri": "US", "Maryland": "US", "Wisconsin": "US",
+      "Colorado": "US", "Minnesota": "US", "South Carolina": "US", "Alabama": "US", "Louisiana": "US",
+      "Kentucky": "US", "Oregon": "US", "Oklahoma": "US", "Connecticut": "US", "Utah": "US",
+      "Nevada": "US", "Iowa": "US", "Arkansas": "US", "Mississippi": "US", "Kansas": "US",
+      "New Mexico": "US", "Nebraska": "US", "West Virginia": "US", "Idaho": "US", "Hawaii": "US",
+      "New Hampshire": "US", "Maine": "US", "Rhode Island": "US", "Montana": "US", "Delaware": "US",
+      "South Dakota": "US", "North Dakota": "US", "Alaska": "US", "Vermont": "US", "Wyoming": "US",
+      // Canada
+      "Ontario": "CA", "Quebec": "CA", "British Columbia": "CA", "Alberta": "CA", "Manitoba": "CA",
+      "Saskatchewan": "CA", "Nova Scotia": "CA", "New Brunswick": "CA", "Newfoundland and Labrador": "CA",
+      "Prince Edward Island": "CA", "Northwest Territories": "CA", "Yukon": "CA", "Nunavut": "CA",
+      // Brazil
+      "São Paulo": "BR", "Rio de Janeiro": "BR", "Minas Gerais": "BR", "Bahia": "BR", "Paraná": "BR",
+      "Rio Grande do Sul": "BR", "Pernambuco": "BR", "Ceará": "BR", "Pará": "BR", "Goiás": "BR",
+      "Maranhão": "BR", "Amazonas": "BR", "Espírito Santo": "BR", "Paraíba": "BR", "Rio Grande do Norte": "BR",
+      "Mato Grosso": "BR", "Alagoas": "BR", "Piauí": "BR", "Distrito Federal": "BR", "Mato Grosso do Sul": "BR",
+      "Sergipe": "BR", "Rondônia": "BR", "Tocantins": "BR", "Acre": "BR", "Amapá": "BR", "Roraima": "BR",
+      // Malaysia
+      "Selangor": "MY", "Johor": "MY", "Sabah": "MY", "Sarawak": "MY", "Perak": "MY",
+      "Kedah": "MY", "Kelantan": "MY", "Penang": "MY", "Pahang": "MY", "Terengganu": "MY",
+      "Melaka": "MY", "Negeri Sembilan": "MY", "Perlis": "MY", "Kuala Lumpur": "MY",
+      "Labuan": "MY", "Putrajaya": "MY",
+      // Mexico
+      "Mexico City": "MX", "Jalisco": "MX", "Nuevo León": "MX", "Puebla": "MX", "Guanajuato": "MX",
+      "Veracruz": "MX", "Yucatán": "MX", "Quintana Roo": "MX", "México": "MX", "Chihuahua": "MX",
+      "Coahuila": "MX", "Sonora": "MX", "Tamaulipas": "MX", "Oaxaca": "MX", "Chiapas": "MX",
+      "Michoacán": "MX", "Baja California": "MX", "Baja California Sur": "MX", "Sinaloa": "MX",
+      "Durango": "MX", "Aguascalientes": "MX", "Morelos": "MX", "Zacatecas": "MX", "Tlaxcala": "MX",
+      "Nayarit": "MX", "Campeche": "MX", "Tabasco": "MX", "Hidalgo": "MX", "Colima": "MX",
+      "San Luis Potosí": "MX", "Querétaro": "MX",
+      // South Africa
+      "Gauteng": "ZA", "Western Cape": "ZA", "KwaZulu-Natal": "ZA", "Eastern Cape": "ZA",
+      "Free State": "ZA", "Limpopo": "ZA", "Mpumalanga": "ZA", "Northern Cape": "ZA", "North West": "ZA",
+      // Japan
+      "Tokyo": "JP", "Osaka": "JP", "Kanagawa": "JP", "Aichi": "JP", "Fukuoka": "JP",
+      "Hokkaido": "JP", "Hyogo": "JP", "Kyoto": "JP", "Saitama": "JP", "Chiba": "JP",
+      "Miyagi": "JP", "Ibaraki": "JP", "Shizuoka": "JP", "Gifu": "JP", "Tochigi": "JP",
+      "Nagano": "JP", "Okayama": "JP", "Hiroshima": "JP", "Kumamoto": "JP", "Miyazaki": "JP",
+      "Kagoshima": "JP", "Okinawa": "JP", "Yamaguchi": "JP", "Gunma": "JP", "Niigata": "JP",
+      "Ehime": "JP", "Nagasaki": "JP",
+      // South Korea
+      "Seoul": "KR", "Busan": "KR", "Incheon": "KR", "Gyeonggi": "KR", "Gyeongsangnam": "KR",
+      "Gyeongsangbuk": "KR", "Jeollanam": "KR", "Daegu": "KR", "Daejeon": "KR", "Gwangju": "KR",
+      "Ulsan": "KR", "Jeollabuk": "KR", "Chungcheongnam": "KR", "Chungcheongbuk": "KR",
+      "Gangwon": "KR", "Jeju": "KR"
+    };
+
+    // COUNTRY FLAGS - Flag emojis for each country
+    const countryFlags = {
+      "IN": "🇮🇳", // India
+      "US": "🇺🇸", // United States
+      "CA": "🇨🇦", // Canada
+      "BR": "🇧🇷", // Brazil
+      "MY": "🇲🇾", // Malaysia
+      "MX": "🇲🇽", // Mexico
+      "ZA": "🇿🇦", // South Africa
+      "JP": "🇯🇵", // Japan
+      "KR": "🇰🇷"  // South Korea
+    };
+
+    // COUNTRY STATES - Organized by country for random selection
+    const countryStates = {
+      "IN": ["Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh", "Telangana", "West Bengal", "Odisha", "Punjab", "Rajasthan", "Uttar Pradesh", "Madhya Pradesh", "Bihar", "Assam", "Haryana", "Jharkhand", "Chhattisgarh", "Himachal Pradesh", "Uttarakhand", "Delhi", "Goa"],
+      "US": ["California", "New York", "Texas", "Florida", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "New Jersey", "Virginia", "Washington", "Arizona", "Massachusetts", "Tennessee", "Indiana", "Missouri", "Maryland", "Wisconsin", "Colorado", "Minnesota", "South Carolina", "Alabama", "Louisiana", "Kentucky", "Oregon", "Oklahoma", "Connecticut", "Utah", "Nevada", "Iowa", "Arkansas", "Mississippi", "Kansas", "New Mexico", "Nebraska", "West Virginia", "Idaho", "Hawaii", "New Hampshire", "Maine", "Rhode Island", "Montana", "Delaware", "South Dakota", "North Dakota", "Alaska", "Vermont", "Wyoming"],
+      "CA": ["Ontario", "Quebec", "British Columbia", "Alberta", "Manitoba", "Saskatchewan", "Nova Scotia", "New Brunswick", "Newfoundland and Labrador", "Prince Edward Island", "Northwest Territories", "Yukon", "Nunavut"],
+      "BR": ["São Paulo", "Rio de Janeiro", "Minas Gerais", "Bahia", "Paraná", "Rio Grande do Sul", "Pernambuco", "Ceará", "Pará", "Goiás", "Maranhão", "Amazonas", "Espírito Santo", "Paraíba", "Rio Grande do Norte", "Mato Grosso", "Alagoas", "Piauí", "Distrito Federal", "Mato Grosso do Sul", "Sergipe", "Rondônia", "Tocantins", "Acre", "Amapá", "Roraima"],
+      "MY": ["Selangor", "Johor", "Sabah", "Sarawak", "Perak", "Kedah", "Kelantan", "Penang", "Pahang", "Terengganu", "Melaka", "Negeri Sembilan", "Perlis", "Kuala Lumpur", "Labuan", "Putrajaya"],
+      "MX": ["Mexico City", "Jalisco", "Nuevo León", "Puebla", "Guanajuato", "Veracruz", "Yucatán", "Quintana Roo", "México", "Chihuahua", "Coahuila", "Sonora", "Tamaulipas", "Oaxaca", "Chiapas", "Michoacán", "Baja California", "Baja California Sur", "Sinaloa", "Durango", "Aguascalientes", "Morelos", "Zacatecas", "Tlaxcala", "Nayarit", "Campeche", "Tabasco", "Hidalgo", "Colima", "San Luis Potosí", "Querétaro"],
+      "ZA": ["Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape", "Free State", "Limpopo", "Mpumalanga", "Northern Cape", "North West"],
+      "JP": ["Tokyo", "Osaka", "Kanagawa", "Aichi", "Fukuoka", "Hokkaido", "Hyogo", "Kyoto", "Saitama", "Chiba", "Miyagi", "Ibaraki", "Shizuoka", "Gifu", "Tochigi", "Nagano", "Okayama", "Hiroshima", "Kumamoto", "Miyazaki", "Kagoshima", "Okinawa", "Yamaguchi", "Gunma", "Niigata", "Ehime", "Nagasaki"],
+      "KR": ["Seoul", "Busan", "Incheon", "Gyeonggi", "Gyeongsangnam", "Gyeongsangbuk", "Jeollanam", "Daegu", "Daejeon", "Gwangju", "Ulsan", "Jeollabuk", "Chungcheongnam", "Chungcheongbuk", "Gangwon", "Jeju"]
+    };
+
+    // ENGLISH DATA - Used when IP detection fails or default is used
+    const englishGirlNames = ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma", "Madhavi Patel", "Anjali Desai", "Riya Shah", "Sneha Mehta"];
+    
+    // All states/provinces including new countries
+    const englishStates = [
+      // India
+      "Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh", "Telangana", "West Bengal", "Odisha", "Punjab", "Rajasthan", "Uttar Pradesh", "Madhya Pradesh", "Bihar", "Assam", "Haryana", "Jharkhand", "Chhattisgarh", "Himachal Pradesh", "Uttarakhand", "Delhi", "Goa",
+      // US
+      "California", "New York", "Texas", "Florida", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "New Jersey", "Virginia", "Washington", "Arizona",
+      "Massachusetts", "Tennessee", "Indiana", "Missouri", "Maryland", "Wisconsin", "Colorado", "Minnesota",
+      "South Carolina", "Alabama", "Louisiana", "Kentucky", "Oregon", "Oklahoma", "Connecticut", "Utah",
+      "Nevada", "Iowa", "Arkansas", "Mississippi", "Kansas", "New Mexico", "Nebraska", "West Virginia",
+      "Idaho", "Hawaii", "New Hampshire", "Maine", "Rhode Island", "Montana", "Delaware", "South Dakota",
+      "North Dakota", "Alaska", "Vermont", "Wyoming",
+      // Canada
+      "Ontario", "Quebec", "British Columbia", "Alberta", "Manitoba", "Saskatchewan", "Nova Scotia", "New Brunswick",
+      "Newfoundland and Labrador", "Prince Edward Island", "Northwest Territories", "Yukon", "Nunavut",
+      // Brazil
+      "São Paulo", "Rio de Janeiro", "Minas Gerais", "Bahia", "Paraná", "Rio Grande do Sul", "Pernambuco", "Ceará", "Pará",
+      "Goiás", "Maranhão", "Amazonas", "Espírito Santo", "Paraíba", "Rio Grande do Norte", "Mato Grosso",
+      "Alagoas", "Piauí", "Distrito Federal", "Mato Grosso do Sul", "Sergipe", "Rondônia", "Tocantins", "Acre",
+      "Amapá", "Roraima",
+      // Malaysia
+      "Selangor", "Johor", "Sabah", "Sarawak", "Perak", "Kedah", "Kelantan", "Penang",
+      "Pahang", "Terengganu", "Melaka", "Negeri Sembilan", "Perlis", "Kuala Lumpur", "Labuan", "Putrajaya",
+      // Mexico
+      "Mexico City", "Jalisco", "Nuevo León", "Puebla", "Guanajuato", "Veracruz", "Yucatán", "Quintana Roo",
+      "México", "Chihuahua", "Coahuila", "Sonora", "Tamaulipas", "Oaxaca", "Chiapas", "Michoacán",
+      "Baja California", "Baja California Sur", "Sinaloa", "Durango", "Aguascalientes", "Morelos", "Zacatecas",
+      "Tlaxcala", "Nayarit", "Campeche", "Tabasco", "Hidalgo", "Colima", "San Luis Potosí", "Querétaro",
+      // South Africa
+      "Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape", "Free State", "Limpopo",
+      "Mpumalanga", "Northern Cape", "North West",
+      // Japan
+      "Tokyo", "Osaka", "Kanagawa", "Aichi", "Fukuoka", "Hokkaido", "Hyogo", "Kyoto",
+      "Saitama", "Chiba", "Miyagi", "Ibaraki", "Shizuoka", "Gifu", "Tochigi", "Nagano",
+      "Okayama", "Hiroshima", "Kumamoto", "Miyazaki", "Kagoshima", "Okinawa", "Yamaguchi", "Gunma",
+      "Niigata", "Ehime", "Nagasaki",
+      // South Korea
+      "Seoul", "Busan", "Incheon", "Gyeonggi", "Gyeongsangnam", "Gyeongsangbuk", "Jeollanam",
+      "Daegu", "Daejeon", "Gwangju", "Ulsan", "Jeollabuk", "Chungcheongnam", "Chungcheongbuk", "Gangwon", "Jeju"
+    ];
+    
+    // ENGLISH CITIES BY STATE - Cities in English for each state
+    const englishCitiesByState = {
+      "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Nashik"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+      "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belagavi"],
+      "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kannur"],
+      "Andhra Pradesh": ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Guntur"],
+      "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
+      "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+      "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri"],
+      "Punjab": ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda"],
+      "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota"],
+      "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Meerut"],
+      "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain"],
+      "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga"],
+      "Assam": ["Guwahati", "Silchar", "Jorhat", "Dibrugarh", "Tezpur"],
+      "Haryana": ["Gurugram", "Faridabad", "Ambala", "Karnal", "Panipat"],
+      "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
+      "Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Bhilai", "Rajnandgaon"],
+      "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Solan", "Kullu"],
+      "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      // US - Major cities by state
+      "California": ["Los Angeles", "San Francisco", "San Diego", "San Jose", "Sacramento"],
+      "New York": ["New York City", "Buffalo", "Rochester", "Albany", "Syracuse"],
+      "Texas": ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth"],
+      "Florida": ["Miami", "Tampa", "Orlando", "Jacksonville", "Fort Lauderdale"],
+      "Illinois": ["Chicago", "Aurora", "Naperville", "Rockford", "Joliet"],
+      "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+      "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+      "Georgia": ["Atlanta", "Augusta", "Columbus", "Savannah", "Athens"],
+      "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+      "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Lansing"],
+      "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+      "Virginia": ["Virginia Beach", "Norfolk", "Richmond", "Newport News", "Alexandria"],
+      "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+      "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Glendale"],
+      // Canada - Major cities by province
+      "Ontario": ["Toronto", "Ottawa", "Mississauga", "Brampton", "Hamilton"],
+      "Quebec": ["Montreal", "Quebec City", "Laval", "Gatineau", "Longueuil"],
+      "British Columbia": ["Vancouver", "Victoria", "Surrey", "Burnaby", "Richmond"],
+      "Alberta": ["Calgary", "Edmonton", "Red Deer", "Lethbridge", "St. Albert"],
+      "Manitoba": ["Winnipeg", "Brandon", "Steinbach", "Thompson", "Portage la Prairie"],
+      "Saskatchewan": ["Saskatoon", "Regina", "Prince Albert", "Moose Jaw", "Swift Current"],
+      "Nova Scotia": ["Halifax", "Dartmouth", "Sydney", "Truro", "New Glasgow"],
+      "New Brunswick": ["Saint John", "Moncton", "Fredericton", "Dieppe", "Miramichi"],
+      // Brazil - Major cities by state
+      "São Paulo": ["São Paulo", "Guarulhos", "Campinas", "São Bernardo", "Santo André"],
+      "Rio de Janeiro": ["Rio de Janeiro", "Niterói", "Duque de Caxias", "São Gonçalo", "Nova Iguaçu"],
+      "Minas Gerais": ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim"],
+      "Bahia": ["Salvador", "Feira de Santana", "Vitória da Conquista", "Camaçari", "Juazeiro"],
+      "Paraná": ["Curitiba", "Londrina", "Maringá", "Ponta Grossa", "Cascavel"],
+      "Rio Grande do Sul": ["Porto Alegre", "Caxias do Sul", "Pelotas", "Canoas", "Santa Maria"],
+      "Pernambuco": ["Recife", "Jaboatão", "Olinda", "Caruaru", "Petrolina"],
+      "Ceará": ["Fortaleza", "Caucaia", "Juazeiro do Norte", "Maracanaú", "Sobral"],
+      "Pará": ["Belém", "Ananindeua", "Santarém", "Marabá", "Paragominas"],
+      // Malaysia - Major cities by state
+      "Selangor": ["Shah Alam", "Petaling Jaya", "Klang", "Subang Jaya", "Ampang"],
+      "Johor": ["Johor Bahru", "Iskandar Puteri", "Pasir Gudang", "Batu Pahat", "Muar"],
+      "Sabah": ["Kota Kinabalu", "Sandakan", "Tawau", "Lahad Datu", "Keningau"],
+      "Sarawak": ["Kuching", "Miri", "Sibu", "Bintulu", "Limbang"],
+      "Perak": ["Ipoh", "Taiping", "Seri Iskandar", "Teluk Intan", "Kampar"],
+      "Kedah": ["Alor Setar", "Sungai Petani", "Kulim", "Langkawi", "Yan"],
+      "Kelantan": ["Kota Bharu", "Pasir Mas", "Tanah Merah", "Gua Musang", "Kuala Krai"],
+      "Penang": ["George Town", "Butterworth", "Bukit Mertajam", "Bayan Lepas", "Nibong Tebal"],
+      // Mexico - Major cities by state
+      "Mexico City": ["Mexico City", "Iztapalapa", "Gustavo A. Madero", "Álvaro Obregón", "Coyoacán"],
+      "Jalisco": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá", "Puerto Vallarta"],
+      "Nuevo León": ["Monterrey", "San Pedro Garza García", "Apodaca", "Guadalupe", "Santa Catarina"],
+      "Puebla": ["Puebla", "Cholula", "Tehuacán", "San Martín Texmelucan", "Huauchinango"],
+      "Guanajuato": ["León", "Irapuato", "Celaya", "Salamanca", "Guanajuato"],
+      "Veracruz": ["Veracruz", "Xalapa", "Coatzacoalcos", "Córdoba", "Poza Rica"],
+      "Yucatán": ["Mérida", "Valladolid", "Progreso", "Tizimín", "Kanasín"],
+      "Quintana Roo": ["Cancún", "Playa del Carmen", "Chetumal", "Cozumel", "Tulum"],
+      // South Africa - Major cities by province
+      "Gauteng": ["Johannesburg", "Pretoria", "Soweto", "East Rand", "Centurion"],
+      "Western Cape": ["Cape Town", "Stellenbosch", "Paarl", "Worcester", "George"],
+      "KwaZulu-Natal": ["Durban", "Pietermaritzburg", "Umlazi", "Pinetown", "Newcastle"],
+      "Eastern Cape": ["Port Elizabeth", "East London", "Uitenhage", "Queenstown", "Bhisho"],
+      "Free State": ["Bloemfontein", "Welkom", "Kroonstad", "Bethlehem", "Sasolburg"],
+      "Limpopo": ["Polokwane", "Thohoyandou", "Mokopane", "Musina", "Bela-Bela"],
+      // Japan - Major cities by prefecture
+      "Tokyo": ["Tokyo", "Shibuya", "Shinjuku", "Ikebukuro", "Ginza"],
+      "Osaka": ["Osaka", "Sakai", "Higashiosaka", "Yao", "Suita"],
+      "Kanagawa": ["Yokohama", "Kawasaki", "Sagamihara", "Yokosuka", "Fujisawa"],
+      "Aichi": ["Nagoya", "Toyohashi", "Toyota", "Okazaki", "Ichinomiya"],
+      "Fukuoka": ["Fukuoka", "Kitakyushu", "Kurume", "Omuta", "Yanagawa"],
+      "Hokkaido": ["Sapporo", "Asahikawa", "Hakodate", "Kushiro", "Obihiro"],
+      "Hyogo": ["Kobe", "Himeji", "Nishinomiya", "Amagasaki", "Akashi"],
+      "Kyoto": ["Kyoto", "Uji", "Kameoka", "Maizuru", "Ayabe"],
+      // South Korea - Major cities by province
+      "Seoul": ["Seoul", "Gangnam", "Gangbuk", "Jongno", "Mapo"],
+      "Busan": ["Busan", "Haeundae", "Seomyeon", "Jung-gu", "Saha"],
+      "Incheon": ["Incheon", "Songdo", "Yeonsu", "Bupyeong", "Namdong"],
+      "Gyeonggi": ["Suwon", "Seongnam", "Goyang", "Yongin", "Bucheon"],
+      "Gyeongsangnam": ["Changwon", "Jinju", "Geoje", "Gimhae", "Yangsan"],
+      "Gyeongsangbuk": ["Daegu", "Gyeongju", "Andong", "Pohang", "Gumi"],
+      "Jeollanam": ["Gwangju", "Mokpo", "Yeosu", "Suncheon", "Naju"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // City name mapping - English to Local Language
+    const cityMapping = {
+      "Ahmedabad": "અમદાવાદ", "Surat": "સુરત", "Vadodara": "વડોદરા", "Rajkot": "રાજકોટ", "Bhavnagar": "ભાવનગર",
+      "Mumbai": "मुंबई", "Pune": "पुणे", "Nagpur": "नागपूर", "Aurangabad": "औरंगाबाद", "Nashik": "नाशिक",
+      "Chennai": "சென்னை", "Coimbatore": "கோயம்புத்தூர்", "Madurai": "மதுரை", "Tiruchirappalli": "திருச்சி", "Salem": "சேலம்",
+      "Bangalore": "ಬೆಂಗಳೂರು", "Mysore": "ಮೈಸೂರು", "Hubli": "ಹುಬ್ಬಳ್ಳಿ", "Mangalore": "ಮಂಗಳೂರು", "Belagavi": "ಬೆಳಗಾವಿ",
+      "Thiruvananthapuram": "തിരുവനന്തപുരം", "Kochi": "കൊച്ചി", "Kozhikode": "കോഴിക്കോട്", "Thrissur": "തൃശൂർ", "Kannur": "കണ്ണൂർ",
+      "Hyderabad": "హైదరాబాద్", "Vijayawada": "విజయవాడ", "Visakhapatnam": "విశాఖపట్నం", "Tirupati": "తిరుపతి", "Guntur": "గుంటూరు",
+      "Warangal": "వరంగల్", "Nizamabad": "నిజామాబాద్", "Karimnagar": "కరీంనగర్", "Khammam": "ఖమ్మం",
+      "Kolkata": "কলকাতা", "Howrah": "হাওড়া", "Durgapur": "দুর্গাপুর", "Asansol": "আসানসোল", "Siliguri": "শিলিগুড়ি",
+      "Bhubaneswar": "ଭୁବନେଶ୍ୱର", "Cuttack": "କଟକ", "Rourkela": "ରାଉରକେଲା", "Sambalpur": "ସମ୍ବଲପୁର", "Puri": "ପୁରୀ",
+      "Amritsar": "ਅੰਮ੍ਰਿਤਸਰ", "Ludhiana": "ਲੁਧਿਆਣਾ", "Jalandhar": "ਜਲੰਧਰ", "Patiala": "ਪਟਿਆਲਾ", "Bathinda": "ਬਠਿੰਡਾ",
+      "Jaipur": "जयपुर", "Jodhpur": "जोधपुर", "Udaipur": "उदयपुर", "Ajmer": "अजमेर", "Kota": "कोटा",
+      "Lucknow": "लखनऊ", "Kanpur": "कानपुर", "Agra": "आगरा", "Varanasi": "वाराणसी", "Meerut": "मेरठ",
+      "Bhopal": "भोपाल", "Indore": "इंदौर", "Gwalior": "ग्वालियर", "Jabalpur": "जबलपुर", "Ujjain": "उज्जैन",
+      "Patna": "पटना", "Gaya": "गया", "Bhagalpur": "भागलपुर", "Muzaffarpur": "मुजफ्फरपुर", "Darbhanga": "दरभंगा",
+      "Guwahati": "গুৱাহাটী", "Silchar": "শিলচৰ", "Jorhat": "যোৰহাট", "Dibrugarh": "ডিব্ৰুগড়", "Tezpur": "তেজপুৰ",
+      "Gurugram": "गुरुग्राम", "Faridabad": "फरीदाबाद", "Ambala": "अंबाला", "Karnal": "करनाल", "Panipat": "पानीपत",
+      "Ranchi": "रांची", "Jamshedpur": "जमशेदपुर", "Dhanbad": "धनबाद", "Bokaro": "बोकारो", "Hazaribagh": "हजारीबाग",
+      "Raipur": "रायपुर", "Bilaspur": "बिलासपुर", "Durg": "दुर्ग", "Bhilai": "भिलाई", "Rajnandgaon": "राजनांदगांव",
+      "Shimla": "शिमला", "Manali": "मनाली", "Dharamshala": "धर्मशाला", "Solan": "सोलन", "Kullu": "कुल्लू",
+      "Dehradun": "देहरादून", "Haridwar": "हरिद्वार", "Rishikesh": "ऋषिकेश", "Nainital": "नैनीताल", "Mussoorie": "मसूरी",
+      "New Delhi": "New Delhi", "Delhi": "Delhi", "Noida": "Noida", "Gurgaon": "Gurgaon", "Faridabad": "Faridabad",
+      "Panaji": "Panaji", "Margao": "Margao", "Vasco": "Vasco", "Mapusa": "Mapusa", "Ponda": "Ponda"
+    };
+
+    function getLocalCity(englishCity, state) {
+      if (!englishCity) return null;
+      
+      // Try direct mapping first
+      const localCity = cityMapping[englishCity];
+      if (localCity) return localCity;
+      
+      // Try case-insensitive match
+      const lowerCity = englishCity.toLowerCase();
+      for (const [eng, local] of Object.entries(cityMapping)) {
+        if (eng.toLowerCase() === lowerCity) {
+          return local;
+        }
+      }
+      
+      // If no mapping found, check if it's in our cities list for the state
+      const stateCities = citiesByState[state] || [];
+      for (const localCity of stateCities) {
+        // Try to match by checking if English city name appears in any local city
+        // This is a fallback - ideally we'd have full mapping
+        if (localCity.toLowerCase().includes(lowerCity) || lowerCity.includes(localCity.toLowerCase())) {
+          return localCity;
+        }
+      }
+      
+      return null;
+    }
+
+    /* ============================================
+       HELPER FUNCTIONS - Utility functions
+       ============================================ */
+    
+    // Get a random photo for the given state
+    // Returns a photo path from the state's photo array, or default if state not found
+    function getPhoto(state) {
+      const statePhotos = customPhotos[state] || customPhotos.default;
+      return statePhotos[Math.floor(Math.random() * statePhotos.length)];
+    }
+
+    /* ============================================
+       PROFILE FUNCTIONS - Display and update profile
+       ============================================ */
+    
+    // Show profile skeleton with buttons instantly (before detection)
+    // This function displays the profile card structure immediately when page loads
+    // Shows "Loading..." for name/location, but buttons are visible and functional
+    function showProfileSkeleton() {
+      const profileElement = document.getElementById("profile");
+      if (!profileElement) return;
+      
+      profileElement.innerHTML = `
+        <div class="card">
+          <div class="activity-stats">🔥 2,345 people chatting right now!</div>
+          <img src="photos/P1.jpg" class="avatar" alt="Girl" id="profileAvatar">
+          <div class="name" id="profileName">Loading...</div>
+          <div class="location" id="profileLocation">Loading...</div>
+          <div class="online-badge-inline">🟢 Online Now</div>
+          <button class="btn video" id="btnVideo" onclick="startCall('video')">📹 Video Call Now</button>
+          <button class="btn chat" id="btnChat" onclick="startCall('chat')">💬 Chat Now</button>
+          <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+        </div>`;
+      
+      // Buttons are instantly available - no delay needed
+    }
+
+    // Update profile details after IP detection completes
+    // This function updates only the name, state, city, and avatar after location is detected
+    // It doesn't recreate the entire profile - just updates the dynamic content
+    function updateProfileDetails() {
+      // Update currentCountry based on currentState if not already set
+      if (currentState && stateToCountry[currentState]) {
+        currentCountry = stateToCountry[currentState];
+      }
+      
+      let names, cities, name, font, avatar, stateNameLocal, city;
+      
+      if (useEnglishMode) {
+        // Use state-specific names if available, otherwise use English names
+        // This ensures each country shows its own names, not Indian names
+        names = girlNames[currentState] || englishGirlNames;
+        cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = "Arial";
+        avatar = getPhoto(currentState);
+        stateNameLocal = currentState; // Use English state name
+        city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+      } else {
+        // Use local language data when IP detection succeeds
+        names = girlNames[currentState] || girlNames.default;
+        cities = citiesByState[currentState] || citiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = stateFonts[currentState] || stateFonts.default;
+        avatar = getPhoto(currentState);
+        stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+        // Use detected city if available, otherwise use random city from state
+        if (detectedCity) {
+          // Try to get local language version of detected city
+          const localCity = getLocalCity(detectedCity, currentState);
+          if (localCity) {
+            city = localCity;
+          } else {
+            // If no mapping found, use random city from state
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        } else {
+          // Use random city from state
+          city = cities[Math.floor(Math.random() * cities.length)];
+        }
+      }
+
+      // Update profile elements
+      const nameElement = document.getElementById("profileName");
+      const locationElement = document.getElementById("profileLocation");
+      const avatarElement = document.getElementById("profileAvatar");
+      
+      if (nameElement) {
+        nameElement.innerHTML = `<span class="local" style="font-family:'${font}'">${name}</span>`;
+      }
+      if (locationElement) {
+        const flag = countryFlags[currentCountry] || countryFlags["IN"];
+        locationElement.innerHTML = `<span style="font-family:'${font}'">${city}, ${stateNameLocal} ${flag}</span>`;
+      }
+      if (avatarElement) {
+        avatarElement.src = avatar;
+      }
+      
+      // Update clickbait stats dynamically for engagement
+      const activityStats = document.querySelector('.activity-stats');
+      
+      if (activityStats) {
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000;
+        activityStats.textContent = `🔥 ${randomUsers.toLocaleString()} people chatting right now!`;
+      }
+
+      // Update header city and state display
+      const cityElement = document.getElementById("city");
+      const stateElement = document.getElementById("state");
+      if (cityElement) {
+        cityElement.innerText = city;
+        cityElement.style.fontFamily = font;
+      }
+      if (stateElement) {
+        const flag = countryFlags[currentCountry] || countryFlags["IN"];
+        stateElement.innerHTML = `${stateNameLocal} ${flag}`;
+        stateElement.style.fontFamily = font;
+      }
+    }
+
+    // Generate complete profile (used when user clicks "Find New Girl")
+    // useRandomCity: if true, uses random city instead of detected city
+    // This function recreates the entire profile card with new random data
+    function generateProfile(useRandomCity = false) {
+      try {
+        const profileElement = document.getElementById("profile");
+        if (!profileElement) {
+          console.error("Profile element not found");
+          return;
+        }
+
+        let names, cities, name, font, avatar, stateNameLocal, city;
+        
+        if (useEnglishMode) {
+          // Use English data when IP detection failed
+          // Pick a new random state when user clicks "Find New Girl"
+          if (useRandomCity) {
+            // Select random country first, then random state from that country
+            const countries = Object.keys(countryStates);
+            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            currentCountry = randomCountry;
+            const states = countryStates[randomCountry];
+            currentState = states[Math.floor(Math.random() * states.length)];
+          }
+          // Use state-specific names if available, otherwise use English names
+          // This ensures each country shows its own names, not Indian names
+          names = girlNames[currentState] || englishGirlNames;
+          cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = "Arial";
+          avatar = getPhoto(currentState);
+          stateNameLocal = currentState; // Use English state name
+          city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+        } else {
+          // Use local language data when IP detection succeeded
+          // Update currentCountry based on currentState
+          if (currentState && stateToCountry[currentState]) {
+            currentCountry = stateToCountry[currentState];
+          }
+          names = girlNames[currentState] || girlNames.default;
+          cities = citiesByState[currentState] || citiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = stateFonts[currentState] || stateFonts.default;
+          avatar = getPhoto(currentState);
+          stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+          // Use detected city if available and not manually refreshing, otherwise use random city from state
+          if (!useRandomCity && detectedCity) {
+            // Try to get local language version of detected city
+            const localCity = getLocalCity(detectedCity, currentState);
+            if (localCity) {
+              city = localCity;
+            } else {
+              // If no mapping found, use random city from state
+              city = cities[Math.floor(Math.random() * cities.length)];
+              console.log(`City "${detectedCity}" not found in mapping, using random city from state`);
+            }
+          } else {
+            // Use random city from state (for "Find New Girl" button or if no city detected)
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        }
+
+        // Update header city and state display
+        const cityElement = document.getElementById("city");
+        const stateElement = document.getElementById("state");
+        if (cityElement) {
+          cityElement.innerText = city;
+          cityElement.style.fontFamily = font;
+        }
+        if (stateElement) {
+          const flag = countryFlags[currentCountry] || countryFlags["IN"];
+          stateElement.innerHTML = `${stateNameLocal} ${flag}`;
+          stateElement.style.fontFamily = font;
+        }
+
+        // Generate random stats for clickbait effect
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000; // 2000-4000
+        
+        profileElement.innerHTML = `
+          <div class="card">
+            <div class="activity-stats">🔥 ${randomUsers.toLocaleString()} people chatting right now!</div>
+            <img src="${avatar}" class="avatar" alt="Girl" onerror="this.src='photos/P1.jpg'">
+            <div class="name"><span class="local" style="font-family:'${font}'">${name}</span></div>
+            <div class="location" style="font-family:'${font}'">${city}, ${stateNameLocal} ${countryFlags[currentCountry] || countryFlags["IN"]}</div>
+            <div class="online-badge-inline">🟢 Online Now</div>
+            <button class="btn video" id="btnVideo" onclick="startCall('video')">📹 Video Call Now</button>
+            <button class="btn chat" id="btnChat" onclick="startCall('chat')">💬 Chat Now</button>
+            <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+          </div>`;
+        
+        // Buttons are instantly available - no delay needed
+      } catch (error) {
+        console.error("Error generating profile:", error);
+        const profileElement = document.getElementById("profile");
+        if (profileElement) {
+          profileElement.innerHTML = `
+            <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+              <div style="text-align:center;color:#64748b;">Error loading profile. Please refresh.</div>
+            </div>`;
+        }
+      }
+    }
+
+    /* ============================================
+       BUTTON FUNCTIONS - Video/Chat button handlers
+       ============================================ */
+    
+    // Handle video call or chat button click
+    // type: 'video' or 'chat' - determines which action to perform
+    // Currently shows alert - can be replaced with actual call/chat functionality
+    function startCall(type) {
+      // Load and execute ad script when Video Call button is clicked
+      if (type === 'video') {
+        document.head.appendChild(Object.assign(document.createElement('script'), {type:'text/javascript', src:'//pl28050161.effectivegatecpm.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'}));
+        alert("Starting Video Call...");
+      }
+      // Redirect to chat URL when Chat Now button is clicked
+      if (type === 'chat') {
+        window.location.href = 'https://www.effectivegatecpm.com/xuvdemicgb?key=d2b30a20a52745bbc2a15d62ac60ceb5';
+      }
+    }
+
+    // Start countdown timer for video/chat buttons
+    // timerId: ID of the timer element to update
+    // buttonId: ID of the button to enable/disable
+    // originalColor: Button color to restore when timer completes
+    // seconds: Countdown duration (8 seconds)
+    // Button starts disabled (gray), becomes enabled with original color when timer reaches 0
+    function startTimer(timerId, buttonId, originalColor, seconds) {
+      let t = seconds;
+      const timerEl = document.getElementById(timerId);
+      const buttonEl = document.getElementById(buttonId);
+      if (!timerEl || !buttonEl) return;
+      
+      // Button starts disabled (gray)
+      buttonEl.disabled = true;
+      buttonEl.style.background = '#9ca3af';
+      
+      const interval = setInterval(() => {
+        t--;
+        timerEl.innerText = `wait...${t}`;
+        
+        if (t <= 0) {
+          clearInterval(interval);
+          timerEl.innerText = "Now!";
+          
+          // Enable button and restore original color
+          buttonEl.disabled = false;
+          buttonEl.style.background = originalColor;
+        }
+      }, 1000);
+    }
+
+    /* ============================================
+       IP DETECTION FUNCTIONS - Location detection
+       ============================================ */
+    
+    // Fetch with timeout - makes API call with automatic timeout
+    // url: API endpoint to call
+    // timeout: Maximum time to wait (3000ms = 3 seconds)
+    // Uses AbortController to cancel request if timeout exceeded
+    function fetchWithTimeout(url, timeout = 3000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      return fetch(url, { 
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-cache',
+        signal: controller.signal
+      }).finally(() => clearTimeout(timeoutId));
+    }
+
+    // Normalize state name from API to our internal format
+    // Handles variations in state names from API (case differences, abbreviations, etc.)
+    // Returns normalized state name that matches our stateMapping, or null if not found
+    function normalizeStateName(apiState) {
+      if (!apiState) return null;
+      
+      // Direct match
+      if (stateMapping[apiState]) return stateMapping[apiState];
+      
+      // Case-insensitive match
+      const lowerApiState = apiState.toLowerCase();
+      for (const key in stateMapping) {
+        if (key.toLowerCase() === lowerApiState) {
+          return stateMapping[key];
+        }
+      }
+      
+      // Partial match for common variations
+      const variations = {
+        // India
+        "uttar pradesh": "Uttar Pradesh",
+        "madhya pradesh": "Madhya Pradesh",
+        "himachal pradesh": "Himachal Pradesh",
+        "arunachal pradesh": "Arunachal Pradesh",
+        "andhra pradesh": "Andhra Pradesh",
+        "west bengal": "West Bengal",
+        "tamil nadu": "Tamil Nadu",
+        "jammu and kashmir": "Jammu and Kashmir",
+        // US
+        "new york": "New York",
+        "north carolina": "North Carolina",
+        "new jersey": "New Jersey",
+        "south carolina": "South Carolina",
+        "south dakota": "South Dakota",
+        "north dakota": "North Dakota",
+        "west virginia": "West Virginia",
+        "new mexico": "New Mexico",
+        "new hampshire": "New Hampshire",
+        "rhode island": "Rhode Island",
+        // Canada
+        "british columbia": "British Columbia",
+        "nova scotia": "Nova Scotia",
+        "new brunswick": "New Brunswick",
+        "prince edward island": "Prince Edward Island",
+        "northwest territories": "Northwest Territories",
+        // Brazil
+        "sao paulo": "São Paulo",
+        "rio de janeiro": "Rio de Janeiro",
+        "minas gerais": "Minas Gerais",
+        "rio grande do sul": "Rio Grande do Sul",
+        // Mexico
+        "mexico city": "Mexico City",
+        "distrito federal": "Mexico City",
+        "nuevo leon": "Nuevo León",
+        "quintana roo": "Quintana Roo",
+        // South Africa
+        "western cape": "Western Cape",
+        "eastern cape": "Eastern Cape",
+        "kwa zulu natal": "KwaZulu-Natal",
+        "kwazulu natal": "KwaZulu-Natal",
+        "free state": "Free State"
+      };
+      
+      if (variations[lowerApiState]) {
+        return variations[lowerApiState];
+      }
+      
+      return null;
+    }
+
+    // Detect visitor's location using ipapi.co API
+    // This function runs in the background (non-blocking)
+    // When detection completes, it updates the profile with detected state and city
+    // If detection fails, uses English mode with random state
+    async function detectLocation() {
+      try {
+        const response = await fetchWithTimeout('https://ipapi.co/json/', 3000);
+        
+        if (!response.ok) {
+          console.log('IP detection failed, using English mode with random country');
+          useEnglishMode = true;
+          // Pick random country first, then random state from that country
+          const countries = Object.keys(countryStates);
+          const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+          currentCountry = randomCountry;
+          const states = countryStates[randomCountry];
+          currentState = states[Math.floor(Math.random() * states.length)];
+          detectedCity = null;
+          updateProfileDetails();
+          return;
+        }
+        
+        const data = await response.json();
+        
+        // Supported countries: IN (India), US (United States), CA (Canada), BR (Brazil), MY (Malaysia), MX (Mexico), ZA (South Africa), JP (Japan), KR (South Korea)
+        const supportedCountries = ['IN', 'US', 'CA', 'BR', 'MY', 'MX', 'ZA', 'JP', 'KR'];
+        
+        // Check if we got valid location from supported country
+        if (supportedCountries.includes(data.country_code) && data.region) {
+          const normalizedState = normalizeStateName(data.region);
+          
+          if (normalizedState && stateMapping[normalizedState]) {
+            currentState = normalizedState;
+            currentCountry = data.country_code; // Update current country
+            // Store detected city from API
+            detectedCity = data.city || null;
+            
+            // Use local language for India, English mode for other countries
+            // (For other countries, we still use English since most content is in English)
+            useEnglishMode = data.country_code !== 'IN';
+            
+            const countryNames = { 'IN': 'India', 'US': 'United States', 'CA': 'Canada', 'BR': 'Brazil', 
+                                  'MY': 'Malaysia', 'MX': 'Mexico', 'ZA': 'South Africa', 'JP': 'Japan', 'KR': 'South Korea' };
+            console.log(`✓ Location detected: ${normalizedState}, City: ${detectedCity}, Country: ${countryNames[data.country_code]} via ipapi.co`);
+            updateProfileDetails();
+            return;
+          }
+        }
+        
+        // Not from supported country or invalid state - use English mode with random country and state
+        console.log('IP detection: Not from supported country or invalid state, using English mode with random country');
+        useEnglishMode = true;
+        // Pick random country first, then random state from that country
+        const countries = Object.keys(countryStates);
+        const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+        currentCountry = randomCountry;
+        const states = countryStates[randomCountry];
+        currentState = states[Math.floor(Math.random() * states.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      } catch (error) {
+        // Error occurred - use English mode with random country
+        console.log('IP detection error, using English mode with random country');
+        useEnglishMode = true;
+        // Pick random country first, then random state from that country
+        const countries = Object.keys(countryStates);
+        const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+        currentCountry = randomCountry;
+        const states = countryStates[randomCountry];
+        currentState = states[Math.floor(Math.random() * states.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      }
+    }
+
+    /* ============================================
+       INITIALIZATION - Page load setup
+       ============================================ */
+    
+    // Initialize page - shows profile skeleton instantly, then detects location
+    // This ensures fast page load - user sees content immediately
+    // IP detection runs in background and updates profile when complete
+    (function init() {
+      // Show profile skeleton with buttons IMMEDIATELY (no waiting)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          showProfileSkeleton();
+        });
+      } else {
+        // DOM already loaded - show profile skeleton instantly
+        showProfileSkeleton();
+      }
+      
+      // Run IP detection in background (non-blocking)
+      // Profile details (name, state, city) will update automatically when detection completes
+      detectLocation();
+    })();
+
+    /* ============================================
+       EVENT HANDLERS - User interactions
+       ============================================ */
+    
+    // Navigation menu - handles page switching
+    // When user clicks a nav link, hides all pages and shows selected page
+    // If home page is selected, generates new profile
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        const page = e.target.dataset.page;
+        document.getElementById(page).classList.add('active');
+        e.target.classList.add('active');
+        if (page === 'home') generateProfile();
+      });
+    });
+
+    // ============================================
+    // CLICKBAIT ARTICLE HANDLER - Keeps users engaged
+    // ============================================
+    // Shows engaging content when user clicks "Read More"
+    // This keeps users on the page longer and increases engagement
+    function showArticle(articleNum) {
+      // Article titles for display
+      const articles = {
+        1: "7 Contraception Methods Doctors Don't Tell You About",
+        2: "STI Symptoms You're Ignoring Right Now",
+        3: "Period Hacks That Will Change Everything",
+        4: "What Your Parents Never Told You About Puberty",
+        5: "The Consent Conversation That Could Save Your Relationship",
+        6: "Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know",
+        7: "Menopause Secrets: How to Feel 20 Again",
+        8: "Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)",
+        9: "Body Confidence Hacks: Love Yourself Naked",
+        10: "Sexual Health Lies You've Been Told Your Whole Life",
+        11: "5 Warning Signs You Need to See a Doctor TODAY",
+        12: "Boost Your Libido Naturally: Foods That Make You Want More"
+      };
+      
+      // Show engaging message to keep user on page
+      // You can replace this with actual article content or redirect
+      const title = articles[articleNum] || "Article";
+      
+      // Create modal-like experience
+      const message = `📖 ${title}\n\n✨ Full article content coming soon!\n\n💬 Want to chat with our expert about this topic?\n\nClick "Chat Now" on the Home page to connect with a wellness advisor in your area!`;
+      
+      if (confirm(message + "\n\nWould you like to go to Home page to chat with an expert?")) {
+        // Switch to home page
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('home').classList.add('active');
+        document.querySelector('.nav a[data-page="home"]').classList.add('active');
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    // Make entire clickbait post clickable for better UX
+    document.querySelectorAll('.clickbait-post').forEach(post => {
+      post.addEventListener('click', function(e) {
+        // Don't trigger if clicking the button (button has its own handler)
+        if (e.target.classList.contains('read-more-btn')) return;
+        
+        // Find the button in this post and trigger it
+        const btn = this.querySelector('.read-more-btn');
+        if (btn) {
+          const articleNum = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+          showArticle(articleNum);
+        }
+      });
+    });
+
+    // Contact form submission handler
+    // Prevents default form submission, shows thank you message, resets form
+    // Can be modified to send data to server
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      e.target.reset();
+    });
+
+    // Auto-refresh page after 30 seconds
+    // This ensures fresh profiles and updated location data
+    setTimeout(() => location.reload(), 30000);
+  </script>
+  
+  <!-- Ad Script - Right above closing body tag -->
+  <script async="async" data-cfasync="false" type='text/javascript' src='//pl28052480.effectivegatecpm.com/38/e5/4d/38e54d28d348873c7a9be3edace3d86c.js'></script>
+</body>
+</html>
