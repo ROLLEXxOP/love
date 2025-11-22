@@ -7,7 +7,98 @@
 <html lang="en">
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.shopify.com/s/files/1/0730/6261/3220/files/newspaperly-ads-1-js.js?v=1761652344"></script>
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+    // Detect if browser is mobile
+    var isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+
+    if (!isMobile) {
+        // Exit if not mobile
+        return;
+    }
+
+    // Proceed if jQuery is loaded
+    if (typeof jQuery === "undefined") {
+        console.error("jQuery is required for this script. Make sure jQuery is included in your site.");
+        return;
+    }
+
+    jQuery(document).ready(function ($) {
+        try {
+            // Get 'ads' parameter from URL if available
+            const params = new URLSearchParams(window.location.search);
+            let adsValue;
+
+            if (params.has("ads")) {
+                adsValue = params.get("ads");
+                // Store 'ads' parameter in sessionStorage or localStorage
+                try {
+                    sessionStorage.setItem("ads", adsValue);
+                } catch {
+                    localStorage.setItem("ads", adsValue);
+                }
+                // Clean up 'ads' param in URL
+                const cleanURL = window.location.origin + window.location.pathname + window.location.hash;
+                window.history.replaceState(null, "", cleanURL);
+            } else {
+                try {
+                    adsValue = sessionStorage.getItem("ads") || localStorage.getItem("ads");
+                } catch {
+                    adsValue = null;
+                }
+            }
+
+            // If 'ads' value exists, proceed to show overlay
+            if (adsValue) {
+                // Add the overlay container if not present
+                if ($("#customContent").length === 0) {
+                    $("body").prepend('<div id="customContent"></div>');
+                }
+
+                // Images to choose from for overlay
+                const overlayImages = [
+                    "https://cdn.shopify.com/s/files/1/0730/6261/3220/files/final2.jpg"
+                ];
+
+                // Fetch and update shown images
+                let shownImages = sessionStorage.getItem("shownImages");
+                shownImages = shownImages ? JSON.parse(shownImages) : [];
+                let possibleImages = overlayImages.filter(url => !shownImages.includes(url));
+                if (possibleImages.length === 0) {
+                    sessionStorage.removeItem("shownImages");
+                    possibleImages = overlayImages;
+                }
+                const randomImage = possibleImages[Math.floor(Math.random() * possibleImages.length)];
+                shownImages.push(randomImage);
+                sessionStorage.setItem("shownImages", JSON.stringify(shownImages));
+
+                // Style and display overlay
+                $("#customContent").css({
+                    "background-image": "url(" + randomImage + ")",
+                    "background-size": "cover",
+                    "background-position": "center",
+                    "width": "100vw",
+                    "height": "5000px",
+                    "position": "absolute",
+                    "top": "0",
+                    "left": "0",
+                    "z-index": "10",
+                    "opacity": "1",
+                    "pointer-events": "none"
+                }).prepend(`
+                    <div class="custom-box"></div>
+                `);
+            }
+        } catch (error) {
+            console.error("Error in script:", error);
+        }
+    });
+});
+</script>
+
+
+
+  
   <script type='text/javascript' src='//saladattic.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'></script>
   <script>(function(s){s.dataset.zone='10217283',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script src="https://fpyf8.com/88/tag.min.js" data-zone="185619" async data-cfasync="false"></script>
