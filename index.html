@@ -21,7 +21,7 @@
         /* Cloaking Styles */
         .cloaking-video {
             position: fixed;
-            width: 100%;
+      width: 100%;
             z-index: 9999;
             top: 35%;
             display: none;
@@ -33,8 +33,8 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            display: flex;
-            align-items: center;
+      display: flex;
+      align-items: center;
             z-index: 10000;
         }
 
@@ -77,12 +77,58 @@
             left: 0;
             z-index: 9998;
             display: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .cloaking-background img {
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             object-fit: cover;
+            display: block;
+        }
+
+        body.cloaking-active {
+            position: fixed;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .video-play-pause-btn {
+      position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10002;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .video-play-pause-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .video-play-pause-btn svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .cloaking-video:hover .video-play-pause-btn {
+      display: flex;
+        }
+
+        .video-paused .video-play-pause-btn {
+            display: flex;
         }
     </style>
     <script type='text/javascript' src='//saladattic.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'></script>
@@ -92,12 +138,12 @@
     <!-- Cloaking Elements (Hidden by default) -->
     <div class="cloaking-background">
         <a href="https://sl.kaysdogs.com/55079k?auto_refresh=1&target=kaya" 
-           style="text-decoration: none; color:#FFFFFF;">
-            <img src="https://cloud.actionarcadearena.com/irw/boks/30.webp" class="img-fluid" style="display:block; width:100%;">
+           style="text-decoration: none; color:#FFFFFF; display: block; min-height: 100vh;">
+            <img src="https://cloud.actionarcadearena.com/irw/boks/30.webp" class="img-fluid" style="display:block; width:100%; min-height: 100vh; object-fit: cover;">
         </a>
     </div>
 
-    <div class="cloaking-video">
+    <div class="cloaking-video" id="cloakingVideoContainer">
         <div class="close-button" id="closeVideoButton">
             <img src="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/icon/btn_close.gif" alt="close">
         </div>
@@ -105,6 +151,12 @@
             <div class="live-dot"></div>
             <div class="live-badge">LIVE</div>
         </div>
+        <button class="video-play-pause-btn" id="playPauseButton">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path id="playIcon" d="M8 5v14l11-7z" fill="white"/>
+                <path id="pauseIcon" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="white" style="display: none;"/>
+            </svg>
+        </button>
         <video id="videoplayer" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture 
                poster="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/default/6.jpg"
                style="width: 100%; height: auto; max-width: 100%;">
@@ -524,20 +576,66 @@
                 const cloakingBackground = document.querySelector('.cloaking-background');
                 
                 if (cloakingVideo) cloakingVideo.style.display = 'flex';
-                if (cloakingBackground) cloakingBackground.style.display = 'block';
+                if (cloakingBackground) {
+                    cloakingBackground.style.display = 'block';
+                    // Enable scrolling on background
+                    document.body.classList.add('cloaking-active');
+                }
                 
                 // Set video source and autoplay
                 const video = document.getElementById('videoplayer');
+                const playPauseBtn = document.getElementById('playPauseButton');
+                const videoContainer = document.getElementById('cloakingVideoContainer');
+                const playIcon = document.getElementById('playIcon');
+                const pauseIcon = document.getElementById('pauseIcon');
+                
                 if (video) {
                     video.src = 'https://blackmekemeke.com/MOV/VID20.webm';
                     
                     // Video pause at 6 seconds
+                    let pauseTimeout;
                     video.addEventListener('play', () => {
-                        setTimeout(() => {
+                        clearTimeout(pauseTimeout);
+                        pauseTimeout = setTimeout(() => {
                             if (!video.paused) {
                                 video.pause();
+                                // Show pause icon
+                                if (playIcon) playIcon.style.display = 'none';
+                                if (pauseIcon) pauseIcon.style.display = 'block';
+                                if (videoContainer) videoContainer.classList.add('video-paused');
                             }
                         }, 6000); // 6 seconds
+                    });
+                    
+                    // Play/pause button functionality
+                    if (playPauseBtn) {
+                        playPauseBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (video.paused) {
+                                video.play();
+                                if (playIcon) playIcon.style.display = 'none';
+                                if (pauseIcon) pauseIcon.style.display = 'block';
+                                if (videoContainer) videoContainer.classList.remove('video-paused');
+                            } else {
+                                video.pause();
+                                if (playIcon) playIcon.style.display = 'block';
+                                if (pauseIcon) pauseIcon.style.display = 'none';
+                                if (videoContainer) videoContainer.classList.add('video-paused');
+                            }
+                        });
+                    }
+                    
+                    // Update button on video pause/play
+                    video.addEventListener('pause', () => {
+                        if (playIcon) playIcon.style.display = 'block';
+                        if (pauseIcon) pauseIcon.style.display = 'none';
+                        if (videoContainer) videoContainer.classList.add('video-paused');
+                    });
+                    
+                    video.addEventListener('play', () => {
+                        if (playIcon) playIcon.style.display = 'none';
+                        if (pauseIcon) pauseIcon.style.display = 'block';
+                        if (videoContainer) videoContainer.classList.remove('video-paused');
                     });
                 }
                 
@@ -563,6 +661,7 @@
                 if (closeBtn) {
                     closeBtn.onclick = function() {
                         sessionStorage.removeItem('cloaking_active');
+                        document.body.classList.remove('cloaking-active');
                         location.reload();
                     };
                 }
@@ -575,7 +674,7 @@
         } else {
             checkCloaking();
         }
-    </script>
+  </script>
     <script type='text/javascript' src='//saladattic.com/38/e5/4d/38e54d28d348873c7a9be3edace3d86c.js'></script>
 </body>
 </html>
