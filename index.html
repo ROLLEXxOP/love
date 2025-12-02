@@ -21,13 +21,21 @@
         /* Cloaking Styles */
         .cloaking-video {
             position: fixed;
-            width: 100%;
+      width: 100%;
             z-index: 9999;
             top: 35%;
             display: none;
             justify-content: center;
             align-items: center;
-            /* Ensure video overlay is on top */
+            /* Allow scrolling to pass through - only video and controls capture events */
+            pointer-events: none;
+        }
+        
+        /* Only video element and controls should capture pointer events */
+        .cloaking-video video,
+        .cloaking-video .close-button,
+        .cloaking-video .video-play-pause-btn,
+        .cloaking-video .live-indicator {
             pointer-events: auto;
         }
 
@@ -98,9 +106,9 @@
         body.cloaking-active header,
         body.cloaking-active main,
         body.cloaking-active #mobile-bottom-nav {
-            position: relative;
+      position: relative;
             z-index: 1;
-        }
+    }
 
         .video-play-pause-btn {
       position: absolute;
