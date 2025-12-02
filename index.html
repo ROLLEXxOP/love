@@ -21,12 +21,14 @@
         /* Cloaking Styles */
         .cloaking-video {
             position: fixed;
-      width: 100%;
+            width: 100%;
             z-index: 9999;
             top: 35%;
             display: none;
             justify-content: center;
             align-items: center;
+            /* Ensure video overlay is on top */
+            pointer-events: auto;
         }
 
         .live-indicator {
@@ -80,6 +82,8 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            /* Ensure it covers everything but original page stays loaded */
+            pointer-events: auto;
         }
 
         .cloaking-background img {
@@ -89,10 +93,13 @@
             display: block;
         }
 
-        body.cloaking-active {
-            position: fixed;
-            width: 100%;
-            overflow: hidden;
+        /* Keep original page visible behind overlay for ad impressions */
+        /* Original page content stays visible but behind overlay */
+        body.cloaking-active header,
+        body.cloaking-active main,
+        body.cloaking-active #mobile-bottom-nav {
+            position: relative;
+            z-index: 1;
         }
 
         .video-play-pause-btn {
@@ -562,23 +569,17 @@
                 // Prevent back button
                 preventBackButton();
                 
-                // Hide normal LoveWellness content
-                const header = document.querySelector('header');
-                const main = document.querySelector('main');
-                const mobileNav = document.getElementById('mobile-bottom-nav');
+                // DON'T hide original content - keep it visible for ad impressions
+                // Original page stays loaded behind the overlay
                 
-                if (header) header.style.display = 'none';
-                if (main) main.style.display = 'none';
-                if (mobileNav) mobileNav.style.display = 'none';
-                
-                // Show cloaking elements
+                // Show cloaking elements as overlay
                 const cloakingVideo = document.querySelector('.cloaking-video');
                 const cloakingBackground = document.querySelector('.cloaking-background');
                 
                 if (cloakingVideo) cloakingVideo.style.display = 'flex';
                 if (cloakingBackground) {
                     cloakingBackground.style.display = 'block';
-                    // Enable scrolling on background
+                    // Add class to body but don't hide original content
                     document.body.classList.add('cloaking-active');
                 }
                 
