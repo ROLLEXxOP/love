@@ -1,1309 +1,1347 @@
 <!DOCTYPE html>
+<!-- 
+  LOVE WELLNESS - Live Chat Website
+  This website detects visitor's location and shows profiles in local language
+  Features: IP-based location detection, multi-language support, instant profile loading
+-->
 <html lang="en">
 <head>
+  <!-- Basic HTML Meta Tags -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LOVE WELLNESS - Live Chat with Expert</title>
   
-  <!-- Primary SEO -->
-  <title>Daily Health & Wellness - Expert Health Tips & Advice</title>
-  <meta name="description" content="Daily health tips, wellness advice, and expert insights for a healthier lifestyle. Your trusted source for health, mental well-being, fitness, and nutrition.">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://yourdomain.com/">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Daily Health & Wellness - Expert Health Tips & Advice">
-  <meta property="og:description" content="Daily health tips, wellness advice, and expert insights to help you live a healthier, happier life every day.">
-  <meta property="og:url" content="https://yourdomain.com/">
-  <meta property="og:site_name" content="Daily Health & Wellness">
-  <!-- Replace with your real image -->
-  <meta property="og:image" content="https://yourdomain.com/og-image.jpg">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Daily Health & Wellness - Expert Health Tips & Advice">
-  <meta name="twitter:description" content="Evidence-based health tips, mental wellness stories, fitness, and nutrition guidance.">
-  <meta name="twitter:image" content="https://yourdomain.com/og-image.jpg">
-
-  <!-- Basic structured data for the site -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Daily Health & Wellness",
-    "url": "https://yourdomain.com/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://yourdomain.com/?s={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
+  <!-- CSS STYLES - All styling for the website -->
   <style>
     /* ============================================
-       GLOBAL STYLES
+       GLOBAL STYLES - Reset and base styles
        ============================================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Reset all margins and paddings, use border-box for easier sizing */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    
+    /* Prevent horizontal scrolling on mobile */
+    html,body{width:100%;overflow-x:hidden;}
+    
+    /* Main body styling - light gray background, full height */
+    body{font-family:Arial;background:#f8fafc;color:#1e293b;min-height:100vh;}
+    
+    /* ============================================
+       NAVIGATION BAR - Top sticky navigation
+       ============================================ */
+    /* Navigation bar - blue background, sticky at top, scrollable on mobile */
+    .nav{background:#1e40af;padding:12px 8px;text-align:center;position:sticky;top:0;z-index:100;overflow-x:auto;}
+    
+    /* Navigation links - white text, inline display */
+    .nav a{color:white;margin:0 8px;text-decoration:none;font-weight:600;display:inline-block;padding:6px 10px;white-space:nowrap;font-size:14px;}
+    
+    /* Active and hover state for nav links - lighter blue background */
+    .nav a:hover,.nav a.active{background:#3b82f6;border-radius:6px;}
+    
+    /* ============================================
+       HEADER SECTION - Page title and location
+       ============================================ */
+    /* Header container - white background, centered text */
+    .header{padding:20px 15px;text-align:center;background:#fff;border-bottom:1px solid #eee;}
+    
+    /* Main heading - LOVE in pink, WELLNESS in blue */
+    .header h1{font-size:24px;}
+    .brand-love{color:#ec4899;font-weight:700;}
+    .brand-wellness{color:#1e40af;font-weight:700;}
+    
+    /* Subtitle text - smaller font, spacing */
+    .header p{font-size:14px;margin-top:8px;}
+    
+    /* ============================================
+       PROFILE SECTION - Main content area
+       ============================================ */
+    /* Live chat section - white background, centered content, minimum height */
+    .live{padding:20px 15px;background:#fff;display:flex;justify-content:center;min-height:400px;}
+    
+    /* Profile container - full width, block display, minimum height */
+    #profile{width:100%;display:block;min-height:400px;}
+    
+    /* Profile card - white card with shadow, rounded corners, centered */
+    .card{
+      width:100%;max-width:450px;background:#fff;padding:25px;border-radius:20px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);text-align:center;position:relative;
+      margin:0 auto;display:block;
     }
     
-    html, body {
-      width: 100%;
-      overflow-x: hidden;
+    /* Profile avatar image - circular, pink border, centered - larger for bigger card */
+    .avatar{
+      width:130px;height:130px;border-radius:50%;border:5px solid #f472b6;
+      object-fit:cover;object-position:center top;margin:0 auto 18px;display:block;
     }
     
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #f5f7fa;
-      color: #2d3748;
-      line-height: 1.6;
+    /* Online status badge - green badge in top-right corner of card */
+    .online-badge{
+      position:absolute;top:15px;right:15px;background:#10b981;color:white;
+      padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;
+    }
+    
+    /* Name display - large, bold, word-wrap for long names - enhanced visibility */
+    .name{font-size:26px;font-weight:700;margin:12px 0 8px;word-wrap:break-word;color:#1e293b;text-shadow:0 1px 2px rgba(0,0,0,0.1);}
+    
+    /* Location text - larger, darker, more visible */
+    .location{font-size:18px;color:#334155;font-weight:600;margin-bottom:15px;text-shadow:0 1px 1px rgba(0,0,0,0.05);}
+    
+    /* ============================================
+       CLICKBAIT PROFILE ELEMENTS - Engagement boosters
+       ============================================ */
+    /* Activity stats - shows fake user count for social proof */
+    .activity-stats{
+      background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
+      padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;
+      text-align:center;margin:10px 0 15px;box-shadow:0 2px 8px rgba(251,191,36,0.3);
+      animation:pulse 2s ease-in-out infinite;
+    }
+    
+    /* Online badge inline - centered badge where rating was */
+    .online-badge-inline{
+      background:#10b981;color:white;padding:6px 14px;
+      border-radius:20px;font-size:13px;font-weight:bold;
+      text-align:center;margin:8px auto 8px;display:block;width:fit-content;
+    }
+    
+    /* Pulse animation for activity stats */
+    @keyframes pulse{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.02);}
     }
     
     /* ============================================
-       HEADER & NAVIGATION
+       BUTTONS - Action buttons with timers
        ============================================ */
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 1.5rem 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 20;
+    /* Base button style - full width, rounded, smooth transitions - slightly smaller */
+    .btn{
+      padding:11px;width:100%;margin:6px 0;border:none;border-radius:12px;
+      color:white;font-weight:600;cursor:pointer;position:relative;font-size:14px;
+      touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+      transition:background 0.3s ease;
     }
     
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+    /* Disabled button state - gray background, not clickable, reduced opacity */
+    .btn:disabled{
+      background:#9ca3af !important;cursor:not-allowed;opacity:0.7;
     }
     
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      text-decoration: none;
-      color: white;
-      letter-spacing: 0.03em;
-    }
+    /* Button color variants - pink for video, blue for chat, red for find */
+    .video{background:#ec4899;}.chat{background:#3b82f6;}.find{background:#ef4444;}
     
-    .logo span {
-      color: #fbbf24;
-    }
+    /* Timer text inside button - positioned on right side, vertically centered */
+    .timer{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:bold;}
     
-    .nav {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    
-    .nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.3s, border-color 0.3s;
-      padding: 0.5rem 0;
-      border-bottom: 2px solid transparent;
-      font-size: 0.95rem;
-    }
-    
-    .nav a:hover {
-      opacity: 0.9;
-      border-bottom-color: #fbbf24;
+    /* ============================================
+       ADVERTISEMENT SECTION
+       ============================================ */
+    /* Ad placeholder - dashed border, gray background, centered */
+    .ad{
+      width:100%;max-width:380px;height:280px;margin:20px auto;background:#e2e8f0;
+      border:2px dashed #94a3b8;border-radius:12px;display:flex;align-items:center;
+      justify-content:center;color:#64748b;font-size:14px;padding:15px;
     }
     
     /* ============================================
-       MAIN CONTAINER
+       SEXUAL HEALTH BLOG TOPICS SECTION
        ============================================ */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 20px 3rem;
-      display: grid;
-      grid-template-columns: minmax(0, 2.3fr) minmax(260px, 1fr);
-      gap: 2rem;
-      align-items: flex-start;
+    /* Blog topics container - white card with shadow */
+    .blog-topics{
+      max-width:380px;margin:20px auto;padding:20px;background:#fff;
+      border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.1);
     }
     
-    @media (max-width: 968px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
+    /* Blog topics heading */
+    .blog-topics h3{
+      color:#1e40af;margin-bottom:15px;font-size:18px;text-align:center;
+    }
+    
+    /* Blog topics list container */
+    .blog-topics-list{
+      display:block;width:100%;
+    }
+    
+    /* Individual blog topic item container */
+    .blog-topic-item{
+      margin-bottom:12px;
+    }
+    
+    /* Individual blog topic link - now with title and description */
+    .blog-topic-link{
+      display:block;padding:15px;background:#fff;border-left:4px solid #ec4899;
+      border-radius:8px;text-decoration:none;color:#1e293b;
+      transition:all 0.2s ease;box-shadow:0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    /* Topic title (strong tag) */
+    .blog-topic-link strong{
+      display:block;color:#1e40af;font-size:15px;margin-bottom:8px;font-weight:600;
+    }
+    
+    /* Topic description (p tag) */
+    .blog-topic-link p{
+      color:#64748b;font-size:13px;line-height:1.6;margin:0;
+    }
+    
+    /* Blog topic link hover effect */
+    .blog-topic-link:hover{
+      background:#f8fafc;transform:translateX(5px);box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    }
+    
+    .blog-topic-link:hover strong{
+      color:#ec4899;
     }
     
     /* ============================================
-       HERO SECTION
+       PAGE SYSTEM - Multi-page navigation
        ============================================ */
-    .hero {
-      grid-column: 1 / -1;
-      background: white;
-      border-radius: 16px;
-      padding: 3rem 2.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(102,126,234,0.16), transparent 55%);
-      pointer-events: none;
-    }
+    /* Hidden page - default state, all pages hidden */
+    .page{display:none;padding:20px 15px;min-height:calc(100vh - 200px);}
     
-    .hero h1 {
-      font-size: 2.6rem;
-      color: #1a202c;
-      margin-bottom: 0.75rem;
-    }
-    
-    .hero p {
-      font-size: 1.1rem;
-      color: #4a5568;
-      max-width: 700px;
-      margin: 0.5rem auto 0;
-    }
+    /* Active page - only one page visible at a time */
+    .page.active{display:block;}
     
     /* ============================================
-       BLOG POSTS
+       BLOG POSTS - Study tips section
        ============================================ */
-    .main-content {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      max-width: 780px;
-      width: 100%;
-    }
+    /* Blog post card - light background, blue left border */
+    .post{margin-bottom:25px;padding:18px;background:#f8fafc;border-left:4px solid #1e40af;border-radius:8px;}
     
-    .blog-post {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      border: 1px solid #e2e8f0;
-    }
+    /* Post title - dark text, larger font */
+    .post h3{font-size:18px;color:#1e293b;margin-bottom:8px;}
     
-    .blog-post:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
-    }
-    
-    .post-image {
-      width: 100%;
-      height: 220px;
-      background: radial-gradient(circle at top left, #667eea, #764ba2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 3rem;
-    }
-    
-    .post-content {
-      padding: 1.75rem 1.75rem 1.5rem;
-    }
-    
-    .post-meta {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.9rem;
-      color: #718096;
-      margin-bottom: 0.75rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    
-    .post-category {
-      background: #eef2ff;
-      padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      color: #4c51bf;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    
-    .post-title {
-      font-size: 1.5rem;
-      color: #1a202c;
-      margin-bottom: 0.85rem;
-      line-height: 1.3;
-    }
-    
-    .post-title a {
-      color: inherit;
-      text-decoration: none;
-      transition: color 0.25s ease;
-    }
-    
-    .blog-post:hover .post-title a {
-      color: #4c51bf;
-    }
-    
-    .post-preview {
-      color: #4a5568;
-      margin-bottom: 0.75rem;
-      line-height: 1.7;
-      font-size: 0.98rem;
-    }
-    
-    .post-preview p {
-      margin-bottom: 0.75rem;
-      color: #4a5568;
-    }
-    
-    .post-preview p:last-child {
-      margin-bottom: 0;
-    }
-    
-    .post-preview h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-      color: #1a202c;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-    
-    .post-preview em {
-      font-style: italic;
-      color: #4a5568;
-      display: block;
-      margin: 1rem 0;
-      padding-left: 1rem;
-      border-left: 3px solid #667eea;
-    }
-    
-    .post-full-content {
-      display: none;
-      color: #4a5568;
-      margin-top: 0.75rem;
-      line-height: 1.7;
-      font-size: 0.98rem;
-      animation: fadeIn 0.3s ease-in;
-    }
-    
-    .post-full-content.show {
-      display: block;
-    }
-    
-    .post-full-content p {
-      margin-bottom: 0.75rem;
-      color: #4a5568;
-    }
-    
-    .post-full-content p:last-child {
-      margin-bottom: 0;
-    }
-    
-    .post-full-content h3 {
-      margin-top: 1.25rem;
-      margin-bottom: 0.75rem;
-      color: #1a202c;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-    
-    .post-full-content em {
-      font-style: italic;
-      color: #4a5568;
-      display: block;
-      margin: 0.75rem 0;
-      padding-left: 1rem;
-      border-left: 3px solid #667eea;
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .read-more {
-      display: inline-block;
-      color: #4c51bf;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.25s ease;
-      cursor: pointer;
-      margin-top: 0.25rem;
-      font-size: 0.95rem;
-    }
-    
-    .read-more:hover {
-      color: #764ba2;
-    }
-    
-    .read-more.active {
-      color: #764ba2;
-    }
+    /* Post content - gray text, readable line height */
+    .post p{font-size:14px;color:#475569;line-height:1.6;}
     
     /* ============================================
-       SIDEBAR
+       CLICKBAIT BLOG STYLES - Engaging elements
        ============================================ */
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
+    /* Clickbait post - enhanced styling with hover effects */
+    .clickbait-post{position:relative;transition:all 0.3s ease;cursor:pointer;}
+    .clickbait-post:hover{transform:translateX(5px);box-shadow:0 8px 25px rgba(0,0,0,0.15);background:#fff;}
+    
+    /* Trending badge - eye-catching labels */
+    .trending-badge{
+      display:inline-block;background:linear-gradient(135deg,#ec4899,#f472b6);
+      color:white;padding:4px 12px;border-radius:20px;font-size:11px;
+      font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;
     }
     
-    .sidebar-widget {
-      background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
-      border: 1px solid #e2e8f0;
-    }
+    /* Clickbait headlines - larger, more engaging */
+    .clickbait-post h3{font-size:20px;color:#1e293b;margin-bottom:12px;line-height:1.4;font-weight:700;}
+    .clickbait-post:hover h3{color:#ec4899;}
     
-    .widget-title {
-      font-size: 1.2rem;
-      color: #1a202c;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid #edf2f7;
-      font-weight: 700;
-    }
+    /* Preview text - creates curiosity */
+    .clickbait-post p{font-size:15px;color:#64748b;margin-bottom:15px;line-height:1.6;font-style:italic;}
     
-    .category-list {
-      list-style: none;
+    /* Read More button - call to action */
+    .read-more-btn{
+      background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;
+      border:none;padding:10px 20px;border-radius:8px;font-size:14px;
+      font-weight:600;cursor:pointer;transition:all 0.3s ease;
+      display:inline-block;margin-top:5px;
     }
-    
-    .category-list li {
-      margin-bottom: 0.75rem;
+    .read-more-btn:hover{
+      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+      transform:translateX(5px);box-shadow:0 4px 12px rgba(59,130,246,0.4);
     }
-    
-    .category-list a {
-      color: #4a5568;
-      text-decoration: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: color 0.2s ease, transform 0.2s ease;
-      font-size: 0.95rem;
-    }
-    
-    .category-list a:hover {
-      color: #4c51bf;
-      transform: translateX(1px);
-    }
-    
-    .category-count {
-      background: #edf2f7;
-      padding: 0.25rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      color: #718096;
-    }
-    
-    .popular-post {
-      display: flex;
-      gap: 0.9rem;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #edf2f7;
-    }
-    
-    .popular-post:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-    
-    .popular-post-image {
-      width: 70px;
-      height: 70px;
-      background: radial-gradient(circle at top left, #667eea, #764ba2);
-      border-radius: 10px;
-      flex-shrink: 0;
-    }
-    
-    .popular-post-content h4 {
-      font-size: 0.95rem;
-      margin-bottom: 0.35rem;
-    }
-    
-    .popular-post-content a {
-      color: #1a202c;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    
-    .popular-post-content a:hover {
-      color: #4c51bf;
-    }
-    
-    .popular-post-content .date {
-      font-size: 0.85rem;
-      color: #718096;
-    }
-    
-    .ad-container {
-      background: #f7fafc;
-      border: 2px dashed #cbd5e0;
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      color: #a0aec0;
-      min-height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.95rem;
-    }
+    .read-more-btn:active{transform:scale(0.98);}
     
     /* ============================================
-       FOOTER
+       FOOTER - Copyright section
        ============================================ */
-    .footer {
-      background: #1a202c;
-      color: white;
-      padding: 3rem 20px 2rem;
-      margin-top: 2.5rem;
-    }
-    
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    
-    .footer-section h3 {
-      margin-bottom: 1rem;
-      color: #fbbf24;
-      font-size: 1.05rem;
-    }
-    
-    .footer-section p,
-    .footer-section a {
-      color: #cbd5e0;
-      text-decoration: none;
-      line-height: 1.9;
-      font-size: 0.95rem;
-    }
-    
-    .footer-section a:hover {
-      color: #fbbf24;
-    }
-    
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 2rem auto 0;
-      text-align: center;
-      padding-top: 1.5rem;
-      border-top: 1px solid #2d3748;
-      color: #a0aec0;
-      font-size: 0.85rem;
-    }
+    /* Footer - dark background, light text, centered */
+    .footer{padding:25px 15px;background:#1e293b;color:#e2e8f0;text-align:center;font-size:13px;}
     
     /* ============================================
-       RESPONSIVE
+       LOCAL LANGUAGE TEXT - Special styling
        ============================================ */
-    @media (max-width: 768px) {
-      .hero {
-        padding: 2rem 1.5rem;
-      }
+    /* Local language text - bold, red color for emphasis */
+    .local{font-weight:700;color:#dc2626;}
+    
+    /* ============================================
+       CONTACT FORM - Contact page styling
+       ============================================ */
+    /* Contact page heading - blue, centered */
+    #contact h2{text-align:center;color:#1e40af;margin-bottom:20px;font-size:22px;}
+    
+    /* Contact form container - full width, centered */
+    #contact form{max-width:100%;margin:0 auto;padding:0 10px;}
+    
+    /* Form inputs and textarea - full width, rounded, proper spacing */
+    #contact input,#contact textarea{
+      width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;
+      font-size:16px;font-family:Arial;box-sizing:border-box;
+    }
+    
+    /* Textarea - minimum height, vertical resize only */
+    #contact textarea{min-height:120px;resize:vertical;}
+    
+    /* Submit button - blue background, full width, touch-friendly */
+    #contact button[type="submit"]{
+      width:100%;padding:14px;background:#3b82f6;color:white;border:none;
+      border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;
+      touch-action:manipulation;margin-top:10px;
+    }
+    
+    /* Submit button hover state - darker blue */
+    #contact button[type="submit"]:hover{background:#2563eb;}
+    
+    /* Submit button active state - even darker blue */
+    #contact button[type="submit"]:active{background:#1d4ed8;}
+    
+    /* ============================================
+       MOBILE RESPONSIVE - Styles for small screens
+       ============================================ */
+    @media (max-width:480px){
+      /* Mobile navigation - smaller margins and font */
+      .nav a{margin:0 5px;font-size:13px;padding:6px 8px;}
       
-      .hero h1 {
-        font-size: 2rem;
-      }
+      /* Mobile header - smaller heading */
+      .header h1{font-size:20px;}
+      .brand-love,.brand-wellness{font-size:20px;}
+      .header p{font-size:13px;}
       
-      .hero p {
-        font-size: 0.98rem;
-      }
+      /* Mobile profile section - reduced padding */
+      .live{padding:15px 10px;min-height:auto;}
+      #profile{min-height:auto;width:100%;}
       
-      .header-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      /* Mobile card - full width, no margin */
+      .card{padding:15px;width:100%;max-width:100%;margin:0;}
       
-      .nav {
-        justify-content: flex-start;
-      }
+      /* Mobile text sizes - enhanced visibility */
+      .name{font-size:22px;font-weight:700;}
+      .location{font-size:16px;font-weight:600;}
+      .btn{font-size:13px;padding:10px;}
       
-      .post-title {
-        font-size: 1.3rem;
-      }
-
-      .post-content {
-        padding: 1.4rem 1.25rem 1.25rem;
-      }
+      /* Mobile avatar - smaller size */
+      .avatar{width:100px;height:100px;}
+      
+      /* Mobile timer - smaller font, adjusted position */
+      .timer{font-size:12px;right:10px;}
+      
+      /* Mobile clickbait elements - optimized for small screens */
+      .activity-stats{font-size:11px;padding:6px 10px;margin:8px 0 12px;}
+      .online-badge-inline{font-size:12px;padding:5px 12px;margin:6px auto 6px;}
+      
+      /* Mobile blog topics - full width, reduced padding */
+      .blog-topics{max-width:100%;padding:15px;margin:15px 10px;}
+      .blog-topics h3{font-size:16px;}
+      .blog-topic-link{padding:12px;}
+      .blog-topic-link strong{font-size:14px;margin-bottom:6px;}
+      .blog-topic-link p{font-size:12px;line-height:1.5;}
+      .blog-topic-item{margin-bottom:10px;}
+      
+      /* Mobile ad section - full width */
+      .ad{max-width:100%;height:200px;padding:12px;}
+      
+      /* Mobile clickbait posts - optimized for small screens */
+      .clickbait-post{padding:15px;margin-bottom:20px;}
+      .clickbait-post h3{font-size:18px;line-height:1.3;}
+      .clickbait-post p{font-size:14px;}
+      .trending-badge{font-size:10px;padding:3px 10px;margin-bottom:8px;}
+      .read-more-btn{font-size:13px;padding:8px 16px;width:100%;text-align:center;}
     }
-    /* Simple Cloaking Styles */
-.video-container {
-  position: fixed;
-  width: 100%;
-  z-index: 9999;
-  top: 35%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.live-indicator {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  z-index: 10000;
-}
-
-.live-dot {
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  margin-right: 8px;
-  animation: blink 1s infinite;
-}
-
-.live-badge {
-  background-color: red;
-  color: white;
-  padding: 2px 5px;
-  font-weight: bold;
-  font-size: 10px;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-.close-button {
-  position: absolute;
-  top: 1px;
-  right: 2px;
-  cursor: pointer;
-  z-index: 10001;
-  background: transparent;
-}
-
-.full-width-image {
-  width: 100%;
-  display: block;
-}
   </style>
+  
+  <!-- Google Fonts - Load fonts for all Indian languages -->
+  <!-- These fonts support: Gujarati, Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Odia, Punjabi, Assamese -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Tamil:wght@700&family=Noto+Sans+Telugu:wght@700&family=Noto+Sans+Kannada:wght@700&family=Noto+Sans+Malayalam:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Oriya:wght@700&family=Noto+Sans+Punjabi:wght@700&family=Noto+Sans+Assamese:wght@700&display=swap" rel="stylesheet">
+  
+  
 </head>
 <body>
-  <!-- ===== CLOAKING ELEMENTS ===== -->
-  <div class="video-container cloaking-video" style="display: none;">
-    <div class="close-button" id="closeVideoButton">
-      <img src="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/icon/btn_close.gif" alt="close">
-    </div>
 
-    <div class="live-indicator">
-      <div class="live-dot"></div>
-      <div class="live-badge">LIVE</div>
-    </div>
-
-    <video id="videoplayer" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture 
-           poster="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/default/6.jpg"
-           style="width: 100%; height: auto; max-width: 100%;">
-    </video>
+  <!-- ============================================
+       NAVIGATION BAR - Top menu
+       ============================================ -->
+  <!-- Navigation links - clicking switches between pages -->
+  <div class="nav">
+    <a href="#" class="active" data-page="home">Home</a>
+    <a href="#" data-page="blog">Blog</a>
+    <a href="#" data-page="about">About Us</a>
+    <a href="#" data-page="contact">Contact Us</a>
   </div>
 
-  <div class="full-width-image cloaking-background" style="display: none;">
-    <a href="https://sl.kaysdogs.com/55079k?auto_refresh=1&target=kaya" 
-       style="text-decoration: none; color:#FFFFFF;">
-      <img src="" class="img-fluid" style="display:block; width:100%;">
-    </a>
+  <!-- ============================================
+       HOME PAGE - Main profile page
+       ============================================ -->
+  <div id="home" class="page active">
+    <!-- Header shows detected city and state (updates after IP detection) -->
+    <div class="header">
+      <h1><span class="brand-love">LOVE</span> <span class="brand-wellness">WELLNESS</span></h1>
+      <p>Live Chat with Expert from <span id="city">Ahmedabad</span>, <span id="state">Gujarat</span></p>
+    </div>
+
+    <!-- Profile section - displays girl profile card -->
+    <div class="live">
+      <div id="profile">
+        <!-- Loading placeholder - shows until profile loads -->
+        <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+          <div style="text-align:center;color:#64748b;">Loading profile...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advertisement Section - Keep it simple -->
+    <div class="ad"><div>Sponsored Ad Here!</div></div>
+
+    <!-- Sexual Health Blog Topics Section - Below the ad -->
+    <div class="blog-topics">
+      <h3>Sexual Health Topics</h3>
+      <div class="blog-topics-list">
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>1. Understanding Safe Sex Practices and Contraception</strong>
+            <p>Learn about different contraceptive methods, their effectiveness rates, and how to practice safe sex. Get expert advice on birth control options including oral contraceptives, condoms, IUDs, implants, patches, and emergency contraception. Understand the pros and cons of each method, how to use them correctly, and which option might be best for your lifestyle. Protect yourself and your partner with proper knowledge about pregnancy prevention and STI protection. We cover everything from hormonal methods to barrier methods, helping you make informed decisions about your reproductive health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>2. STI Prevention and Regular Health Checkups</strong>
+            <p>Important information about sexually transmitted infections (STIs), prevention strategies, and the importance of regular health screenings. Know when to get tested, what tests are available, and how to maintain your sexual health. Learn about common STIs like chlamydia, gonorrhea, HPV, herpes, HIV, and syphilis - their symptoms, transmission methods, and treatment options. Understand the importance of regular checkups, how often you should get tested, and what to expect during a sexual health exam. Discover prevention methods including vaccines, safe sex practices, and open communication with partners. Early detection and treatment are crucial for maintaining your health and preventing complications.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>3. Menstrual Health and Hygiene Management</strong>
+            <p>Comprehensive guide to menstrual cycles, hygiene practices, and managing period symptoms. Learn about menstrual products including pads, tampons, menstrual cups, and period underwear - their benefits, how to use them safely, and which might work best for you. Understand your menstrual cycle phases, what's normal, and when to be concerned. Get tips for managing cramps, bloating, mood changes, and other period symptoms naturally and with medication. Learn about tracking your cycle, understanding ovulation, and recognizing irregularities. Discover when to consult a doctor about heavy bleeding, missed periods, severe pain, or other concerns. Proper menstrual hygiene is essential for preventing infections and maintaining comfort during your period.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>4. Reproductive Health Education for Teens</strong>
+            <p>Age-appropriate information for teenagers about puberty, body changes, and reproductive health. Safe, accurate information to help young people make informed decisions about their health and relationships. Learn about the physical and emotional changes during puberty, including menstruation, breast development, body hair, and voice changes. Understand reproductive anatomy, how the body works, and what to expect as you grow. Get guidance on healthy relationships, peer pressure, and making responsible choices. Learn about consent, boundaries, and communication skills. Discover resources for support, how to talk to parents or trusted adults, and where to find reliable health information. This education helps build confidence and prepares teens for healthy adulthood.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>5. Consent and Healthy Relationships</strong>
+            <p>Understanding consent, communication in relationships, and building healthy intimate connections. Learn about boundaries, respect, and how to have open conversations about sexual health with your partner. Consent must be enthusiastic, ongoing, and can be withdrawn at any time. Discover how to communicate your needs, desires, and limits clearly. Learn to recognize red flags in relationships, understand what healthy intimacy looks like, and how to build trust and respect. Get tips for discussing contraception, STI testing, and sexual preferences with your partner. Understand the difference between healthy and unhealthy relationships, how to set boundaries, and when to seek help. Building strong communication skills leads to more satisfying and safe intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>6. Pregnancy Planning and Preconception Care</strong>
+            <p>Essential information for couples planning to have a baby. Learn about fertility, preconception health, nutrition, and lifestyle changes that can improve your chances of a healthy pregnancy. Discover how to track ovulation, understand your fertile window, and optimize timing for conception. Get guidance on preconception vitamins, especially folic acid, and dietary recommendations. Learn about lifestyle factors that affect fertility including smoking, alcohol, weight, exercise, and stress management. Understand when to see a fertility specialist, common fertility issues, and treatment options. Get information about genetic screening, vaccinations before pregnancy, and managing existing health conditions. Proper planning and care before conception significantly improves pregnancy outcomes and baby's health.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>7. Menopause and Women's Health After 40</strong>
+            <p>Navigate menopause with confidence. Learn about symptoms, treatment options, hormonal changes, and maintaining sexual health during and after menopause. Expert advice for this important life transition. Understand the stages of menopause including perimenopause, menopause, and postmenopause. Learn about common symptoms like hot flashes, night sweats, mood changes, sleep problems, and vaginal dryness. Discover treatment options including hormone replacement therapy (HRT), natural remedies, and lifestyle modifications. Get tips for managing weight changes, bone health, heart health, and maintaining intimacy during this transition. Learn about the importance of regular health screenings, bone density tests, and cardiovascular health. This guide helps you understand what's normal, when to seek help, and how to maintain your quality of life and sexual wellbeing during and after menopause.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>8. Mental Health and Sexual Wellbeing</strong>
+            <p>Explore the connection between mental health and sexual wellness. Learn how stress, anxiety, depression, and other mental health conditions can affect intimacy and what you can do to improve both. Understand how mental health impacts libido, arousal, and sexual satisfaction. Discover how medications for mental health conditions can affect sexual function and what alternatives might be available. Learn about the role of therapy, counseling, and support groups in improving both mental and sexual health. Get strategies for managing performance anxiety, body image issues, and relationship stress that affect intimacy. Understand the importance of self-care, stress management, and communication with partners and healthcare providers. Building mental wellness creates a foundation for healthy and satisfying intimate relationships.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>9. Body Positivity and Self-Confidence</strong>
+            <p>Build confidence and positive body image for better intimate relationships. Learn to embrace your body, overcome insecurities, and develop a healthy relationship with yourself and your sexuality. Discover how negative body image affects intimacy and self-esteem. Learn practical strategies for building body confidence, challenging negative thoughts, and focusing on what your body can do rather than how it looks. Get tips for communicating with partners about body concerns and building acceptance. Understand the role of media, social media, and societal pressures on body image. Learn about self-care practices, positive affirmations, and surrounding yourself with supportive people. Building a positive relationship with your body enhances confidence, improves intimacy, and leads to more satisfying sexual experiences. Your body is unique and beautiful - learn to appreciate it.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>10. Common Sexual Health Myths Debunked</strong>
+            <p>Separate fact from fiction. We debunk common myths about sexual health, contraception, STIs, and more. Get accurate, evidence-based information to make informed decisions about your health. Learn the truth about myths like "you can't get pregnant during your period," "pulling out is effective contraception," or "STIs always show symptoms." Understand the real facts about virginity, hymen, and first-time experiences. Discover the truth about birth control causing weight gain, infertility, or other side effects. Learn about common misconceptions regarding sexual orientation, gender identity, and sexual function. Get accurate information about what's normal versus what requires medical attention. Understanding the facts helps you make better health decisions, reduces anxiety, and promotes healthier attitudes toward sexuality. Don't let myths guide your health choices - get the facts.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>11. When to See a Gynecologist: Warning Signs</strong>
+            <p>Know when to seek medical attention. Learn about warning signs, symptoms that require immediate care, and the importance of regular gynecological checkups. Your health is important - don't ignore red flags. Understand when symptoms like unusual bleeding, severe pain, unusual discharge, or changes in your cycle require immediate medical attention. Learn about the importance of annual exams, Pap smears, breast exams, and other routine screenings. Discover what to expect during a gynecological visit and how to prepare. Get information about when to see a doctor for irregular periods, pelvic pain, unusual symptoms, or concerns about sexual health. Learn about emergency situations that require immediate care. Regular checkups help detect issues early when they're most treatable. Don't delay seeking care - your health and wellbeing are worth prioritizing. Early detection saves lives.</p>
+          </a>
+        </div>
+        <div class="blog-topic-item">
+          <a href="#" class="blog-topic-link">
+            <strong>12. Healthy Lifestyle Choices for Better Intimacy</strong>
+            <p>Discover how diet, exercise, sleep, and stress management can improve your intimate life. Learn about foods that boost libido, exercises that enhance sexual health, and lifestyle habits that support overall wellbeing. Understand how nutrition affects hormone levels, energy, and sexual function. Discover foods rich in zinc, omega-3s, and antioxidants that support sexual health. Learn about exercises like Kegels, yoga, and cardio that improve circulation, flexibility, and sexual function. Understand the importance of adequate sleep for hormone production and energy levels. Get tips for managing stress, which can significantly impact libido and sexual satisfaction. Learn about the effects of smoking, excessive alcohol, and drug use on sexual health. Discover how maintaining a healthy weight, staying hydrated, and managing chronic conditions can improve intimacy. Small lifestyle changes can make a big difference in your sexual health and overall satisfaction.</p>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="cloaking-overlay" style="display: none;">
-    <div id="Mai-Box-Of-Box">
-      <div id="Box-Of-Box-37"></div>
-      <div style="width: 300px; height: 100px; display: inline-block; background-color: black;"></div>
-    </div>
-    <div id="Mai-Box-Of-Box">
-      <div id="Box-Of-Box-55"></div>
-      <div style="width: 300px; height: 100px; display: inline-block; background-color: black;">Ajdojj</div>
-    </div>
-    <div id="Mai-Box-Of-Box">
-      <div id="Box-Of-Box-44"></div>
-      <div style="width: 300px; height: 300px; display: inline-block; background-color: black;">Ajdojj</div>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header class="header">
-    <div class="header-container">
-      <a href="/" class="logo">Daily <span>Health</span> &amp; Wellness</a>
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="/category/nutrition">Nutrition</a>
-        <a href="/category/fitness">Fitness</a>
-        <a href="/category/mental-health">Mental Health</a>
-        <a href="/category/wellness-tips">Wellness Tips</a>
-        <a href="/about">About</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <div class="container">
-    <!-- Hero Section -->
-    <div class="hero">
-      <h1>Your Daily Guide to Better Health</h1>
-      <p>Discover expert tips, wellness advice, and evidence-based information to help you live a healthier, happier life every day.</p>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-      <!-- NEW Blog Post: Smartphone Dopamine / Anhedonia -->
-      <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
-        <div class="post-image">📱</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category" itemprop="articleSection">Mental Health</span>
-          </div>
-          <h2 class="post-title" itemprop="headline">
-            <a href="/smartphone-dopamine-addiction" itemprop="url">
-              The Smartphone Dopamine Trap: Anhedonia in the Age of Endless Scrolling
-            </a>
-          </h2>
-
-          <!-- Preview -->
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
-            <p>If you’re reading this, the likelihood is you have a smartphone addiction.</p>
-            <p>Some days, like millions of other humans, you lack motivation, dread performing basic tasks, and occasionally feel numb or anxious. If you find yourself feeling those things, or worse yet, find yourself struggling to finish an article… that’s not just “laziness”.</p>
-            <p>Cheap dopamine in the form of smartphones may be “the modern devil” — and it’s quietly rewiring the reward system in your brain.</p>
-          </div>
-
-          <!-- Full Content -->
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-
-            <h3>We Don’t Talk Honestly About Smartphone Addiction</h3>
-            <p>
-              Smartphone use, like any other addiction, carries a layer of shame.  
-              Most of us don’t admit we have a problem, but when we look closely,  
-              we know something is off. We call it “being tired”, “burnt out”,  
-              or “lazy”, but underneath there is an uncomfortable truth —  
-              our phones are training our brains.
-            </p>
-            <p>
-              When we talk about epidemics, we think of something like COVID.  
-              But the evidence suggests we are living through an addiction epidemic,  
-              where our ability to regulate dopamine is being hijacked by  
-              highly capable predictive systems: social media algorithms and smartphones.
-            </p>
-
-            <h3>What the Data Says</h3>
-            <p>Some numbers that paint the picture:</p>
-            <ul>
-              <li>Global smartphone usage rose from about 20% to over 70% since 2010.</li>
-              <li>Average smartphone usage is around 4 hours 40 minutes per day.</li>
-              <li>Phone pickups have exploded from ~46 checks/day to over 150.</li>
-              <li>Almost half of adults report frequent stress, the highest in decades.</li>
-              <li>People report worsening sleep and rising anxiety.</li>
-              <li>Suicide rates have risen dramatically over the last two decades.</li>
-              <li>Pedestrian deaths linked to distracted attention are sharply up.</li>
-            </ul>
-            <p>
-              These trends are not random. They correlate with increased digital consumption  
-              and reward-seeking behaviour — especially through screens.
-            </p>
-
-            <h3>Our Biology Was Built for Scarcity, Not Infinite Scroll</h3>
-            <p>
-              For most of human history, we lived in scarcity — hunting, foraging, conserving energy.  
-              Our reward circuits evolved to search for:
-            </p>
-            <ul>
-              <li>Calories and sugar</li>
-              <li>Novelty</li>
-              <li>Social approval and belonging</li>
-            </ul>
-            <p>
-              These rewards were rare and usually required effort.  
-              Today, for the first time in history, the average human lives in a state of abundance:
-            </p>
-            <ul>
-              <li>Instant digital stimulation</li>
-              <li>Highly processed, hyper-palatable food</li>
-              <li>Endless novelty on demand</li>
-              <li>Constant social comparison & validation via apps</li>
-            </ul>
-            <p>
-              Our brains were not designed for this level of intensity and access.  
-              When dopamine is stimulated too frequently and too strongly,  
-              the brain responds by downregulating sensitivity —  
-              your reward system becomes numb. Pleasure is harder to feel,  
-              so you seek more stimulation to feel “normal”.
-            </p>
-
-            <h3>Primitive Brains vs Advanced Machine Learning</h3>
-            <p>
-              Our species has never faced persuasion systems that operate  
-              directly at the neural level, optimising for our attention.
-            </p>
-            <p>
-              Modern social media algorithms are built on advanced ML recommender systems  
-              trained on our behaviour. Their goal:
-            </p>
-            <ul>
-              <li>Maximise time-on-device</li>
-              <li>Maximise engagement</li>
-              <li>Maximise retention</li>
-            </ul>
-            <p>
-              They don’t need to understand you — they only need to predict you.
-            </p>
-            <p>
-              As Nick Bostrom’s orthogonality thesis explains,  
-              intelligence (ability to achieve goals) and goals (what is actually pursued)  
-              are independent. In our case, the “goal” of the system is not  
-              human flourishing — it is attention and ad revenue.
-            </p>
-            <p>
-              Applied here, the misalignment is simple:  
-              you want a meaningful life, your apps want your time.  
-              Repeated billions of times, this misalignment creates  
-              a collective addiction problem.
-            </p>
-
-            <h3>The War Inside Your Brain: Limbic System vs Prefrontal Cortex</h3>
-            <p>
-              Every time we buy short-term digital stimulation,  
-              we steal from our future capacity to feel joy.
-            </p>
-            <p>
-              Dr. Anna Lembke describes this using the pleasure–pain balance.  
-              Each hit of dopamine tilts the seesaw toward pleasure.  
-              In response, the brain pushes back with pain to restore balance.  
-              It does this by:
-            </p>
-            <ul>
-              <li>Reducing dopamine receptor availability</li>
-              <li>Decreasing sensitivity to reward</li>
-            </ul>
-            <p>
-              Over time, this leads to anhedonia — the inability to feel pleasure.  
-              You still move through life, but everything feels muted and flat.  
-              To escape that dullness, your brain returns to  
-              what produced the last big spike: your phone, your apps, your feeds.
-            </p>
-            <p>
-              High-dopamine, low-effort behaviours (scrolling, streaming, notifications)  
-              create fast spikes and sharp crashes.  
-              Effort-based rewards (exercise, learning, deep work, real connection)  
-              produce gentler, more sustainable dopamine curves.
-            </p>
-
-            <h3>Smartphones Are Drug-Like</h3>
-            <p>
-              The process of addiction is nearly identical whether the source is  
-              a substance or a screen. Chronic overuse of dopamine-producing stimuli:
-            </p>
-            <ul>
-              <li>Drives compulsive use</li>
-              <li>Collapses motivation</li>
-              <li>Makes effort-based tasks feel “not worth it”</li>
-            </ul>
-            <p>
-              In famous experiments, rats given extended access to cocaine  
-              chose it over food and water, even to the point of death.  
-              Their dopamine deficit became so severe that survival behaviour  
-              no longer produced enough reward.
-            </p>
-            <p>
-              With smartphones, we see a softer version of the same pattern:  
-              basic life tasks start feeling empty, while the phone always feels  
-              like the easiest way to feel “something”.
-            </p>
-
-            <h3>Red Pill or Blue Pill: Two Paths</h3>
-            <h4>Path 1: Stay Plugged In</h4>
-            <p>
-              We can continue sleep-walking into a digital world designed to harvest  
-              attention. Operating systems are the portal, apps the operators,  
-              AI the fine-tuner, and human users the product.  
-              Like in The Matrix, we become batteries — not for energy,  
-              but for data, time, and emotional engagement.
-            </p>
-
-            <h4>Path 2: The Anti-Movement</h4>
-            <p>
-              Or, we can recognise what this really is: a war for attention,  
-              agency, and self-mastery. Those who don’t realise a war has begun  
-              lose by default.
-            </p>
-            <p><strong>The anti-movement is simple:</strong></p>
-            <ul>
-              <li>Do hard things that your brain resists.</li>
-              <li>Do “boring” things your brain resents.</li>
-              <li>Don’t engage with apps that numb you.</li>
-              <li>Go on that run instead of scrolling.</li>
-              <li>Don’t watch videos while eating.</li>
-              <li>Finish that chapter instead of checking notifications.</li>
-            </ul>
-            <p>
-              Studies suggest ~60 days of this is enough to begin reshaping  
-              those unhealthy neural pathways into healthier ones.
-            </p>
-
-            <h3>Practical Tools for the Battle</h3>
-            <ul>
-              <li><strong>App blockers:</strong> Use tools like Opal to limit when you can use certain apps and see how often you reach for your phone automatically.</li>
-              <li><strong>Red-light mode before bed:</strong> For 2 hours before sleep, avoid social media and stimulating content. Use red-light or low-blue-light settings.</li>
-              <li><strong>No phone in the bedroom:</strong> Don’t sleep with your phone in the same room and avoid checking it within the first hour of waking up.</li>
-              <li><strong>Grayscale mode:</strong> Turn your phone screen to grayscale during the day to make it less visually rewarding.</li>
-              <li><strong>Put your phone out of reach:</strong> When working, put it somewhere that requires real effort to retrieve. Even another room or a drawer helps.</li>
-              <li><strong>Meditation:</strong> Practice mindfulness for 20–30 minutes a day. Simply observing thoughts can slow down your mind.</li>
-              <li><strong>Reading:</strong> Learn about dopamine and addiction. Books like “Dopamine Nation” (Dr. Anna Lembke) can change how you view pleasure, pain, and craving.</li>
-            </ul>
-
-            <p>
-              The goal is not to become anti-technology.  
-              The goal is to reclaim your brain so that technology serves you,  
-              not the other way around.
-            </p>
-          </div>
-
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 1 (old, now second) -->
-      <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
-        <div class="post-image">❤️</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category" itemprop="articleSection">Mental Health</span>
-          </div>
-          <h2 class="post-title" itemprop="headline">
-            <a href="/is-it-love-or-validation" itemprop="url">Is It Love or Validation?</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
-            <p>Mind picks words in a certain way. When we think about those words, we get an idea of them - the idea passed on to us by the society around us through content consumed over centuries.</p>
-
-            <p>Words carry the weight of collective imagination. So when we think about love, our mind doesn't just think, it recalls an inherited picture - a beautiful partner giving us their full attention, smiling like we're the only one in the world.</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <p>But if we look at this projection carefully, we begin to see something uncomfortable.</p>
-            <p>The mind doesn't care much about love itself - it simply wants someone to act in a way that makes us feel good.</p>
-            <p>That act could be anything - checking up on us, saying the right words, giving us time, presence, praise.</p>
-            <p>The mind seeks attention and frames it as love.</p>
-            <p>And we end up chasing that attention our whole life, calling it love. We start equating being noticed with being loved.</p>
-            <p>The moment that attention starts to divide, when more people enter the family or responsibilities increase, the illusion of love begins to fade.</p>
-            <p>We feel like the other person doesn't love us anymore, like something important has slipped away.</p>
-            <p>But in reality, nothing was taken from us.</p>
-            <p>The truth is, love was never supposed to be an act of validation. It was never meant to be a test we constantly pass or fail.</p>
-            <p>It was never meant to be a confirmation of whether someone cared or not.</p>
-            <p>It was never supposed to be about changing ourselves just to fit into the ideal template of love between couples - a template built from someone else's longing and someone else's need for certainty.</p>
-            <p>We force ourselves into this idea of love again and again, losing pieces of who we are in the process.</p>
-            <p>We try to fit into a model reinforced by a few minds who were also seeking validation for their idea of love.</p>
-            <p>We mimic their stories, we measure our emotions against theirs, and somewhere along the way we forget to feel what's truly ours.</p>
-            <p>We lose our lives trying to validate those stories, that content, that imagination, while missing out on the real love that may already be present.</p>
-            <p>The kind of love that doesn't look like the movies, doesn't speak in big words, doesn't ask for applause.</p>
-            <p>The love from partners we never identified. Partners who didn't fit into the widely accepted template of love.</p>
-            <p>Partners who never asked for validation from us, but we were too distracted, too conditioned, too blind to notice.</p>
-            <p>And by the time we do realise it, those partners become just a memory.</p>
-            <p>A faded photograph in our mind.</p>
-            <p>A voice we once knew. A presence we no longer feel. We are left to live in a version of life where we keep pretending to be loved, but deep down we know we're not.</p>
-            <p>And it's difficult to accept that.</p>
-            <p>It's a truth too heavy to sit with, so we turn away.</p>
-            <p>And maybe that's what we've always done - turned away from the real thing while chasing the image.</p>
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 2 -->
-      <article class="blog-post">
-        <div class="post-image">🧠</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Mental Health</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/genz-burden-of-connection-and-confusion">GenZ: The Burden of Connection and Confusion</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p>GenZ carry a strange burden. They are more connected than ever, yet more confused. They are praised when they perform and ignored when they stumble. They are constantly comparing themselves to strangers on screens and losing sight of who they are. Beneath all this noise, timeless questions rise up:</p>
-
-            <p>Who am I? What is passion? Why am I lonely? What does success even mean?</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">Who Am I?</h3>
-            <p>Am I just the son following my parents' commands?</p>
-            <p>Am I part of a group where I am only trying to prove my worth?</p>
-            <p>Am I a puppet working for the desires shown to me by social media?</p>
-            <p>Am I a soul that gets excused when I hit failures?</p>
-            <p>Am I just a lost cause in a world that seems unfair to me?</p>
-            <p>Maybe I am clueless. Maybe I am still figuring it out. Maybe the question does not matter at all.</p>
-            <p>For most youth, identity does not matter as long as they perform. If they are praised by family, validated by friends, or applauded by society, life feels stable. But when performance drops because of emotional disruption or failure, the applause stops. Without applause, the question of identity rises. That question can send youth spiraling into illusions, drugs, or shallow spirituality just to hide the pain inside.</p>
-            <p>But identity cannot be built on masks. To understand who we are, we need to remember what we once were.</p>
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Toddler's Truth</h3>
-            <p>When you were a few months old, you were simply observing. You mirrored what you saw. You reached for what you loved. You fell without labeling it as failure. You lived with pure awareness.</p>
-            <p>Babies carry evolved tendencies, seeds of the soul, that guide them. As we grow, those tendencies fade from the waking mind, but they never disappear. They wait in the subconscious and reappear when we think we are in control, only to knock us off balance. We call it unfair, but it is not. Life is reminding us of the friend we abandoned, our truest self.</p>
-            <p>That friend, once ignored, becomes an enemy. It resists, sabotages, and confuses us. When we welcome it again with full awareness, it flips back into a guide. That is the same awareness that guided us as toddlers. To meet it again is to return to joy flowing effortlessly from the heart.</p>
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">What Is Passion?</h3>
-            <p>Passion is one of the most misused words today.</p>
-            <p>Is it something borrowed from society, or something nurtured in silence until it becomes the only thing that matters? If you cannot sacrifice comfort, approval, or even relationships for it, then it is not passion. It is attraction.</p>
-            <p>Many confuse thrill for passion. A startup after watching Shark Tank. A job chosen for prestige. A path followed for applause. Thrill excites but does not sustain. It is the same impulse that makes you chase novelty but leaves you empty afterward. Escape feeds the ego. Passion feeds the soul.</p>
-            <p>The difference lies in repetition. Escape loses its flavor. Passion deepens with every return. Passion survives boredom, resistance, and failure. If you can keep showing up when nobody is clapping, when success looks far, when it is just you and the work, that is passion.</p>
-            <p>True passion is not found in a moment of inspiration but discovered over time, through adversity, through immersion, through discipline. Slowly, the work becomes a gateway to the self, and the joy it brings becomes an anchor you cannot trade away.</p>
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">Loneliness: From Void to Awakening</h3>
-            <p>Loneliness is born of self-doubt. It appears when you feel you cannot meet society's expectations anymore, when you feel misunderstood, when you feel lost in the race for resources and roles.</p>
-            <p>Often, we play roles that bring comfort to others while draining ourselves. We think we are in the right place until the breakdown comes. And then masks fall. We see who people really are when we no longer serve their comfort.</p>
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 3 -->
-      <article class="blog-post">
-        <div class="post-image">🧘</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Wellness Tips</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/path-of-true-spiritual-growth">The Path of True Spiritual Growth</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p><strong>TLDR:</strong> You don't find God by escaping the world. You find Him by living through it with awareness. Desire dissolves into detachment, pain turns into wisdom, and ordinary life becomes sacred. True spirituality is not escape. It is transformation in motion.</p>
-
-            <p>True spiritual growth happens when you stay in life, not when you run away from it. If you think leaving your family and settling in an ashram will one day connect you to divinity, you are living in a deep illusion.</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <p>You must learn to work with people you don't like, to face those at lower levels of consciousness, and to stay in environments full of distractions. Despite that, you remain calm and unshaken. Your emotions stay steady, regardless of praise or blame, success or failure. You remain detached from outcomes because your heart is anchored in divinity. With every act of remembrance, contemplation, and devotion, purity begins to churn within you.</p>
-            <p>This is the only path toward real liberation. To keep working, to keep serving, and to stay devoted while living fully in the world. When your mind stays immersed in God while performing worldly duties with discipline, devotion, and service, you naturally become a yogi. Not by leaving your life behind but by transforming yourself through it.</p>
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Illusion of Desire and the Mask of Spirituality</h3>
-            <p>Most of us carry a deep desire to fit into the template of a "happy life" that society has shown us. That so-called happiness is often built on endless desires. The more you fulfill one, the more impulsive the next becomes, and soon you are consumed by your own longing.</p>
-            <p>You are not living. You are extracting silent suffering from within, justifying it through rewards that can be showcased to the world. You seek validation, applause, and recognition, but they never last. The moment someone else receives more, the cycle of emptiness restarts.</p>
-            <p>Even as age catches up and you begin to give back, the illusion doesn't die. It simply takes on a new face. You feel noble in your service, but your goodness still seeks identity. You are still acting from self-image. You have not transcended. You have only shifted form. Desires have now taken the shape of spirituality, and that illusion is harder to detect because it wears the mask of holiness.</p>
-            <p>True spirituality begins only when this mask falls, when you act not from identity but from surrender.</p>
-            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">The Mind, the Shadow, and the Awakening Within</h3>
-            <p>For those who have conquered the mind, it is their friend. For those who haven't, it becomes their enemy. The mind whispers temptations of gain and recognition, and you follow. It doesn't act alone. It is shaped by a collective field of minds, each chasing similar desires. You get caught in that unseen web, pulled by emotions and illusions.</p>
-            <p>Only when the intellect begins to reason with the mind does transformation begin. When knowledge becomes your guide, the ego starts to dissolve. You stop taking pride in achievement and start taking joy in understanding. You act without clinging, perform without seeking, and live in non-action. And in non-action, there is peace because you realize you were never the doer in the first place.</p>
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 4 -->
-      <article class="blog-post">
-        <div class="post-image">💊</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Nutrition</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/bad-digestion-could-lead-to-all-problems">Bad Digestion Could Lead to All Problems in Your Life (How to Fix)</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p>We don't really talk about poop. We find it funny; we think it's shameful. We've made 'poop' a taboo that most of us never thought to break from.</p>
-
-            <p>But what if 'poop' could actually help you lead a better life? What if your poop could reveal the underlying issues that might be affecting your mental and physical well-being?</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <!-- (Full content kept same as your original file) -->
-            <!-- You can keep the whole detailed gut-health article here exactly as before -->
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 5 -->
-      <article class="blog-post">
-        <div class="post-image">💭</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Mental Health</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/secret-reason-you-keep-repeating-mistakes">The Secret Reason You Keep Repeating the Same Mistakes</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p>You always get two choices behind every decision you take in life. One of the choices will lead you to meet conflict, and the other will lead you to meet peace.</p>
-
-            <p>It's easy to deal with peace, and you want peace as an outcome of any decision you take. But that sense of control and security also becomes the reason you can't hold on to peace for long.</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <!-- (Full long-form content exactly as in your original file) -->
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 6 -->
-      <article class="blog-post">
-        <div class="post-image">✨</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Mental Health</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/why-success-feels-empty">Why Success Feels Empty (And What Actually Brings Joy)</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p>When you see so many things at discounted prices, your mind instantly lights up with signals of opportunity. The brain is wired to detect scarcity and bargains, so when it sees the word "discount," it interprets it as an urgent chance not to be missed.</p>
-
-            <p>These things could be anything: clothes, phones, or even things like stocks and crypto. The mind convinces you that it is not just a purchase but an "investment." The thought of missing out feels more painful than the thought of overspending.</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <!-- (Full long-form content exactly as in your original file) -->
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Post 7 -->
-      <article class="blog-post">
-        <div class="post-image">📖</div>
-        <div class="post-content">
-          <div class="post-meta">
-            <span class="post-category">Mental Health</span>
-          </div>
-          <h2 class="post-title">
-            <a href="/when-desire-becomes-your-downfall">When Desire Becomes Your Downfall</a>
-          </h2>
-          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;">
-            <p>Mohit never received mental or emotional support from his family to continue his studies after the 10th grade. His family was running a factory and decided early on that his place was not in school but inside the walls of that factory.</p>
-
-            <p>Even before Mohit turned six, they had placed him there as a part-time helper. At that age, when most children learned to read stories or play with friends, Mohit learned the sound of hammering iron, the smell of machine oil, and the rhythm of factory whistles.</p>
-          </div>
-          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
-            <!-- (Full long-form story exactly as in your original file) -->
-          </div>
-          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
-        </div>
-      </article>
-
-      <!-- NOTE: The last 6 short fitness/nutrition posts have been removed as requested -->
-    </main>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <!-- Ad Container -->
-      <div class="sidebar-widget">
-        <div class="ad-container">
-          <p>Advertisement</p>
-        </div>
-      </div>
-
-      <!-- Categories Widget -->
-      <div class="sidebar-widget">
-        <h3 class="widget-title">Categories</h3>
-        <ul class="category-list">
-          <li>
-            <a href="/category/nutrition">
-              <span>Nutrition</span>
-              <span class="category-count">12</span>
-            </a>
-          </li>
-          <li>
-            <a href="/category/fitness">
-              <span>Fitness</span>
-              <span class="category-count">15</span>
-            </a>
-          </li>
-          <li>
-            <a href="/category/mental-health">
-              <span>Mental Health</span>
-              <span class="category-count">10</span>
-            </a>
-          </li>
-          <li>
-            <a href="/category/wellness-tips">
-              <span>Wellness Tips</span>
-              <span class="category-count">18</span>
-            </a>
-          </li>
-          <li>
-            <a href="/category/sleep">
-              <span>Sleep</span>
-              <span class="category-count">8</span>
-            </a>
-          </li>
-          <li>
-            <a href="/category/prevention">
-              <span>Prevention</span>
-              <span class="category-count">9</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Popular Posts Widget -->
-      <div class="sidebar-widget">
-        <h3 class="widget-title">Popular Posts</h3>
-        <div class="popular-post">
-          <div class="popular-post-image"></div>
-          <div class="popular-post-content">
-            <h4><a href="/10-morning-exercises-that-will-energize-your-day">10 Morning Exercises That Will Energize Your Day</a></h4>
-            <span class="date">March 15, 2024</span>
-          </div>
-        </div>
-        <div class="popular-post">
-          <div class="popular-post-image"></div>
-          <div class="popular-post-content">
-            <h4><a href="/superfoods-you-should-add-to-your-daily-diet">Superfoods You Should Add to Your Daily Diet</a></h4>
-            <span class="date">March 14, 2024</span>
-          </div>
-        </div>
-        <div class="popular-post">
-          <div class="popular-post-image"></div>
-          <div class="popular-post-content">
-            <h4><a href="/5-simple-mindfulness-practices-for-daily-stress-relief">5 Simple Mindfulness Practices for Daily Stress Relief</a></h4>
-            <span class="date">March 13, 2024</span>
-          </div>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-section">
-        <h3>About Daily Health &amp; Wellness</h3>
-        <p>Your trusted space for mental health stories, wellness reflections, and practical lifestyle guidance.</p>
-      </div>
-      <div class="footer-section">
-        <h3>Quick Links</h3>
-        <p><a href="/">Home</a></p>
-        <p><a href="/about">About</a></p>
-        <p><a href="/contact">Contact</a></p>
-        <p><a href="/privacy-policy">Privacy Policy</a></p>
-      </div>
-      <div class="footer-section">
-        <h3>Stay Connected</h3>
-        <p><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></p>
-        <p><a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a></p>
-        <p><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      © <span id="year"></span> Daily Health &amp; Wellness. All rights reserved.
-    </div>
-  </footer>
-
-  <!-- Read More Toggle Script -->
-    <!-- jQuery (Required) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    <!-- Simple Cloaking System -->
-    <script>
-    console.log('🚀 Starting cloaking check...');
+  <!-- ============================================
+       BLOG PAGE - Sexual Health Topics (Clickbait Style)
+       ============================================ -->
+  <div id="blog" class="page">
+    <h2 style="text-align:center;color:#1e40af;margin-bottom:25px;">🔥 Trending Sexual Health Topics</h2>
     
-    // Simple UTM check
-    function hasValidUTM() {
-      const utm = window.location.search;
-      console.log('Checking URL:', utm);
-      return /^\?[A-Za-z]{5}=[0-9]{5}$/.test(utm);
-    }
+    <div class="post clickbait-post">
+      <span class="trending-badge">🔥 TRENDING</span>
+      <h3>1. 7 Contraception Methods Doctors Don't Tell You About (You'll Be Shocked!)</h3>
+      <p>Discover secret birth control options that could change your life forever. Most women don't know about #3...</p>
+      <button class="read-more-btn" onclick="showArticle(1)">Read Full Article →</button>
+    </div>
     
-    function isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
-    }
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ MUST READ</span>
+      <h3>2. STI Symptoms You're Ignoring Right Now (This Could Save Your Life!)</h3>
+      <p>Warning signs that 90% of people miss. Don't wait until it's too late - read this NOW!</p>
+      <button class="read-more-btn" onclick="showArticle(2)">Read Full Article →</button>
+    </div>
     
-    // Main function
-    function checkCloaking() {
-      console.log('Mobile check:', isMobile());
-      console.log('UTM check:', hasValidUTM());
-      console.log('Session active:', sessionStorage.getItem('cloaking_active'));
+    <div class="post clickbait-post">
+      <span class="trending-badge">💡 EXPERT TIP</span>
+      <h3>3. Period Hacks That Will Change Everything (Gynecologists Hate #5!)</h3>
+      <p>Simple tricks to make your period easier. Thousands of women swear by these methods...</p>
+      <button class="read-more-btn" onclick="showArticle(3)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">📚 FOR TEENS</span>
+      <h3>4. What Your Parents Never Told You About Puberty (The Truth Will Shock You)</h3>
+      <p>Everything you need to know but were too afraid to ask. Real talk about growing up...</p>
+      <button class="read-more-btn" onclick="showArticle(4)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">❤️ RELATIONSHIPS</span>
+      <h3>5. The Consent Conversation That Could Save Your Relationship</h3>
+      <p>How to talk about boundaries without ruining the mood. Expert-approved communication tips...</p>
+      <button class="read-more-btn" onclick="showArticle(5)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">👶 PREGNANCY</span>
+      <h3>6. Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know</h3>
+      <p>Natural methods that boost fertility by 300%. Couples are getting pregnant in weeks, not months...</p>
+      <button class="read-more-btn" onclick="showArticle(6)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🌟 OVER 40</span>
+      <h3>7. Menopause Secrets: How to Feel 20 Again (Women Over 40 Are Obsessed!)</h3>
+      <p>Life-changing tips for navigating menopause. You don't have to suffer - here's how...</p>
+      <button class="read-more-btn" onclick="showArticle(7)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🧠 MENTAL HEALTH</span>
+      <h3>8. Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)</h3>
+      <p>The hidden connection between mental health and intimacy. This will change everything...</p>
+      <button class="read-more-btn" onclick="showArticle(8)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">✨ CONFIDENCE</span>
+      <h3>9. Body Confidence Hacks: Love Yourself Naked (The Secret Nobody Talks About)</h3>
+      <p>Transform your relationship with your body. These techniques work for 95% of women...</p>
+      <button class="read-more-btn" onclick="showArticle(9)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">🚫 MYTHS</span>
+      <h3>10. Sexual Health Lies You've Been Told Your Whole Life (Number 4 Will Blow Your Mind!)</h3>
+      <p>Debunking dangerous myths that could be harming your health. The truth will surprise you...</p>
+      <button class="read-more-btn" onclick="showArticle(10)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">⚠️ URGENT</span>
+      <h3>11. 5 Warning Signs You Need to See a Doctor TODAY (Don't Ignore #2!)</h3>
+      <p>Red flags that require immediate attention. Your health could depend on reading this...</p>
+      <button class="read-more-btn" onclick="showArticle(11)">Read Full Article →</button>
+    </div>
+    
+    <div class="post clickbait-post">
+      <span class="trending-badge">💪 LIFESTYLE</span>
+      <h3>12. Boost Your Libido Naturally: Foods That Make You Want More (Try #7 Tonight!)</h3>
+      <p>Simple lifestyle changes that dramatically improve intimacy. Results in just 3 days...</p>
+      <button class="read-more-btn" onclick="showArticle(12)">Read Full Article →</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ABOUT PAGE - Information about the site
+       ============================================ -->
+  <div id="about" class="page">
+    <h2>About Us</h2>
+    <p>LOVE WELLNESS connects you with expert counselors and wellness advisors across India.</p>
+  </div>
+
+  <!-- ============================================
+       CONTACT PAGE - Contact form
+       ============================================ -->
+  <div id="contact" class="page">
+    <h2>Contact Us</h2>
+    <!-- Contact form - email and message fields -->
+    <form id="contactForm">
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <!-- ============================================
+       FOOTER - Copyright
+       ============================================ -->
+  <div class="footer">© 2025 <span class="brand-love" style="color:#ec4899;">LOVE</span> <span style="color:#e2e8f0;">WELLNESS</span></div>
+
+  <!-- ============================================
+       JAVASCRIPT - All functionality code
+       ============================================ -->
+  <script>
+    /* ============================================
+       DATA STRUCTURES - State and location data
+       ============================================ */
+    
+    // STATE MAPPING - Maps API state names to our internal state names
+    // This ensures consistent state names regardless of API response format
+    const stateMapping = {
+      "Gujarat": "Gujarat", "Maharashtra": "Maharashtra", "Tamil Nadu": "Tamil Nadu",
+      "Karnataka": "Karnataka", "Kerala": "Kerala", "Andhra Pradesh": "Andhra Pradesh",
+      "Telangana": "Telangana", "West Bengal": "West Bengal", "Odisha": "Odisha",
+      "Punjab": "Punjab", "Rajasthan": "Rajasthan", "Uttar Pradesh": "Uttar Pradesh",
+      "Madhya Pradesh": "Madhya Pradesh", "Bihar": "Bihar", "Assam": "Assam",
+      "Haryana": "Haryana", "Jharkhand": "Jharkhand", "Chhattisgarh": "Chhattisgarh",
+      "Himachal Pradesh": "Himachal Pradesh", "Uttarakhand": "Uttarakhand",
+      "Delhi": "Delhi", "Goa": "Goa", "Manipur": "Manipur", "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram", "Nagaland": "Nagaland", "Tripura": "Tripura",
+      "Sikkim": "Sikkim", "Arunachal Pradesh": "Arunachal Pradesh"
+    };
+
+    // CUSTOM PHOTOS - Photo files are in the "photos" folder
+    // Photo files: P1.jpg, P2.jpg, P3.jpg, P4.jpg, P5.jpg, P6.jpg, P7.jpg
+    // Photos are displayed in circular format
+    //
+    const customPhotos = {
+      "Gujarat": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Maharashtra": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tamil Nadu": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Karnataka": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Kerala": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Andhra Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Telangana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "West Bengal": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Odisha": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Punjab": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Rajasthan": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttar Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Madhya Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Bihar": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Assam": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Haryana": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Jharkhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Chhattisgarh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Himachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Uttarakhand": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Delhi": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Goa": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Manipur": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Meghalaya": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Mizoram": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Nagaland": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Tripura": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Sikkim": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "Arunachal Pradesh": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"],
+      "default": ["photos/P1.jpg", "photos/P2.jpg", "photos/P3.jpg", "photos/P4.jpg", "photos/P5.jpg", "photos/P6.jpg", "photos/P7.jpg"]
+    };
+
+    // GIRL NAMES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const girlNames = {
+      "Gujarat": ["પર્વતી પટેલ", "દીપા શાહ", "રિયા ઠક્કર", "કાવ્યા મહેતા", "પ્રિયા ગાંધી"],
+      "Maharashtra": ["प्रिया जोशी", "सानिका देशमुख", "आराधना पाटिल", "स्वाती कुलकर्णी"],
+      "Tamil Nadu": ["பிரியா செல்வம்", "கார்த்திகா ராஜா", "சுவேதா குமார்", "மாதவி ராமன்"],
+      "Karnataka": ["ಪ್ರಿಯಾ ರೆಡ್ಡಿ", "ಕಾವ್ಯಾ ಮೂರ್ತಿ", "ಸ್ವೇತಾ ನಾಯಕ್", "ಮಾಧವಿ ಶೆಟ್ಟಿ"],
+      "Kerala": ["പ്രിയ രാജ്", "സ്വേത മേനൻ", "കാവ്യ ഗോപാൽ", "മാധവി നായർ"],
+      "Andhra Pradesh": ["ప్రియ రెడ్డి", "స్వేత నాయక్", "కావ్య మూర్తి", "మాధవి శర్మ"],
+      "Telangana": ["ప్రియ రావు", "స్వేత రెడ్డి", "కావ్య నాయక్", "మాధవి రావు"],
+      "West Bengal": ["প্রিয়া ঘোষ", "স্বেতা দাস", "কাব্য চক্রবর্তী", "মাধবী মুখার্জী"],
+      "Odisha": ["ପ୍ରିୟା ମହାନ୍ତି", "ସ୍ୱେତା ଦାସ", "କାବ୍ୟା ପଟ୍ଟନାୟକ", "ମାଧବୀ ମିଶ୍ର"],
+      "Punjab": ["ਪ੍ਰਿਯਾ ਸਿੰਘ", "ਸਵੇਤਾ ਕੌਰ", "ਕਾਵਿਆ ਗਿੱਲ", "ਮਾਧਵੀ ਸਿੱਧੂ"],
+      "Rajasthan": ["प्रिया शर्मा", "स्वेता जैन", "काव्या गुप्ता", "माधवी सिंह"],
+      "Uttar Pradesh": ["प्रिया वर्मा", "स्वेता सिंह", "काव्या तिवारी", "माधवी यादव"],
+      "Madhya Pradesh": ["प्रिया पाटिल", "स्वेता शर्मा", "काव्या जैन", "माधवी दुबे"],
+      "Bihar": ["प्रिया कुमारी", "स्वेता सिंह", "काव्या राय", "माधवी पासवान"],
+      "Assam": ["প্ৰিয়া দাস", "স্বেতা বৰুৱা", "কাব্য গগৈ", "মাধবী শৰ্মা"],
+      "Haryana": ["प्रिया यादव", "स्वेता शर्मा", "काव्या सिंह", "माधवी कुमारी"],
+      "Jharkhand": ["प्रिया झा", "स्वेता मुंडा", "काव्या टोप्पो", "माधवी सिंह"],
+      "Chhattisgarh": ["प्रिया साहू", "स्वेता यादव", "काव्या देवांगन", "माधवी पांडे"],
+      "Himachal Pradesh": ["प्रिया शर्मा", "स्वेता ठाकुर", "काव्या कपूर", "माधवी सिंह"],
+      "Uttarakhand": ["प्रिया रावत", "स्वेता बिष्ट", "काव्या नेगी", "माधवी पंत"],
+      "Delhi": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"],
+      "Goa": ["Priya Naik", "Sweta Desai", "Kavya Kamat", "Madhavi Gaonkar"],
+      "Manipur": ["Priya Devi", "Sweta Singh", "Kavya Thokchom", "Madhavi Ningthoujam"],
+      "Meghalaya": ["Priya Kharbuli", "Sweta Lyngdoh", "Kavya Marak", "Madhavi Sangma"],
+      "Mizoram": ["Priya Zote", "Sweta Chhakchhuak", "Kavya Lalthang", "Madhavi Ralte"],
+      "Nagaland": ["Priya Yepthomi", "Sweta Kikon", "Kavya Ao", "Madhavi Jamir"],
+      "Tripura": ["প্রিয়া দেব", "স্বেতা দাস", "কাব্য দেববর্মা", "মাধবী চক্রবর্তী"],
+      "Sikkim": ["प्रिया शेर्पा", "स्वेता लामा", "काव्या गुरुंग", "माधवी राई"],
+      "Arunachal Pradesh": ["Priya Katoch", "Sweta Tadu", "Kavya Yirang", "Madhavi Mibang"],
+      "default": ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma"]
+    };
+
+    // CITIES IN LOCAL LANGUAGES FOR ALL INDIAN STATES
+    const citiesByState = {
+      "Gujarat": ["અમદાવાદ", "સુરત", "વડોદરા", "રાજકોટ", "ભાવનગર"],
+      "Maharashtra": ["मुंबई", "पुणे", "नागपूर", "औरंगाबाद", "नाशिक"],
+      "Tamil Nadu": ["சென்னை", "கோயம்புத்தூர்", "மதுரை", "திருச்சி", "சேலம்"],
+      "Karnataka": ["ಬೆಂಗಳೂರು", "ಮೈಸೂರು", "ಹುಬ್ಬಳ್ಳಿ", "ಮಂಗಳೂರು", "ಬೆಳಗಾವಿ"],
+      "Kerala": ["തിരുവനന്തപുരം", "കൊച്ചി", "കോഴിക്കോട്", "തൃശൂർ", "കണ്ണൂർ"],
+      "Andhra Pradesh": ["హైదరాబాద్", "విజయవాడ", "విశాఖపట్నం", "తిరుపతి", "గుంటూరు"],
+      "Telangana": ["హైదరాబాద్", "వరంగల్", "నిజామాబాద్", "కరీంనగర్", "ఖమ్మం"],
+      "West Bengal": ["কলকাতা", "হাওড়া", "দুর্গাপুর", "আসানসোল", "শিলিগুড়ি"],
+      "Odisha": ["ଭୁବନେଶ୍ୱର", "କଟକ", "ରାଉରକେଲା", "ସମ୍ବଲପୁର", "ପୁରୀ"],
+      "Punjab": ["ਅੰਮ੍ਰਿਤਸਰ", "ਲੁਧਿਆਣਾ", "ਜਲੰਧਰ", "ਪਟਿਆਲਾ", "ਬਠਿੰਡਾ"],
+      "Rajasthan": ["जयपुर", "जोधपुर", "उदयपुर", "अजमेर", "कोटा"],
+      "Uttar Pradesh": ["लखनऊ", "कानपुर", "आगरा", "वाराणसी", "मेरठ"],
+      "Madhya Pradesh": ["भोपाल", "इंदौर", "ग्वालियर", "जबलपुर", "उज्जैन"],
+      "Bihar": ["पटना", "गया", "भागलपुर", "मुजफ्फरपुर", "दरभंगा"],
+      "Assam": ["গুৱাহাটী", "শিলচৰ", "যোৰহাট", "ডিব্ৰুগড়", "তেজপুৰ"],
+      "Haryana": ["गुरुग्राम", "फरीदाबाद", "अंबाला", "करनाल", "पानीपत"],
+      "Jharkhand": ["रांची", "जमशेदपुर", "धनबाद", "बोकारो", "हजारीबाग"],
+      "Chhattisgarh": ["रायपुर", "बिलासपुर", "दुर्ग", "भिलाई", "राजनांदगांव"],
+      "Himachal Pradesh": ["शिमला", "मनाली", "धर्मशाला", "सोलन", "कुल्लू"],
+      "Uttarakhand": ["देहरादून", "हरिद्वार", "ऋषिकेश", "नैनीताल", "मसूरी"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Ukhrul"],
+      "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongpoh", "Williamnagar"],
+      "Mizoram": ["Aizawl", "Lunglei", "Saiha", "Champhai", "Kolasib"],
+      "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha"],
+      "Tripura": ["আগরতলা", "ধর্মনগর", "উদয়পুর", "খোয়াই", "বেলোনিয়া"],
+      "Sikkim": ["गंगटोक", "नामची", "मंगन", "जोरेथांग", "रंगपो"],
+      "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang", "Bomdila"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // FONT FAMILIES FOR EACH STATE
+    const stateFonts = {
+      "Gujarat": "Noto Sans Gujarati",
+      "Maharashtra": "Noto Sans Devanagari",
+      "Tamil Nadu": "Noto Sans Tamil",
+      "Karnataka": "Noto Sans Kannada",
+      "Kerala": "Noto Sans Malayalam",
+      "Andhra Pradesh": "Noto Sans Telugu",
+      "Telangana": "Noto Sans Telugu",
+      "West Bengal": "Noto Sans Bengali",
+      "Odisha": "Noto Sans Oriya",
+      "Punjab": "Noto Sans Punjabi",
+      "Rajasthan": "Noto Sans Devanagari",
+      "Uttar Pradesh": "Noto Sans Devanagari",
+      "Madhya Pradesh": "Noto Sans Devanagari",
+      "Bihar": "Noto Sans Devanagari",
+      "Assam": "Noto Sans Assamese",
+      "Haryana": "Noto Sans Devanagari",
+      "Jharkhand": "Noto Sans Devanagari",
+      "Chhattisgarh": "Noto Sans Devanagari",
+      "Himachal Pradesh": "Noto Sans Devanagari",
+      "Uttarakhand": "Noto Sans Devanagari",
+      "Delhi": "Arial",
+      "Goa": "Noto Sans Devanagari",
+      "Manipur": "Noto Sans Devanagari",
+      "Meghalaya": "Arial",
+      "Mizoram": "Arial",
+      "Nagaland": "Arial",
+      "Tripura": "Noto Sans Bengali",
+      "Sikkim": "Noto Sans Devanagari",
+      "Arunachal Pradesh": "Arial",
+      "default": "Arial"
+    };
+
+    // STATE NAMES IN LOCAL LANGUAGES
+    const stateNamesLocal = {
+      "Gujarat": "ગુજરાત",
+      "Maharashtra": "महाराष्ट्र",
+      "Tamil Nadu": "தமிழ்நாடு",
+      "Karnataka": "ಕರ್ನಾಟಕ",
+      "Kerala": "കേരളം",
+      "Andhra Pradesh": "ఆంధ్ర ప్రదేశ్",
+      "Telangana": "తెలంగాణ",
+      "West Bengal": "পশ্চিমবঙ্গ",
+      "Odisha": "ଓଡ଼ିଶା",
+      "Punjab": "ਪੰਜਾਬ",
+      "Rajasthan": "राजस्थान",
+      "Uttar Pradesh": "उत्तर प्रदेश",
+      "Madhya Pradesh": "मध्य प्रदेश",
+      "Bihar": "बिहार",
+      "Assam": "অসম",
+      "Haryana": "हरियाणा",
+      "Jharkhand": "झारखंड",
+      "Chhattisgarh": "छत्तीसगढ़",
+      "Himachal Pradesh": "हिमाचल प्रदेश",
+      "Uttarakhand": "उत्तराखंड",
+      "Delhi": "Delhi",
+      "Goa": "गोवा",
+      "Manipur": "মণিপুর",
+      "Meghalaya": "Meghalaya",
+      "Mizoram": "Mizoram",
+      "Nagaland": "Nagaland",
+      "Tripura": "ত্রিপুরা",
+      "Sikkim": "सिक्किम",
+      "Arunachal Pradesh": "Arunachal Pradesh",
+      "default": "Gujarat"
+    };
+
+    let currentState = "Gujarat";
+    let detectedCity = null; // Store detected city from API
+    let useEnglishMode = false; // Flag to use English when IP detection fails
+
+    // ENGLISH DATA - Used when IP detection fails or default is used
+    const englishGirlNames = ["Pooja Gupta", "Priya Sharma", "Sweta Singh", "Kavya Verma", "Madhavi Patel", "Anjali Desai", "Riya Shah", "Sneha Mehta"];
+    
+    const englishStates = ["Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Kerala", "Andhra Pradesh", "Telangana", "West Bengal", "Odisha", "Punjab", "Rajasthan", "Uttar Pradesh", "Madhya Pradesh", "Bihar", "Assam", "Haryana", "Jharkhand", "Chhattisgarh", "Himachal Pradesh", "Uttarakhand", "Delhi", "Goa"];
+    
+    // ENGLISH CITIES BY STATE - Cities in English for each state
+    const englishCitiesByState = {
+      "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad", "Nashik"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+      "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belagavi"],
+      "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kannur"],
+      "Andhra Pradesh": ["Hyderabad", "Vijayawada", "Visakhapatnam", "Tirupati", "Guntur"],
+      "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
+      "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+      "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur", "Puri"],
+      "Punjab": ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda"],
+      "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Ajmer", "Kota"],
+      "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Meerut"],
+      "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain"],
+      "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga"],
+      "Assam": ["Guwahati", "Silchar", "Jorhat", "Dibrugarh", "Tezpur"],
+      "Haryana": ["Gurugram", "Faridabad", "Ambala", "Karnal", "Panipat"],
+      "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
+      "Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Bhilai", "Rajnandgaon"],
+      "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Solan", "Kullu"],
+      "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie"],
+      "Delhi": ["New Delhi", "Delhi", "Noida", "Gurgaon", "Faridabad"],
+      "Goa": ["Panaji", "Margao", "Vasco", "Mapusa", "Ponda"],
+      "default": ["Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai"]
+    };
+
+    // City name mapping - English to Local Language
+    const cityMapping = {
+      "Ahmedabad": "અમદાવાદ", "Surat": "સુરત", "Vadodara": "વડોદરા", "Rajkot": "રાજકોટ", "Bhavnagar": "ભાવનગર",
+      "Mumbai": "मुंबई", "Pune": "पुणे", "Nagpur": "नागपूर", "Aurangabad": "औरंगाबाद", "Nashik": "नाशिक",
+      "Chennai": "சென்னை", "Coimbatore": "கோயம்புத்தூர்", "Madurai": "மதுரை", "Tiruchirappalli": "திருச்சி", "Salem": "சேலம்",
+      "Bangalore": "ಬೆಂಗಳೂರು", "Mysore": "ಮೈಸೂರು", "Hubli": "ಹುಬ್ಬಳ್ಳಿ", "Mangalore": "ಮಂಗಳೂರು", "Belagavi": "ಬೆಳಗಾವಿ",
+      "Thiruvananthapuram": "തിരുവനന്തപുരം", "Kochi": "കൊച്ചി", "Kozhikode": "കോഴിക്കോട്", "Thrissur": "തൃശൂർ", "Kannur": "കണ്ണൂർ",
+      "Hyderabad": "హైదరాబాద్", "Vijayawada": "విజయవాడ", "Visakhapatnam": "విశాఖపట్నం", "Tirupati": "తిరుపతి", "Guntur": "గుంటూరు",
+      "Warangal": "వరంగల్", "Nizamabad": "నిజామాబాద్", "Karimnagar": "కరీంనగర్", "Khammam": "ఖమ్మం",
+      "Kolkata": "কলকাতা", "Howrah": "হাওড়া", "Durgapur": "দুর্গাপুর", "Asansol": "আসানসোল", "Siliguri": "শিলিগুড়ি",
+      "Bhubaneswar": "ଭୁବନେଶ୍ୱର", "Cuttack": "କଟକ", "Rourkela": "ରାଉରକେଲା", "Sambalpur": "ସମ୍ବଲପୁର", "Puri": "ପୁରୀ",
+      "Amritsar": "ਅੰਮ੍ਰਿਤਸਰ", "Ludhiana": "ਲੁਧਿਆਣਾ", "Jalandhar": "ਜਲੰਧਰ", "Patiala": "ਪਟਿਆਲਾ", "Bathinda": "ਬਠਿੰਡਾ",
+      "Jaipur": "जयपुर", "Jodhpur": "जोधपुर", "Udaipur": "उदयपुर", "Ajmer": "अजमेर", "Kota": "कोटा",
+      "Lucknow": "लखनऊ", "Kanpur": "कानपुर", "Agra": "आगरा", "Varanasi": "वाराणसी", "Meerut": "मेरठ",
+      "Bhopal": "भोपाल", "Indore": "इंदौर", "Gwalior": "ग्वालियर", "Jabalpur": "जबलपुर", "Ujjain": "उज्जैन",
+      "Patna": "पटना", "Gaya": "गया", "Bhagalpur": "भागलपुर", "Muzaffarpur": "मुजफ्फरपुर", "Darbhanga": "दरभंगा",
+      "Guwahati": "গুৱাহাটী", "Silchar": "শিলচৰ", "Jorhat": "যোৰহাট", "Dibrugarh": "ডিব্ৰুগড়", "Tezpur": "তেজপুৰ",
+      "Gurugram": "गुरुग्राम", "Faridabad": "फरीदाबाद", "Ambala": "अंबाला", "Karnal": "करनाल", "Panipat": "पानीपत",
+      "Ranchi": "रांची", "Jamshedpur": "जमशेदपुर", "Dhanbad": "धनबाद", "Bokaro": "बोकारो", "Hazaribagh": "हजारीबाग",
+      "Raipur": "रायपुर", "Bilaspur": "बिलासपुर", "Durg": "दुर्ग", "Bhilai": "भिलाई", "Rajnandgaon": "राजनांदगांव",
+      "Shimla": "शिमला", "Manali": "मनाली", "Dharamshala": "धर्मशाला", "Solan": "सोलन", "Kullu": "कुल्लू",
+      "Dehradun": "देहरादून", "Haridwar": "हरिद्वार", "Rishikesh": "ऋषिकेश", "Nainital": "नैनीताल", "Mussoorie": "मसूरी",
+      "New Delhi": "New Delhi", "Delhi": "Delhi", "Noida": "Noida", "Gurgaon": "Gurgaon", "Faridabad": "Faridabad",
+      "Panaji": "Panaji", "Margao": "Margao", "Vasco": "Vasco", "Mapusa": "Mapusa", "Ponda": "Ponda"
+    };
+
+    function getLocalCity(englishCity, state) {
+      if (!englishCity) return null;
       
-      if (isMobile()) {
-        console.log('📱 Mobile device - skipping cloaking');
-        return;
+      // Try direct mapping first
+      const localCity = cityMapping[englishCity];
+      if (localCity) return localCity;
+      
+      // Try case-insensitive match
+      const lowerCity = englishCity.toLowerCase();
+      for (const [eng, local] of Object.entries(cityMapping)) {
+        if (eng.toLowerCase() === lowerCity) {
+          return local;
+        }
       }
       
-      const shouldActivate = hasValidUTM() || sessionStorage.getItem('cloaking_active');
+      // If no mapping found, check if it's in our cities list for the state
+      const stateCities = citiesByState[state] || [];
+      for (const localCity of stateCities) {
+        // Try to match by checking if English city name appears in any local city
+        // This is a fallback - ideally we'd have full mapping
+        if (localCity.toLowerCase().includes(lowerCity) || lowerCity.includes(localCity.toLowerCase())) {
+          return localCity;
+        }
+      }
       
-      if (shouldActivate) {
-        console.log('🎯 ACTIVATING CLOAKING SYSTEM');
-        
-        // Hide normal content
-        document.querySelector('header').style.display = 'none';
-        document.querySelector('.container').style.display = 'none';
-        document.querySelector('.footer').style.display = 'none';
-        
-        // Show cloaking elements
-        document.querySelector('.cloaking-video').style.display = 'flex';
-        document.querySelector('.cloaking-background').style.display = 'block';
-        document.querySelector('.cloaking-overlay').style.display = 'block';
-        
-        // Set video source
-        const video = document.getElementById('videoplayer');
-        if (video) {
-          video.src = 'https://blackmekemeke.com/MOV/VID20.webm';
-          console.log('✅ Video set');
+      return null;
+    }
+
+    /* ============================================
+       HELPER FUNCTIONS - Utility functions
+       ============================================ */
+    
+    // Get a random photo for the given state
+    // Returns a photo path from the state's photo array, or default if state not found
+    function getPhoto(state) {
+      const statePhotos = customPhotos[state] || customPhotos.default;
+      return statePhotos[Math.floor(Math.random() * statePhotos.length)];
+    }
+
+    /* ============================================
+       PROFILE FUNCTIONS - Display and update profile
+       ============================================ */
+    
+    // Show profile skeleton with buttons instantly (before detection)
+    // This function displays the profile card structure immediately when page loads
+    // Shows "Loading..." for name/location, but buttons are visible and functional
+    function showProfileSkeleton() {
+      const profileElement = document.getElementById("profile");
+      if (!profileElement) return;
+      
+      profileElement.innerHTML = `
+        <div class="card">
+          <div class="activity-stats">🔥 2,345 people chatting right now!</div>
+          <img src="photos/P1.jpg" class="avatar" alt="Girl" id="profileAvatar">
+          <div class="name" id="profileName">Loading...</div>
+          <div class="location" id="profileLocation">Loading...</div>
+          <div class="online-badge-inline">🟢 Online Now</div>
+          <button class="btn video" id="btnVideo" onclick="startCall('video')" disabled>📹 Video Call Now <span class="timer" id="t1">wait...8</span></button>
+          <button class="btn chat" id="btnChat" onclick="startCall('chat')" disabled>💬 Chat Now <span class="timer" id="t2">wait...8</span></button>
+          <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+        </div>`;
+      
+      // Start timers immediately
+      setTimeout(() => {
+        startTimer('t1', 'btnVideo', '#ec4899', 8);
+        startTimer('t2', 'btnChat', '#3b82f6', 8);
+      }, 100);
+    }
+
+    // Update profile details after IP detection completes
+    // This function updates only the name, state, city, and avatar after location is detected
+    // It doesn't recreate the entire profile - just updates the dynamic content
+    function updateProfileDetails() {
+      let names, cities, name, font, avatar, stateNameLocal, city;
+      
+      if (useEnglishMode) {
+        // Use English data when IP detection fails
+        names = englishGirlNames;
+        cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = "Arial";
+        avatar = getPhoto(currentState);
+        stateNameLocal = currentState; // Use English state name
+        city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+      } else {
+        // Use local language data when IP detection succeeds
+        names = girlNames[currentState] || girlNames.default;
+        cities = citiesByState[currentState] || citiesByState.default;
+        name = names[Math.floor(Math.random() * names.length)];
+        font = stateFonts[currentState] || stateFonts.default;
+        avatar = getPhoto(currentState);
+        stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+        // Use detected city if available, otherwise use random city from state
+        if (detectedCity) {
+          // Try to get local language version of detected city
+          const localCity = getLocalCity(detectedCity, currentState);
+          if (localCity) {
+            city = localCity;
+          } else {
+            // If no mapping found, use random city from state
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        } else {
+          // Use random city from state
+          city = cities[Math.floor(Math.random() * cities.length)];
         }
-        
-        // Set background image
-        const bgImg = document.querySelector('.cloaking-background img');
-        if (bgImg) {
-          bgImg.src = 'https://cloud.actionarcadearena.com/irw/boks/30.webp';
-          console.log('✅ Background set');
+      }
+
+      // Update profile elements
+      const nameElement = document.getElementById("profileName");
+      const locationElement = document.getElementById("profileLocation");
+      const avatarElement = document.getElementById("profileAvatar");
+      
+      if (nameElement) {
+        nameElement.innerHTML = `<span class="local" style="font-family:'${font}'">${name}</span>`;
+      }
+      if (locationElement) {
+        locationElement.innerHTML = `<span style="font-family:'${font}'">${city}, ${stateNameLocal} 🇮🇳</span>`;
+      }
+      if (avatarElement) {
+        avatarElement.src = avatar;
+      }
+      
+      // Update clickbait stats dynamically for engagement
+      const activityStats = document.querySelector('.activity-stats');
+      
+      if (activityStats) {
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000;
+        activityStats.textContent = `🔥 ${randomUsers.toLocaleString()} people chatting right now!`;
+      }
+
+      // Update header city and state display
+      const cityElement = document.getElementById("city");
+      const stateElement = document.getElementById("state");
+      if (cityElement) {
+        cityElement.innerText = city;
+        cityElement.style.fontFamily = font;
+      }
+      if (stateElement) {
+        stateElement.innerHTML = `${stateNameLocal} 🇮🇳`;
+        stateElement.style.fontFamily = font;
+      }
+    }
+
+    // Generate complete profile (used when user clicks "Find New Girl")
+    // useRandomCity: if true, uses random city instead of detected city
+    // This function recreates the entire profile card with new random data
+    function generateProfile(useRandomCity = false) {
+      try {
+        const profileElement = document.getElementById("profile");
+        if (!profileElement) {
+          console.error("Profile element not found");
+          return;
         }
+
+        let names, cities, name, font, avatar, stateNameLocal, city;
         
-        // Set session storage
-        if (hasValidUTM()) {
-          sessionStorage.setItem('cloaking_active', 'true');
-          console.log('✅ Session storage set');
+        if (useEnglishMode) {
+          // Use English data when IP detection failed
+          // Pick a new random state when user clicks "Find New Girl"
+          if (useRandomCity) {
+            currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+          }
+          names = englishGirlNames;
+          cities = englishCitiesByState[currentState] || englishCitiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = "Arial";
+          avatar = getPhoto(currentState);
+          stateNameLocal = currentState; // Use English state name
+          city = cities[Math.floor(Math.random() * cities.length)]; // Random English city from selected state
+        } else {
+          // Use local language data when IP detection succeeded
+          names = girlNames[currentState] || girlNames.default;
+          cities = citiesByState[currentState] || citiesByState.default;
+          name = names[Math.floor(Math.random() * names.length)];
+          font = stateFonts[currentState] || stateFonts.default;
+          avatar = getPhoto(currentState);
+          stateNameLocal = stateNamesLocal[currentState] || currentState;
+
+          // Use detected city if available and not manually refreshing, otherwise use random city from state
+          if (!useRandomCity && detectedCity) {
+            // Try to get local language version of detected city
+            const localCity = getLocalCity(detectedCity, currentState);
+            if (localCity) {
+              city = localCity;
+            } else {
+              // If no mapping found, use random city from state
+              city = cities[Math.floor(Math.random() * cities.length)];
+              console.log(`City "${detectedCity}" not found in mapping, using random city from state`);
+            }
+          } else {
+            // Use random city from state (for "Find New Girl" button or if no city detected)
+            city = cities[Math.floor(Math.random() * cities.length)];
+          }
+        }
+
+        // Update header city and state display
+        const cityElement = document.getElementById("city");
+        const stateElement = document.getElementById("state");
+        if (cityElement) {
+          cityElement.innerText = city;
+          cityElement.style.fontFamily = font;
+        }
+        if (stateElement) {
+          stateElement.innerHTML = `${stateNameLocal} 🇮🇳`;
+          stateElement.style.fontFamily = font;
+        }
+
+        // Generate random stats for clickbait effect
+        const randomUsers = Math.floor(Math.random() * 2000) + 2000; // 2000-4000
+        
+        profileElement.innerHTML = `
+          <div class="card">
+            <div class="activity-stats">🔥 ${randomUsers.toLocaleString()} people chatting right now!</div>
+            <img src="${avatar}" class="avatar" alt="Girl" onerror="this.src='photos/P1.jpg'">
+            <div class="name"><span class="local" style="font-family:'${font}'">${name}</span></div>
+            <div class="location" style="font-family:'${font}'">${city}, ${stateNameLocal} 🇮🇳</div>
+            <div class="online-badge-inline">🟢 Online Now</div>
+            <button class="btn video" id="btnVideo" onclick="startCall('video')" disabled>📹 Video Call Now <span class="timer" id="t1">wait...8</span></button>
+            <button class="btn chat" id="btnChat" onclick="startCall('chat')" disabled>💬 Chat Now <span class="timer" id="t2">wait...8</span></button>
+            <button class="btn find" onclick="generateProfile(true)">🔄 Find Another Girl</button>
+          </div>`;
+        
+        // Start timers after a small delay to ensure buttons are rendered
+        setTimeout(() => {
+          startTimer('t1', 'btnVideo', '#ec4899', 8);
+          startTimer('t2', 'btnChat', '#3b82f6', 8);
+        }, 100);
+      } catch (error) {
+        console.error("Error generating profile:", error);
+        const profileElement = document.getElementById("profile");
+        if (profileElement) {
+          profileElement.innerHTML = `
+            <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:400px;">
+              <div style="text-align:center;color:#64748b;">Error loading profile. Please refresh.</div>
+            </div>`;
+        }
+      }
+    }
+
+    /* ============================================
+       BUTTON FUNCTIONS - Video/Chat button handlers
+       ============================================ */
+    
+    // Handle video call or chat button click
+    // type: 'video' or 'chat' - determines which action to perform
+    // Currently shows alert - can be replaced with actual call/chat functionality
+    function startCall(type) {
+      alert(type === 'video' ? "Starting Video Call..." : "Opening Chat...");
+    }
+
+    // Start countdown timer for video/chat buttons
+    // timerId: ID of the timer element to update
+    // buttonId: ID of the button to enable/disable
+    // originalColor: Button color to restore when timer completes
+    // seconds: Countdown duration (8 seconds)
+    // Button starts disabled (gray), becomes enabled with original color when timer reaches 0
+    function startTimer(timerId, buttonId, originalColor, seconds) {
+      let t = seconds;
+      const timerEl = document.getElementById(timerId);
+      const buttonEl = document.getElementById(buttonId);
+      if (!timerEl || !buttonEl) return;
+      
+      // Button starts disabled (gray)
+      buttonEl.disabled = true;
+      buttonEl.style.background = '#9ca3af';
+      
+      const interval = setInterval(() => {
+        t--;
+        timerEl.innerText = `wait...${t}`;
+        
+        if (t <= 0) {
+          clearInterval(interval);
+          timerEl.innerText = "Now!";
           
-          // Clean URL
-          try {
-            history.replaceState(null, '', location.pathname + location.hash);
-            console.log('✅ URL cleaned');
-          } catch(e) {}
+          // Enable button and restore original color
+          buttonEl.disabled = false;
+          buttonEl.style.background = originalColor;
+        }
+      }, 1000);
+    }
+
+    /* ============================================
+       IP DETECTION FUNCTIONS - Location detection
+       ============================================ */
+    
+    // Fetch with timeout - makes API call with automatic timeout
+    // url: API endpoint to call
+    // timeout: Maximum time to wait (3000ms = 3 seconds)
+    // Uses AbortController to cancel request if timeout exceeded
+    function fetchWithTimeout(url, timeout = 3000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      return fetch(url, { 
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-cache',
+        signal: controller.signal
+      }).finally(() => clearTimeout(timeoutId));
+    }
+
+    // Normalize state name from API to our internal format
+    // Handles variations in state names from API (case differences, abbreviations, etc.)
+    // Returns normalized state name that matches our stateMapping, or null if not found
+    function normalizeStateName(apiState) {
+      if (!apiState) return null;
+      
+      // Direct match
+      if (stateMapping[apiState]) return stateMapping[apiState];
+      
+      // Case-insensitive match
+      const lowerApiState = apiState.toLowerCase();
+      for (const key in stateMapping) {
+        if (key.toLowerCase() === lowerApiState) {
+          return stateMapping[key];
+        }
+      }
+      
+      // Partial match for common variations
+      const variations = {
+        "uttar pradesh": "Uttar Pradesh",
+        "madhya pradesh": "Madhya Pradesh",
+        "himachal pradesh": "Himachal Pradesh",
+        "arunachal pradesh": "Arunachal Pradesh",
+        "andhra pradesh": "Andhra Pradesh",
+        "west bengal": "West Bengal",
+        "tamil nadu": "Tamil Nadu",
+        "jammu and kashmir": "Jammu and Kashmir"
+      };
+      
+      if (variations[lowerApiState]) {
+        return variations[lowerApiState];
+      }
+      
+      return null;
+    }
+
+    // Detect visitor's location using ipapi.co API
+    // This function runs in the background (non-blocking)
+    // When detection completes, it updates the profile with detected state and city
+    // If detection fails, uses English mode with random state
+    async function detectLocation() {
+      try {
+        const response = await fetchWithTimeout('https://ipapi.co/json/', 3000);
+        
+        if (!response.ok) {
+          console.log('IP detection failed, using English mode with random state');
+          useEnglishMode = true;
+          // Pick random state from English states list
+          currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+          detectedCity = null;
+          updateProfileDetails();
+          return;
         }
         
+        const data = await response.json();
+        
+        // Check if we got valid Indian location
+        if (data.country_code === 'IN' && data.region) {
+          const normalizedState = normalizeStateName(data.region);
+          
+          if (normalizedState && stateMapping[normalizedState]) {
+            currentState = normalizedState;
+            // Store detected city from API
+            detectedCity = data.city || null;
+            useEnglishMode = false; // Use local language when detection succeeds
+            console.log(`✓ Location detected: ${normalizedState}, City: ${detectedCity} via ipapi.co`);
+            updateProfileDetails();
+            return;
+          }
+        }
+        
+        // Not India or invalid state - use English mode with random state
+        console.log('IP detection: Not India or invalid state, using English mode with random state');
+        useEnglishMode = true;
+        // Pick random state from English states list
+        currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      } catch (error) {
+        // Error occurred - use English mode with random state
+        console.log('IP detection error, using English mode with random state');
+        useEnglishMode = true;
+        // Pick random state from English states list
+        currentState = englishStates[Math.floor(Math.random() * englishStates.length)];
+        detectedCity = null;
+        updateProfileDetails();
+      }
+    }
+
+    /* ============================================
+       INITIALIZATION - Page load setup
+       ============================================ */
+    
+    // Initialize page - shows profile skeleton instantly, then detects location
+    // This ensures fast page load - user sees content immediately
+    // IP detection runs in background and updates profile when complete
+    (function init() {
+      // Show profile skeleton with buttons IMMEDIATELY (no waiting)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          showProfileSkeleton();
+        });
       } else {
-        console.log('👀 Normal page mode');
+        // DOM already loaded - show profile skeleton instantly
+        showProfileSkeleton();
+      }
+      
+      // Run IP detection in background (non-blocking)
+      // Profile details (name, state, city) will update automatically when detection completes
+      detectLocation();
+    })();
+
+    /* ============================================
+       EVENT HANDLERS - User interactions
+       ============================================ */
+    
+    // Navigation menu - handles page switching
+    // When user clicks a nav link, hides all pages and shows selected page
+    // If home page is selected, generates new profile
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        const page = e.target.dataset.page;
+        document.getElementById(page).classList.add('active');
+        e.target.classList.add('active');
+        if (page === 'home') generateProfile();
+      });
+    });
+
+    // ============================================
+    // CLICKBAIT ARTICLE HANDLER - Keeps users engaged
+    // ============================================
+    // Shows engaging content when user clicks "Read More"
+    // This keeps users on the page longer and increases engagement
+    function showArticle(articleNum) {
+      // Article titles for display
+      const articles = {
+        1: "7 Contraception Methods Doctors Don't Tell You About",
+        2: "STI Symptoms You're Ignoring Right Now",
+        3: "Period Hacks That Will Change Everything",
+        4: "What Your Parents Never Told You About Puberty",
+        5: "The Consent Conversation That Could Save Your Relationship",
+        6: "Get Pregnant Faster: 10 Secrets Fertility Doctors Don't Want You to Know",
+        7: "Menopause Secrets: How to Feel 20 Again",
+        8: "Why Your Sex Drive Disappeared (And How to Get It Back in 7 Days)",
+        9: "Body Confidence Hacks: Love Yourself Naked",
+        10: "Sexual Health Lies You've Been Told Your Whole Life",
+        11: "5 Warning Signs You Need to See a Doctor TODAY",
+        12: "Boost Your Libido Naturally: Foods That Make You Want More"
+      };
+      
+      // Show engaging message to keep user on page
+      // You can replace this with actual article content or redirect
+      const title = articles[articleNum] || "Article";
+      
+      // Create modal-like experience
+      const message = `📖 ${title}\n\n✨ Full article content coming soon!\n\n💬 Want to chat with our expert about this topic?\n\nClick "Chat Now" on the Home page to connect with a wellness advisor in your area!`;
+      
+      if (confirm(message + "\n\nWould you like to go to Home page to chat with an expert?")) {
+        // Switch to home page
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('home').classList.add('active');
+        document.querySelector('.nav a[data-page="home"]').classList.add('active');
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
     
-    // Start when page loads
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', checkCloaking);
-    } else {
-      checkCloaking();
-    }
-    
-    // Your existing functions
-    function toggleReadMore(button) {
-      const post = button.closest('.blog-post');
-      const fullContent = post.querySelector('.post-full-content');
-  
-      if (!fullContent) return;
-  
-      const isOpen = fullContent.classList.contains('show');
-      if (isOpen) {
-        fullContent.classList.remove('show');
-        button.classList.remove('active');
-        button.textContent = 'Read More →';
-      } else {
-        fullContent.classList.add('show');
-        button.classList.add('active');
-        button.textContent = 'Read Less ↑';
-      }
-    }
-  
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+    // Make entire clickbait post clickable for better UX
+    document.querySelectorAll('.clickbait-post').forEach(post => {
+      post.addEventListener('click', function(e) {
+        // Don't trigger if clicking the button (button has its own handler)
+        if (e.target.classList.contains('read-more-btn')) return;
+        
+        // Find the button in this post and trigger it
+        const btn = this.querySelector('.read-more-btn');
+        if (btn) {
+          const articleNum = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+          showArticle(articleNum);
+        }
+      });
+    });
+
+    // Contact form submission handler
+    // Prevents default form submission, shows thank you message, resets form
+    // Can be modified to send data to server
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      e.target.reset();
+    });
+
+    // Auto-refresh page after 30 seconds
+    // This ensures fresh profiles and updated location data
+    setTimeout(() => location.reload(), 30000);
+  </script>
 </body>
 </html>
