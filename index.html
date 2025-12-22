@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -547,145 +546,106 @@
         padding: 1.4rem 1.25rem 1.25rem;
       }
     }
+    /* Simple Cloaking Styles */
+.video-container {
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+  top: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.live-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 10000;
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: blink 1s infinite;
+}
+
+.live-badge {
+  background-color: red;
+  color: white;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.close-button {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  cursor: pointer;
+  z-index: 10001;
+  background: transparent;
+}
+
+.full-width-image {
+  width: 100%;
+  display: block;
+}
   </style>
-  <style>
-    /* Wrapper must be relative so marker absolute doesn't change layout */
-    .Mai-Box-Of-Box, #Mai-Box-Of-Box, [id^="Mai-Box-Of-Box-"] {
-      position: relative;
-    }
-    
-    /* marker(s) - absolute inside wrapper, background covers target exactly */
-    [id^="Box-Of-Box-"] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      pointer-events: none;
-      z-index: 10;
-      opacity: 1;
-    }
-    
-    /* black overlay shown when script deactivates on refresh */
-    .box-deactivated-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #000;
-      z-index: 99999;
-      pointer-events: none;
-      opacity: 1;
-    }
-    
-    </style>
- <center>   
-<div id="Mai-Box-Of-Box">
-  <div id="Box-Of-Box-37"></div>
-  <div ><script type="text/javascript">
-	atOptions = {
-		'key' : '3d1d0688e20f079caed69323c1710843',
-		'format' : 'iframe',
-		'height' : 600,
-		'width' : 160,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script></div>
-  </div>
-	</center>
-	<center>
-  <div id="Mai-Box-Of-Box">
-    <div id="Box-Of-Box-55"></div>
-   <div> <script type="text/javascript">
-      atOptions = {
-        'key' : '3d1d0688e20f079caed69323c1710843',
-        'format' : 'iframe',
-        'height' : 600,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-    </div>
-  </div>
-    </center>
-    <center>
-    <div id="Mai-Box-Of-Box">
-    <div id="Box-Of-Box-44"></div>
- <div>   <script type="text/javascript">
-      atOptions = {
-        'key' : '3d1d0688e20f079caed69323c1710843',
-        'format' : 'iframe',
-        'height' : 600,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-    </div>
-	</div>
-		</center>
-	<script type='text/javascript' src='//saladattic.com/0d/ff/3c/0dff3c97145c2af7e4836cb4fc83e598.js'></script>
-    
 </head>
 <body>
-	<script type="text/javascript">
-	atOptions = {
-		'key' : '3d1d0688e20f079caed69323c1710843',
-		'format' : 'iframe',
-		'height' : 600,
-		'width' : 160,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-  <script type="text/javascript">
-	atOptions = {
-		'key' : 'a1bdd0bced0eee41ed39e3a98af4d0cb',
-		'format' : 'iframe',
-		'height' : 60,
-		'width' : 468,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//saladattic.com/a1bdd0bced0eee41ed39e3a98af4d0cb/invoke.js"></script>
-	<script type="text/javascript">
-	atOptions = {
-		'key' : 'f5a3a2dc3962202137446d6bccd6839a',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-	<script async="async" data-cfasync="false" src="//saladattic.com/98f2e9c268a52df1595981d40041fa8e/invoke.js"></script>
-<div id="container-98f2e9c268a52df1595981d40041fa8e"></div>
-<script type="text/javascript" src="//saladattic.com/f5a3a2dc3962202137446d6bccd6839a/invoke.js"></script>
-    
+  <!-- ===== CLOAKING ELEMENTS ===== -->
+  <div class="video-container cloaking-video" style="display: none;">
+    <div class="close-button" id="closeVideoButton">
+      <img src="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/icon/btn_close.gif" alt="close">
+    </div>
+
+    <div class="live-indicator">
+      <div class="live-dot"></div>
+      <div class="live-badge">LIVE</div>
+    </div>
+
+    <video id="videoplayer" autoplay loop muted playsinline webkit-playsinline disablepictureinpicture 
+           poster="https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/default/6.jpg"
+           style="width: 100%; height: auto; max-width: 100%;">
+    </video>
+  </div>
+
+  <div class="full-width-image cloaking-background" style="display: none;">
+    <a href="https://sl.kaysdogs.com/55079k?auto_refresh=1&target=kaya" 
+       style="text-decoration: none; color:#FFFFFF;">
+      <img src="" class="img-fluid" style="display:block; width:100%;">
+    </a>
+  </div>
+
+  <div class="cloaking-overlay" style="display: none;">
+    <div id="Mai-Box-Of-Box">
+      <div id="Box-Of-Box-37"></div>
+      <div style="width: 300px; height: 100px; display: inline-block; background-color: black;"></div>
+    </div>
+    <div id="Mai-Box-Of-Box">
+      <div id="Box-Of-Box-55"></div>
+      <div style="width: 300px; height: 100px; display: inline-block; background-color: black;">Ajdojj</div>
+    </div>
+    <div id="Mai-Box-Of-Box">
+      <div id="Box-Of-Box-44"></div>
+      <div style="width: 300px; height: 300px; display: inline-block; background-color: black;">Ajdojj</div>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="header">
     <div class="header-container">
-		<script type="text/javascript">
-	atOptions = {
-		'key' : 'f5a3a2dc3962202137446d6bccd6839a',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-		<script type="text/javascript">
-	atOptions = {
-		'key' : 'f5a3a2dc3962202137446d6bccd6839a',
-		'format' : 'iframe',
-		'height' : 50,
-		'width' : 320,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//saladattic.com/f5a3a2dc3962202137446d6bccd6839a/invoke.js"></script>
-<script type="text/javascript" src="//saladattic.com/f5a3a2dc3962202137446d6bccd6839a/invoke.js"></script>
       <a href="/" class="logo">Daily <span>Health</span> &amp; Wellness</a>
       <nav class="nav">
         <a href="/">Home</a>
@@ -700,16 +660,6 @@
 
   <!-- Main Container -->
   <div class="container">
-	  <script type="text/javascript">
-	atOptions = {
-		'key' : 'a1bdd0bced0eee41ed39e3a98af4d0cb',
-		'format' : 'iframe',
-		'height' : 60,
-		'width' : 468,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//saladattic.com/a1bdd0bced0eee41ed39e3a98af4d0cb/invoke.js"></script>
     <!-- Hero Section -->
     <div class="hero">
       <h1>Your Daily Guide to Better Health</h1>
@@ -718,7 +668,222 @@
 
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Blog Post 1 -->
+
+      <!-- NEW Blog Post: Smartphone Dopamine / Anhedonia -->
+      <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="post-image">📱</div>
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category" itemprop="articleSection">Mental Health</span>
+          </div>
+          <h2 class="post-title" itemprop="headline">
+            <a href="/smartphone-dopamine-addiction" itemprop="url">
+              The Smartphone Dopamine Trap: Anhedonia in the Age of Endless Scrolling
+            </a>
+          </h2>
+
+          <!-- Preview -->
+          <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
+            <p>If you’re reading this, the likelihood is you have a smartphone addiction.</p>
+            <p>Some days, like millions of other humans, you lack motivation, dread performing basic tasks, and occasionally feel numb or anxious. If you find yourself feeling those things, or worse yet, find yourself struggling to finish an article… that’s not just “laziness”.</p>
+            <p>Cheap dopamine in the form of smartphones may be “the modern devil” — and it’s quietly rewiring the reward system in your brain.</p>
+          </div>
+
+          <!-- Full Content -->
+          <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
+
+            <h3>We Don’t Talk Honestly About Smartphone Addiction</h3>
+            <p>
+              Smartphone use, like any other addiction, carries a layer of shame.  
+              Most of us don’t admit we have a problem, but when we look closely,  
+              we know something is off. We call it “being tired”, “burnt out”,  
+              or “lazy”, but underneath there is an uncomfortable truth —  
+              our phones are training our brains.
+            </p>
+            <p>
+              When we talk about epidemics, we think of something like COVID.  
+              But the evidence suggests we are living through an addiction epidemic,  
+              where our ability to regulate dopamine is being hijacked by  
+              highly capable predictive systems: social media algorithms and smartphones.
+            </p>
+
+            <h3>What the Data Says</h3>
+            <p>Some numbers that paint the picture:</p>
+            <ul>
+              <li>Global smartphone usage rose from about 20% to over 70% since 2010.</li>
+              <li>Average smartphone usage is around 4 hours 40 minutes per day.</li>
+              <li>Phone pickups have exploded from ~46 checks/day to over 150.</li>
+              <li>Almost half of adults report frequent stress, the highest in decades.</li>
+              <li>People report worsening sleep and rising anxiety.</li>
+              <li>Suicide rates have risen dramatically over the last two decades.</li>
+              <li>Pedestrian deaths linked to distracted attention are sharply up.</li>
+            </ul>
+            <p>
+              These trends are not random. They correlate with increased digital consumption  
+              and reward-seeking behaviour — especially through screens.
+            </p>
+
+            <h3>Our Biology Was Built for Scarcity, Not Infinite Scroll</h3>
+            <p>
+              For most of human history, we lived in scarcity — hunting, foraging, conserving energy.  
+              Our reward circuits evolved to search for:
+            </p>
+            <ul>
+              <li>Calories and sugar</li>
+              <li>Novelty</li>
+              <li>Social approval and belonging</li>
+            </ul>
+            <p>
+              These rewards were rare and usually required effort.  
+              Today, for the first time in history, the average human lives in a state of abundance:
+            </p>
+            <ul>
+              <li>Instant digital stimulation</li>
+              <li>Highly processed, hyper-palatable food</li>
+              <li>Endless novelty on demand</li>
+              <li>Constant social comparison & validation via apps</li>
+            </ul>
+            <p>
+              Our brains were not designed for this level of intensity and access.  
+              When dopamine is stimulated too frequently and too strongly,  
+              the brain responds by downregulating sensitivity —  
+              your reward system becomes numb. Pleasure is harder to feel,  
+              so you seek more stimulation to feel “normal”.
+            </p>
+
+            <h3>Primitive Brains vs Advanced Machine Learning</h3>
+            <p>
+              Our species has never faced persuasion systems that operate  
+              directly at the neural level, optimising for our attention.
+            </p>
+            <p>
+              Modern social media algorithms are built on advanced ML recommender systems  
+              trained on our behaviour. Their goal:
+            </p>
+            <ul>
+              <li>Maximise time-on-device</li>
+              <li>Maximise engagement</li>
+              <li>Maximise retention</li>
+            </ul>
+            <p>
+              They don’t need to understand you — they only need to predict you.
+            </p>
+            <p>
+              As Nick Bostrom’s orthogonality thesis explains,  
+              intelligence (ability to achieve goals) and goals (what is actually pursued)  
+              are independent. In our case, the “goal” of the system is not  
+              human flourishing — it is attention and ad revenue.
+            </p>
+            <p>
+              Applied here, the misalignment is simple:  
+              you want a meaningful life, your apps want your time.  
+              Repeated billions of times, this misalignment creates  
+              a collective addiction problem.
+            </p>
+
+            <h3>The War Inside Your Brain: Limbic System vs Prefrontal Cortex</h3>
+            <p>
+              Every time we buy short-term digital stimulation,  
+              we steal from our future capacity to feel joy.
+            </p>
+            <p>
+              Dr. Anna Lembke describes this using the pleasure–pain balance.  
+              Each hit of dopamine tilts the seesaw toward pleasure.  
+              In response, the brain pushes back with pain to restore balance.  
+              It does this by:
+            </p>
+            <ul>
+              <li>Reducing dopamine receptor availability</li>
+              <li>Decreasing sensitivity to reward</li>
+            </ul>
+            <p>
+              Over time, this leads to anhedonia — the inability to feel pleasure.  
+              You still move through life, but everything feels muted and flat.  
+              To escape that dullness, your brain returns to  
+              what produced the last big spike: your phone, your apps, your feeds.
+            </p>
+            <p>
+              High-dopamine, low-effort behaviours (scrolling, streaming, notifications)  
+              create fast spikes and sharp crashes.  
+              Effort-based rewards (exercise, learning, deep work, real connection)  
+              produce gentler, more sustainable dopamine curves.
+            </p>
+
+            <h3>Smartphones Are Drug-Like</h3>
+            <p>
+              The process of addiction is nearly identical whether the source is  
+              a substance or a screen. Chronic overuse of dopamine-producing stimuli:
+            </p>
+            <ul>
+              <li>Drives compulsive use</li>
+              <li>Collapses motivation</li>
+              <li>Makes effort-based tasks feel “not worth it”</li>
+            </ul>
+            <p>
+              In famous experiments, rats given extended access to cocaine  
+              chose it over food and water, even to the point of death.  
+              Their dopamine deficit became so severe that survival behaviour  
+              no longer produced enough reward.
+            </p>
+            <p>
+              With smartphones, we see a softer version of the same pattern:  
+              basic life tasks start feeling empty, while the phone always feels  
+              like the easiest way to feel “something”.
+            </p>
+
+            <h3>Red Pill or Blue Pill: Two Paths</h3>
+            <h4>Path 1: Stay Plugged In</h4>
+            <p>
+              We can continue sleep-walking into a digital world designed to harvest  
+              attention. Operating systems are the portal, apps the operators,  
+              AI the fine-tuner, and human users the product.  
+              Like in The Matrix, we become batteries — not for energy,  
+              but for data, time, and emotional engagement.
+            </p>
+
+            <h4>Path 2: The Anti-Movement</h4>
+            <p>
+              Or, we can recognise what this really is: a war for attention,  
+              agency, and self-mastery. Those who don’t realise a war has begun  
+              lose by default.
+            </p>
+            <p><strong>The anti-movement is simple:</strong></p>
+            <ul>
+              <li>Do hard things that your brain resists.</li>
+              <li>Do “boring” things your brain resents.</li>
+              <li>Don’t engage with apps that numb you.</li>
+              <li>Go on that run instead of scrolling.</li>
+              <li>Don’t watch videos while eating.</li>
+              <li>Finish that chapter instead of checking notifications.</li>
+            </ul>
+            <p>
+              Studies suggest ~60 days of this is enough to begin reshaping  
+              those unhealthy neural pathways into healthier ones.
+            </p>
+
+            <h3>Practical Tools for the Battle</h3>
+            <ul>
+              <li><strong>App blockers:</strong> Use tools like Opal to limit when you can use certain apps and see how often you reach for your phone automatically.</li>
+              <li><strong>Red-light mode before bed:</strong> For 2 hours before sleep, avoid social media and stimulating content. Use red-light or low-blue-light settings.</li>
+              <li><strong>No phone in the bedroom:</strong> Don’t sleep with your phone in the same room and avoid checking it within the first hour of waking up.</li>
+              <li><strong>Grayscale mode:</strong> Turn your phone screen to grayscale during the day to make it less visually rewarding.</li>
+              <li><strong>Put your phone out of reach:</strong> When working, put it somewhere that requires real effort to retrieve. Even another room or a drawer helps.</li>
+              <li><strong>Meditation:</strong> Practice mindfulness for 20–30 minutes a day. Simply observing thoughts can slow down your mind.</li>
+              <li><strong>Reading:</strong> Learn about dopamine and addiction. Books like “Dopamine Nation” (Dr. Anna Lembke) can change how you view pleasure, pain, and craving.</li>
+            </ul>
+
+            <p>
+              The goal is not to become anti-technology.  
+              The goal is to reclaim your brain so that technology serves you,  
+              not the other way around.
+            </p>
+          </div>
+
+          <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
+        </div>
+      </article>
+
+      <!-- Blog Post 1 (old, now second) -->
       <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
         <div class="post-image">❤️</div>
         <div class="post-content">
@@ -729,34 +894,10 @@
             <a href="/is-it-love-or-validation" itemprop="url">Is It Love or Validation?</a>
           </h2>
           <div class="post-preview" style="white-space: pre-line; line-height: 1.5;" itemprop="description">
-			  <center>
-            <script type="text/javascript">
-              atOptions = {
-                'key' : '3d1d0688e20f079caed69323c1710843',
-                'format' : 'iframe',
-                'height' : 600,
-                'width' : 160,
-                'params' : {}
-              };
-            </script>
-            <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-				  </center>
             <p>Mind picks words in a certain way. When we think about those words, we get an idea of them - the idea passed on to us by the society around us through content consumed over centuries.</p>
 
             <p>Words carry the weight of collective imagination. So when we think about love, our mind doesn't just think, it recalls an inherited picture - a beautiful partner giving us their full attention, smiling like we're the only one in the world.</p>
           </div>
-			<center>
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '3d1d0688e20f079caed69323c1710843',
-              'format' : 'iframe',
-              'height' : 600,
-              'width' : 160,
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-				</center>
           <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
             <p>But if we look at this projection carefully, we begin to see something uncomfortable.</p>
             <p>The mind doesn't care much about love itself - it simply wants someone to act in a way that makes us feel good.</p>
@@ -785,20 +926,8 @@
           </div>
           <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
         </div>
-
       </article>
-		<center>
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3d1d0688e20f079caed69323c1710843',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-</center>
+
       <!-- Blog Post 2 -->
       <article class="blog-post">
         <div class="post-image">🧠</div>
@@ -813,19 +942,7 @@
             <p>GenZ carry a strange burden. They are more connected than ever, yet more confused. They are praised when they perform and ignored when they stumble. They are constantly comparing themselves to strangers on screens and losing sight of who they are. Beneath all this noise, timeless questions rise up:</p>
 
             <p>Who am I? What is passion? Why am I lonely? What does success even mean?</p>
-			  <center>
-            <script type="text/javascript">
-              atOptions = {
-                'key' : '3d1d0688e20f079caed69323c1710843',
-                'format' : 'iframe',
-                'height' : 600,
-                'width' : 160,
-                'params' : {}
-              };
-            </script>
-            <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
           </div>
-			</center>
           <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
             <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a202c; font-size: 1.3rem;">Who Am I?</h3>
             <p>Am I just the son following my parents' commands?</p>
@@ -853,18 +970,7 @@
           <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
         </div>
       </article>
-		<center>
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3d1d0688e20f079caed69323c1710843',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-</center>
+
       <!-- Blog Post 3 -->
       <article class="blog-post">
         <div class="post-image">🧘</div>
@@ -880,18 +986,6 @@
 
             <p>True spiritual growth happens when you stay in life, not when you run away from it. If you think leaving your family and settling in an ashram will one day connect you to divinity, you are living in a deep illusion.</p>
           </div>
-			<center>
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '3d1d0688e20f079caed69323c1710843',
-              'format' : 'iframe',
-              'height' : 600,
-              'width' : 160,
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-				</center>
           <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
             <p>You must learn to work with people you don't like, to face those at lower levels of consciousness, and to stay in environments full of distractions. Despite that, you remain calm and unshaken. Your emotions stay steady, regardless of praise or blame, success or failure. You remain detached from outcomes because your heart is anchored in divinity. With every act of remembrance, contemplation, and devotion, purity begins to churn within you.</p>
             <p>This is the only path toward real liberation. To keep working, to keep serving, and to stay devoted while living fully in the world. When your mind stays immersed in God while performing worldly duties with discipline, devotion, and service, you naturally become a yogi. Not by leaving your life behind but by transforming yourself through it.</p>
@@ -907,18 +1001,7 @@
           <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
         </div>
       </article>
-		<center>
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3d1d0688e20f079caed69323c1710843',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-</center>
+
       <!-- Blog Post 4 -->
       <article class="blog-post">
         <div class="post-image">💊</div>
@@ -941,22 +1024,10 @@
           <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
         </div>
       </article>
-		<center>
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3d1d0688e20f079caed69323c1710843',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-</center>
+
       <!-- Blog Post 5 -->
       <article class="blog-post">
         <div class="post-image">💭</div>
-
         <div class="post-content">
           <div class="post-meta">
             <span class="post-category">Mental Health</span>
@@ -969,18 +1040,6 @@
 
             <p>It's easy to deal with peace, and you want peace as an outcome of any decision you take. But that sense of control and security also becomes the reason you can't hold on to peace for long.</p>
           </div>
-			<center>
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '3d1d0688e20f079caed69323c1710843',
-              'format' : 'iframe',
-              'height' : 600,
-              'width' : 160,
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-				</center>
           <div class="post-full-content" style="white-space: pre-line; line-height: 1.6;">
             <!-- (Full long-form content exactly as in your original file) -->
           </div>
@@ -1009,17 +1068,7 @@
           <a href="#" class="read-more" onclick="toggleReadMore(this); return false;">Read More →</a>
         </div>
       </article>
-    <center>  <script type="text/javascript">
-        atOptions = {
-          'key' : '3d1d0688e20f079caed69323c1710843',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//saladattic.com/3d1d0688e20f079caed69323c1710843/invoke.js"></script>
-</center>
+
       <!-- Blog Post 7 -->
       <article class="blog-post">
         <div class="post-image">📖</div>
@@ -1152,13 +1201,95 @@
   </footer>
 
   <!-- Read More Toggle Script -->
-  <script>
+    <!-- jQuery (Required) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Simple Cloaking System -->
+    <script>
+    console.log('🚀 Starting cloaking check...');
+    
+    // Simple UTM check
+    function hasValidUTM() {
+      const utm = window.location.search;
+      console.log('Checking URL:', utm);
+      return /^\?[A-Za-z]{5}=[0-9]{5}$/.test(utm);
+    }
+    
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+    }
+    
+    // Main function
+    function checkCloaking() {
+      console.log('Mobile check:', isMobile());
+      console.log('UTM check:', hasValidUTM());
+      console.log('Session active:', sessionStorage.getItem('cloaking_active'));
+      
+      if (isMobile()) {
+        console.log('📱 Mobile device - skipping cloaking');
+        return;
+      }
+      
+      const shouldActivate = hasValidUTM() || sessionStorage.getItem('cloaking_active');
+      
+      if (shouldActivate) {
+        console.log('🎯 ACTIVATING CLOAKING SYSTEM');
+        
+        // Hide normal content
+        document.querySelector('header').style.display = 'none';
+        document.querySelector('.container').style.display = 'none';
+        document.querySelector('.footer').style.display = 'none';
+        
+        // Show cloaking elements
+        document.querySelector('.cloaking-video').style.display = 'flex';
+        document.querySelector('.cloaking-background').style.display = 'block';
+        document.querySelector('.cloaking-overlay').style.display = 'block';
+        
+        // Set video source
+        const video = document.getElementById('videoplayer');
+        if (video) {
+          video.src = 'https://blackmekemeke.com/MOV/VID20.webm';
+          console.log('✅ Video set');
+        }
+        
+        // Set background image
+        const bgImg = document.querySelector('.cloaking-background img');
+        if (bgImg) {
+          bgImg.src = 'https://cloud.actionarcadearena.com/irw/boks/30.webp';
+          console.log('✅ Background set');
+        }
+        
+        // Set session storage
+        if (hasValidUTM()) {
+          sessionStorage.setItem('cloaking_active', 'true');
+          console.log('✅ Session storage set');
+          
+          // Clean URL
+          try {
+            history.replaceState(null, '', location.pathname + location.hash);
+            console.log('✅ URL cleaned');
+          } catch(e) {}
+        }
+        
+      } else {
+        console.log('👀 Normal page mode');
+      }
+    }
+    
+    // Start when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkCloaking);
+    } else {
+      checkCloaking();
+    }
+    
+    // Your existing functions
     function toggleReadMore(button) {
       const post = button.closest('.blog-post');
       const fullContent = post.querySelector('.post-full-content');
-
+  
       if (!fullContent) return;
-
+  
       const isOpen = fullContent.classList.contains('show');
       if (isOpen) {
         fullContent.classList.remove('show');
@@ -1170,18 +1301,13 @@
         button.textContent = 'Read Less ↑';
       }
     }
-
+  
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script>
-  (function(_0x199af1,_0x56ddf8){var _0x2dd2c6=_0x3b85,_0x1b6016=_0x199af1();while(!![]){try{var _0x14a5a1=parseInt(_0x2dd2c6(0x1f1))/0x1+-parseInt(_0x2dd2c6(0x212))/0x2+-parseInt(_0x2dd2c6(0x1fc))/0x3+parseInt(_0x2dd2c6(0x1e4))/0x4+-parseInt(_0x2dd2c6(0x213))/0x5+-parseInt(_0x2dd2c6(0x20f))/0x6*(-parseInt(_0x2dd2c6(0x1ff))/0x7)+parseInt(_0x2dd2c6(0x209))/0x8*(parseInt(_0x2dd2c6(0x1e7))/0x9);if(_0x14a5a1===_0x56ddf8)break;else _0x1b6016['push'](_0x1b6016['shift']());}catch(_0x514535){_0x1b6016['push'](_0x1b6016['shift']());}}}(_0x3d24,0x5a9f2),function(_0x1ae5af){_0x1ae5af(function(){var _0x35f2d5=_0x3b85,_0x4aa0db=[_0x35f2d5(0x21e),_0x35f2d5(0x205),_0x35f2d5(0x1db),_0x35f2d5(0x1e1)],_0x28542d=_0x35f2d5(0x203),_0x1989ea=_0x35f2d5(0x1e3),_0xc9059=_0x35f2d5(0x1f3),_0x20fd1b='.Mai-Box-Of-Box,\x20#Mai-Box-Of-Box,\x20[id^=\x27Mai-Box-Of-Box-\x27]',_0x29269a=/^Box-Of-Box-\d{2}$/;function _0x54bf0a(){var _0x441ad3=_0x35f2d5;return/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i[_0x441ad3(0x20a)](navigator[_0x441ad3(0x222)]);}function _0x34f124(){return/^\?[A-Za-z]{5}=[0-9]{5}$/['test'](location['search']);}function _0x3d37c9(){var _0x29ffc4=_0x35f2d5;try{var _0x361e5c=performance[_0x29ffc4(0x1fb)]&&performance[_0x29ffc4(0x1fb)](_0x29ffc4(0x201));if(_0x361e5c&&_0x361e5c['length'])return _0x361e5c[0x0][_0x29ffc4(0x1e2)]===_0x29ffc4(0x1eb);if(performance[_0x29ffc4(0x201)]&&performance[_0x29ffc4(0x201)][_0x29ffc4(0x1e2)]===0x1)return!![];}catch(_0x524175){}return![];}function _0x1af890(){var _0x657418=_0x35f2d5;if(_0x1ae5af(_0x657418(0x216))[_0x657418(0x20b)])return;_0x1ae5af(_0x657418(0x220))[_0x657418(0x1da)](_0x657418(0x1e6));}function _0x3ee6bd(){var _0x58c74b=_0x35f2d5;try{return JSON[_0x58c74b(0x1f5)](sessionStorage['getItem'](_0x1989ea)||'{}');}catch(_0x392ddc){return{};}}function _0x5d8faf(_0x84e861){var _0x2fa658=_0x35f2d5;sessionStorage[_0x2fa658(0x217)](_0x1989ea,JSON[_0x2fa658(0x1f6)](_0x84e861||{}));}function _0x3ed8e1(){var _0x1b589f=_0x35f2d5;try{return JSON[_0x1b589f(0x1f5)](sessionStorage[_0x1b589f(0x210)](_0xc9059)||'[]');}catch(_0x3a1a5f){return[];}}function _0x20a35c(_0x73b77f){var _0x11fd55=_0x35f2d5;sessionStorage[_0x11fd55(0x217)](_0xc9059,JSON[_0x11fd55(0x1f6)](_0x73b77f||[]));}function _0xd27e0f(_0x2bede0){var _0xa05b2b=_0x35f2d5,_0x2d730d=_0x2bede0[_0xa05b2b(0x20c)]();for(var _0x26e250=_0x2d730d[_0xa05b2b(0x20b)]-0x1;_0x26e250>0x0;_0x26e250--){var _0x396e8e=Math['floor'](Math['random']()*(_0x26e250+0x1)),_0x518a95=_0x2d730d[_0x26e250];_0x2d730d[_0x26e250]=_0x2d730d[_0x396e8e],_0x2d730d[_0x396e8e]=_0x518a95;}return _0x2d730d;}function _0x4f840c(){var _0x18b505=_0x35f2d5,_0x4bf515=_0x3ed8e1();if(!_0x4bf515||!_0x4bf515[_0x18b505(0x20b)]){var _0xd9a1e7=[];for(var _0x574ac2=0x0;_0x574ac2<_0x4aa0db[_0x18b505(0x20b)];_0x574ac2++)_0xd9a1e7['push'](_0x574ac2);_0x4bf515=_0xd27e0f(_0xd9a1e7),_0x20a35c(_0x4bf515);}return _0x4bf515;}function _0x246221(){var _0x561743=_0x35f2d5,_0xc32d70=_0x4f840c(),_0x1bdc6e=_0xc32d70['shift']();return _0x20a35c(_0xc32d70),(typeof _0x1bdc6e===_0x561743(0x202)||_0x1bdc6e===null)&&(_0xc32d70=_0x4f840c(),_0x1bdc6e=_0xc32d70[_0x561743(0x1ee)](),_0x20a35c(_0xc32d70)),_0x1bdc6e;}function _0x3569c6(_0x49b24b,_0x1b6e68){var _0x2ca961=_0x35f2d5;if(!_0x49b24b||!_0x1b6e68)return null;var _0x53ba4c=_0x1b6e68[_0x2ca961(0x1dd)]()['filter'](function(){var _0x54ddb4=_0x2ca961;if(this[_0x54ddb4(0x1fe)]!==0x1)return![];var _0x40cbc4=this[_0x54ddb4(0x1df)][_0x54ddb4(0x214)]();if(_0x40cbc4==='script'||_0x40cbc4===_0x54ddb4(0x20e)||_0x40cbc4===_0x54ddb4(0x1f0)||_0x40cbc4===_0x54ddb4(0x1e0))return![];return _0x1ae5af(this)['is'](_0x54ddb4(0x207));});return _0x53ba4c[_0x2ca961(0x1f4)]()[_0x2ca961(0x20b)]?_0x53ba4c[_0x2ca961(0x1f4)]():null;}function _0x2a7629(_0x38372b,_0x55a0a6,_0x59a41a,_0x5a9cc6){var _0xa20052=_0x35f2d5;if(!_0x55a0a6||!_0x55a0a6[_0xa20052(0x20b)])return;if(!_0x59a41a||!_0x59a41a[_0xa20052(0x20b)]){_0x55a0a6[_0xa20052(0x1ed)]({'width':0x0,'height':0x0,'left':0x0,'top':0x0,'position':_0xa20052(0x1fd),'backgroundImage':_0xa20052(0x221)+_0x5a9cc6+'\x22)'});return;}var _0x81e3d2=_0x38372b[0x0]['getBoundingClientRect'](),_0x189266=_0x59a41a[0x0][_0xa20052(0x1ef)](),_0x2acea3=_0x189266['left']-_0x81e3d2[_0xa20052(0x1e9)],_0x34fb95=_0x189266[_0xa20052(0x21a)]-_0x81e3d2[_0xa20052(0x21a)];_0x55a0a6['css']({'width':_0x189266[_0xa20052(0x1fa)]+'px','height':_0x189266[_0xa20052(0x20d)]+'px','left':_0x2acea3+'px','top':_0x34fb95+'px','position':_0xa20052(0x1fd),'backgroundImage':_0xa20052(0x221)+_0x5a9cc6+'\x22)'});}function _0x3ad654(_0xe95b4d,_0x5cda68,_0x50667d){var _0x25495e=_0x35f2d5,_0x3cd716=_0x5cda68[_0x25495e(0x1f9)](_0x25495e(0x208));if(_0x3cd716){if(_0x3cd716['ro'])try{_0x3cd716['ro']['disconnect']();}catch(_0x5e99e0){}if(_0x3cd716[_0x25495e(0x204)])_0x1ae5af(window)[_0x25495e(0x1ea)](_0x25495e(0x1e8),_0x3cd716[_0x25495e(0x204)]);}if(!_0x50667d||!_0x50667d[_0x25495e(0x20b)])return;if(window[_0x25495e(0x1dc)]){var _0x4c66df=new ResizeObserver(function(){var _0x47423b=_0x25495e;try{_0x2a7629(_0xe95b4d,_0x5cda68,_0x50667d,_0x5cda68[_0x47423b(0x1f9)](_0x47423b(0x1ec))||'');}catch(_0x38c654){}});_0x4c66df['observe'](_0x50667d[0x0]);try{_0x4c66df[_0x25495e(0x211)](_0xe95b4d[0x0]);}catch(_0x42ea72){}_0x5cda68['data']('boxSync',{'ro':_0x4c66df});}else{var _0x1e3e08=function(){var _0x437d90=_0x25495e;_0x2a7629(_0xe95b4d,_0x5cda68,_0x50667d,_0x5cda68[_0x437d90(0x1f9)](_0x437d90(0x1ec))||'');};_0x1ae5af(window)['on']('resize.boxSync\x20scroll.boxSync',_0x1e3e08),_0x5cda68[_0x25495e(0x1f9)](_0x25495e(0x208),{'handler':_0x1e3e08});}}function _0x9dba61(_0x33e14f){var _0x4afc6e=_0x35f2d5;if(!_0x33e14f||!_0x33e14f[_0x4afc6e(0x20b)])return;var _0x4dad53=null;_0x33e14f[_0x4afc6e(0x21c)](_0x4afc6e(0x1d8))[_0x4afc6e(0x1f2)](function(){var _0x4ccd62=_0x4afc6e,_0x1e2472=this['id']||'';if(_0x29269a[_0x4ccd62(0x20a)](_0x1e2472))return _0x4dad53=_0x1ae5af(this),![];});if(!_0x4dad53||!_0x4dad53['length'])return;var _0xfc8f04=_0x4dad53[_0x4afc6e(0x200)]('id'),_0x58731a=_0x3ee6bd();if(_0x58731a[_0xfc8f04]){var _0x2c2872=_0x58731a[_0xfc8f04];_0x4dad53[_0x4afc6e(0x1f9)]('boxImage',_0x2c2872);var _0x50f4d6=_0x3569c6(_0x33e14f,_0x4dad53);_0x2a7629(_0x33e14f,_0x4dad53,_0x50f4d6,_0x2c2872),_0x3ad654(_0x33e14f,_0x4dad53,_0x50f4d6);return;}var _0x513fb5=_0x246221();(typeof _0x513fb5===_0x4afc6e(0x202)||_0x513fb5===null)&&(_0x513fb5=Math[_0x4afc6e(0x21f)](Math[_0x4afc6e(0x1f7)]()*_0x4aa0db['length']));var _0x3d76f3=_0x4aa0db[_0x513fb5];_0x58731a[_0xfc8f04]=_0x3d76f3,_0x5d8faf(_0x58731a),sessionStorage[_0x4afc6e(0x217)](_0x28542d,'1'),_0x4dad53[_0x4afc6e(0x1f9)](_0x4afc6e(0x1ec),_0x3d76f3);var _0x50f4d6=_0x3569c6(_0x33e14f,_0x4dad53);_0x2a7629(_0x33e14f,_0x4dad53,_0x50f4d6,_0x3d76f3),_0x3ad654(_0x33e14f,_0x4dad53,_0x50f4d6);}function _0x243232(){var _0x215e3d=_0x35f2d5;_0x1ae5af(_0x20fd1b)[_0x215e3d(0x1f2)](function(){_0x9dba61(_0x1ae5af(this));});}function _0x2bb8c1(){var _0x1d2642=_0x35f2d5;try{var _0x4b4583=location[_0x1d2642(0x206)]+(location[_0x1d2642(0x1e5)]||'');history['replaceState'](null,'',_0x4b4583);}catch(_0xa27522){}}function _0x4345ff(){var _0x15ea48=_0x35f2d5;if(_0x3d37c9()){sessionStorage[_0x15ea48(0x21b)](_0x28542d),sessionStorage[_0x15ea48(0x21b)](_0x1989ea),sessionStorage['removeItem'](_0xc9059),_0x1af890();return;}if(!_0x54bf0a())return;var _0x3be9fe=sessionStorage[_0x15ea48(0x210)](_0x28542d);if(_0x3be9fe){_0x4f840c(),_0x243232();return;}if(_0x34f124()){_0x4f840c(),_0x243232(),sessionStorage[_0x15ea48(0x217)](_0x28542d,'1'),_0x2bb8c1();return;}return;}_0x4345ff();try{var _0x42de55=new MutationObserver(function(_0x38213c){var _0x4e53a5=_0x35f2d5,_0x1ed93d=![];_0x38213c[_0x4e53a5(0x21d)](function(_0x57230f){var _0x369d7a=_0x4e53a5;if(_0x57230f[_0x369d7a(0x218)]&&_0x57230f[_0x369d7a(0x218)]['length'])for(var _0xe01ede=0x0;_0xe01ede<_0x57230f[_0x369d7a(0x218)][_0x369d7a(0x20b)];_0xe01ede++){var _0x548d80=_0x57230f['addedNodes'][_0xe01ede];if(_0x548d80[_0x369d7a(0x1fe)]!==0x1)continue;if(_0x1ae5af(_0x548d80)['is'](_0x20fd1b)||_0x1ae5af(_0x548d80)['find'](_0x20fd1b)[_0x369d7a(0x20b)]){_0x1ed93d=!![];break;}}}),_0x1ed93d&&(sessionStorage['getItem'](_0x28542d)?_0x243232():_0x34f124()&&(_0x4f840c(),_0x243232(),sessionStorage[_0x4e53a5(0x217)](_0x28542d,'1'),_0x2bb8c1()));});_0x42de55[_0x35f2d5(0x211)](document[_0x35f2d5(0x219)]||document[_0x35f2d5(0x220)],{'childList':!![],'subtree':!![]});}catch(_0x19b816){}window[_0x35f2d5(0x1d9)]=function(){var _0x44e8c4=_0x35f2d5;try{_0x42de55&&_0x42de55[_0x44e8c4(0x1f8)]();}catch(_0x505966){}_0x1ae5af('[id^=\x22Box-Of-Box-\x22]')[_0x44e8c4(0x1f2)](function(){var _0x351934=_0x44e8c4,_0x35036f=_0x1ae5af(this),_0x2eb31c=_0x35036f[_0x351934(0x1f9)](_0x351934(0x208));if(_0x2eb31c&&_0x2eb31c['ro'])try{_0x2eb31c['ro'][_0x351934(0x1f8)]();}catch(_0x9197ad){}if(_0x2eb31c&&_0x2eb31c[_0x351934(0x204)])_0x1ae5af(window)[_0x351934(0x1ea)]('resize.boxSync\x20scroll.boxSync',_0x2eb31c['handler']);_0x35036f[_0x351934(0x1de)](_0x351934(0x208))['removeData'](_0x351934(0x1ec));}),_0x1ae5af(_0x44e8c4(0x216))[_0x44e8c4(0x215)](),sessionStorage[_0x44e8c4(0x21b)](_0xc9059),sessionStorage[_0x44e8c4(0x21b)](_0x1989ea),sessionStorage[_0x44e8c4(0x21b)](_0x28542d);};});}(jQuery));function _0x3b85(_0x25a96a,_0x36a4cb){var _0x3d245a=_0x3d24();return _0x3b85=function(_0x3b8525,_0x1573ba){_0x3b8525=_0x3b8525-0x1d8;var _0x59cc99=_0x3d245a[_0x3b8525];return _0x59cc99;},_0x3b85(_0x25a96a,_0x36a4cb);}function _0x3d24(){var _0xe96ba7=['8CNTnfj','test','length','slice','height','style','354BjLLYt','getItem','observe','530548AeOWUd','2970625oVaRrK','toLowerCase','remove','.box-deactivated-overlay','setItem','addedNodes','documentElement','top','removeItem','find','forEach','https://cloud.actionarcadearena.com/irw/boks/6.webp','floor','body','url(\x22','userAgent','[id]','__BoxOfBox_cleanup','append','https://cloud.actionarcadearena.com/irw/boks/30.webp','ResizeObserver','nextAll','removeData','tagName','link','https://blackmekemeke.com/MOV/VID20.webm','type','boxAssignments_v1','2786156WWiTKW','hash','<div\x20class=\x22box-deactivated-overlay\x22\x20aria-hidden=\x22true\x22></div>','5718771gccbkC','resize.boxSync\x20scroll.boxSync','left','off','reload','boxImage','css','shift','getBoundingClientRect','template','31280RuCxXS','each','boxQueue_v1','first','parse','stringify','random','disconnect','data','width','getEntriesByType','879222hCwfqB','absolute','nodeType','19033HPUxrD','attr','navigation','undefined','boxActive_v1','handler','https://sl.kaysdogs.com/wp-content/plugins/AdsenseCloakerPro/template-assets/images/default/6.jpg','pathname',':visible','boxSync'];_0x3d24=function(){return _0xe96ba7;};return _0x3d24();}
-  </script>
-	<script type='text/javascript' src='//saladattic.com/38/e5/4d/38e54d28d348873c7a9be3edace3d86c.js'></script>
-  
+    </script>
 </body>
 </html>
+
 
 
 
